@@ -1,0 +1,66 @@
+body, html, #root, .App {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.section {
+  height: 100vh;
+  width: 100%;
+  padding: 60px;
+  box-sizing: border-box;
+  text-align: center;
+  color: white;
+  position: relative;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Example background colors for each section */
+.hero    { background: #0f172a; }
+.about   { background: #14532d; }
+.project { background: #1e3a8a; }
+.contact { background: #0a0f1f; }
+
+/* Buttons */
+.btn {
+  margin: 1rem;
+  padding: 12px 24px;
+  background: #f04e31;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid white;
+}
+/* Section.css */
+.next-button {
+  margin-top: 40px;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  background-color: #ffffff30;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.next-button:hover {
+  background-color: white;
+  color: #1e1e1e;
+}
