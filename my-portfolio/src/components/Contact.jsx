@@ -4,9 +4,7 @@ import '../styles/Section.css';
 
 function Contact({ parallaxRef }) {
   return (
-    <section className="section contact"  style={{
-    backgroundImage: "url('https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=1400&q=80')"
-  }}>
+    <section className="section contact" >
       <h2>📬 Contact Me</h2>
 
       <div className="contact-info">

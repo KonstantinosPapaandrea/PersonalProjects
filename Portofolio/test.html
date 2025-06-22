@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tsParticles Diagnostic</title>
+
+  <style>
+    html,body{
+      margin:0;height:100%;overflow:hidden;background:#000;
+      display:flex;justify-content:center;align-items:center;
+      color:#fff;font-family:sans-serif
+    }
+    /* The canvas will be injected here */
+  </style>
+</head>
+<body>
+  Diagnostic running… (wait 2 s)
+
+  <!-- Load non-module bundle (works in Live Server) -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+
+  <!-- Paint-test script -->
+  <script>
+    (async () => {
+      // 1️⃣ Spawn a full-screen yellow canvas with “TEST OK”
+      const full = await tsParticles.load("FULLSCREEN-TEST",
+        { fullScreen:{enable:true,zIndex:100} });
+
+      const canvas = full.canvas.element;
+      const ctx     = canvas.getContext("2d");
+      ctx.fillStyle = "yellow";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = "black";
+      ctx.font      = "64px sans-serif";
+      ctx.fillText("TEST OK", 80, 120);
+
+      // 2️⃣ After 1 s, destroy that instance and spawn big pink dots
+      setTimeout(() => {
+        full.destroy();
+
+        tsParticles.load("FULLSCREEN-TEST",{
+          fullScreen:{enable:true,zIndex:100},
+          background:{color:"#000"},
+          particles:{
+            number:{value:10},
+            size:{value:40},
+            color:{value:"#ff00ff"},
+            opacity:{value:1},
+            move:{enable:true,speed:1}
+          },
+          detectRetina:false
+        }).then(()=>console.log("🟣 Big dots running"));
+      },1000);
+    })();
+  </script>
+</body>
+</html>

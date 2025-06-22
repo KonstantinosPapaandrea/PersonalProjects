@@ -4,9 +4,7 @@ import '../styles/Section.css';
 
 function Project({ parallaxRef }) {
   return (
-    <section className="section projects"  style={{
-    backgroundImage: "url('https://images.unsplash.com/photo-1581092588420-1acb3519114b?auto=format&fit=crop&w=1400&q=80')"
-  }}>
+    <section className="section projects" >
       <h2>🚀 Projects</h2>
 
       <div className="projects-container">
