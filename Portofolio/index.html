@@ -1,117 +1,250 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Constantinos Papaandrea — Portfolio</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Constantinos Papaandrea — Portfolio</title>
 
-  <!-- generic site styles -->
-  <link rel="stylesheet" href="style.css" />
-  <!-- water-drop component styles -->
-  <link rel="stylesheet" href="drop.css" />
+<!-- ─── generic site styles ───────────────────────────── -->
+<link rel="stylesheet" href="style.css">
+
+<!-- ─── animated water-drop styles ────────────────────── -->
+<link rel="stylesheet" href="drop.css">
 </head>
 
 <body>
 
-
-
-  <!-- ─── Global, moving water-drop ──────────────── -->
-  <!-- start centered; JS will swap .pos-… classes -->
-  <div id="global-drop" class="water-drop pos-center">
-    <div class="frame">
-      <div class="ring-static"></div>
-      <div class="wavy-line"></div>
-      <div class="wavy-line second"></div>
-      <div class="drop"></div>
-    </div>
+<!-- ─── Global, moving water-drop ─────────────────────── -->
+<div id="global-drop" class="water-drop pos-center">
+  <div class="frame">
+    <div class="ring-static"></div>
+    <div class="wavy-line"></div>
+    <div class="wavy-line second"></div>
+    <div class="drop"></div>
   </div>
+</div>
 
-  <!-- ─── HERO ───────────────────────────────────── -->
-  <section class="hero" data-drop="center">
-    <h1>Constantinos Papaandrea</h1>
-    <div class="hero-buttons">
-      <a href="#section-bio" class="btn">Hire Me</a>
-      <a href="#section-bio" class="btn btn-secondary">About Me</a>
-    </div>
-  </section>
+<!-- ─── HERO ──────────────────────────────────────────── -->
+<section class="hero" data-drop="center" data-title="Hero">
+  <div class="io-sentinel"></div>  <!-- sentinel for IO -->
+  <h1>Constantinos Papaandrea</h1>
+<div class="target-pic" style="width:0.01vw; height:0.01vh;"></div>
+  <div class="hero-buttons">
+    <a href="#section-bio" class="btn">Hire Me</a>
+    <a href="#section-bio" class="btn btn-secondary">About Me</a>
+  </div>
+</section>
+<div class="wave-separator">
+  <svg viewBox="0 0 1440 240" preserveAspectRatio="none">
+   <path  d="M0,96L18.5,122.7C36.9,149,74,203,111,202.7C147.7,203,185,149,222,138.7C258.5,128,295,160,332,165.3C369.2,171,406,149,443,160C480,171,517,213,554,197.3C590.8,181,628,107,665,101.3C701.5,96,738,160,775,197.3C812.3,235,849,245,886,240C923.1,235,960,213,997,181.3C1033.8,149,1071,107,1108,106.7C1144.6,107,1182,149,1218,170.7C1255.4,192,1292,192,1329,160C1366.2,128,1403,64,1422,32L1440,0L1440,0L1421.5,0C1403.1,0,1366,0,1329,0C1292.3,0,1255,0,1218,0C1181.5,0,1145,0,1108,0C1070.8,0,1034,0,997,0C960,0,923,0,886,0C849.2,0,812,0,775,0C738.5,0,702,0,665,0C627.7,0,591,0,554,0C516.9,0,480,0,443,0C406.2,0,369,0,332,0C295.4,0,258,0,222,0C184.6,0,148,0,111,0C73.8,0,37,0,18,0L0,0Z"></path>
 
-  <!-- ─── ABOUT / BIO ────────────────────────────── -->
-  <section id="about">
-    <div id="section-bio" class="section-wrapper color-1" data-drop="right">
-      <h2 class="aboutMe">About Me</h2>
-      <div class="about-section left">
-        <div class="text-block">
-          <h3>👋 Who I Am</h3>
-          <p>I'm a 3rd-year Computer Science student passionate about game development, full-stack projects, and building digital tools that matter.</p>
-        </div>
-        <div class="media-block">
-          <img src="https://picsum.photos/300?bio" alt="Bio image">
-        </div>
+  </svg>
+</div>
+<!-- ─── ABOUT / BIO ───────────────────────────────────── -->
+<section id="about">
+  <div id="section-bio" class="section-wrapper color-1" data-drop="right" data-title="About">
+    <div class="io-sentinel"></div>
+    <h2 class="aboutMe">About Me</h2>
+    <div class="about-section left">
+      <div class="text-block">
+        <h3>👋 Who I Am</h3>
+        <p>I’m a 3rd-year Computer Science student passionate about game
+           development, full-stack projects, and building digital tools that
+           matter.</p>
       </div>
-      <a href="#section-mission" class="next-btn">Next ↓</a>
-    </div>
-
-    <div id="section-mission" class="section-wrapper color-2" data-drop="left">
-      <div class="about-section right">
-        <div class="text-block">
-          <h3>🌟 My Mission</h3>
-          <p>I aim to build software and games that solve real problems, bring people joy, and push the boundaries of creativity and technology.</p>
-        </div>
-        <div class="media-block">
-          <img src="https://picsum.photos/300?mission" alt="Mission image">
-        </div>
+      <div class="media-block">
+        <img src="photo.jpg" alt="Bio" class="target-pic pic-wrap">
       </div>
-      <a href="#section-education" class="next-btn">Next ↓</a>
     </div>
+    <a href="#section-mission" class="next-btn">Next ↓</a>
+  </div>
+<!-- ▾▾  Wavy divider – paste inside your HTML  ▾▾ -->
+<svg class="section-wave"
+     viewBox="0 0 900 601"
+     preserveAspectRatio="none">
 
-    <div id="section-education" class="section-wrapper color-3" data-drop="right">
-      <div class="about-section left">
-        <div class="text-block">
-          <h3>🎓 Education</h3>
-          <p>BSc in Computer Science – University of Cyprus (2022–2026)<br>Dean’s List, Academic Excellence Scholarship</p>
-        </div>
-        <div class="media-block">
-          <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Education image">
-        </div>
-      </div>
-      <a href="#contact" class="next-btn">Next ↓</a>
-    </div>
-  </section>
+  <!-- layer-1 (teal) -->
+  <path d="M0 115L15 114C30 113 60 111 90 108C120 105 150 101 180 99C210 97 240 97 270 89C300 81 330 65 360 60C390 55 420 61 450 77C480 93 510 119 540 130C570 141 600 137 630 129C660 121 690 109 720 104C750 99 780 101 810 101C840 101 870 99 885 98L900 97L900 0L885 0C870 0 840 0 810 0C780 0 750 0 720 0C690 0 660 0 630 0C600 0 570 0 540 0C510 0 480 0 450 0C420 0 390 0 360 0C330 0 300 0 270 0C240 0 210 0 180 0C150 0 120 0 90 0C60 0 30 0 15 0L0 0Z"
+        fill="#0b3d91"/>
+  
+  <!-- layer-2 (darker) -->
+  <path d="M0 229L15 228C30 227 60 225 90 223C120 221 150 219 180 209C210 199 240 181 270 177C300 173 330 183 360 183C390 183 420 173 450 175C480 177 510 191 540 214C570 237 600 269 630 270C660 271 690 241 720 238C750 235 780 259 810 267C840 275 870 267 885 263L900 259L900 95L885 96C870 97 840 99 810 99C780 99 750 97 720 102C690 107 660 119 630 127C600 135 570 139 540 128C510 117 480 91 450 75C420 59 390 53 360 58C330 63 300 79 270 87C240 95 210 95 180 97C150 99 120 103 90 106C60 109 30 111 15 112L0 113Z"
+        fill="#025855"/>
+  
+  <!-- layer-3 -->
+  <path d="M0 343L15 368C30 393 60 443 90 469C120 495 150 497 180 484C210 471 240 443 270 418C300 393 330 371 360 370C390 369 420 389 450 384C480 379 510 349 540 344C570 339 600 359 630 385C660 411 690 443 720 462C750 481 780 487 810 478C840 469 870 445 885 433L900 421L900 257L885 261C870 265 840 273 810 265C780 257 750 233 720 236C690 239 660 269 630 268C600 267 570 235 540 212C510 189 480 175 450 173C420 171 390 181 360 181C330 181 300 171 270 175C240 179 210 197 180 207C150 217 120 219 90 221C60 223 30 225 15 226L0 227Z"
+        fill="#03403d"/>
 
-  <!-- ─── CONTACT ─────────────────────────────────- -->
-  <section id="contact" class="section-wrapper color-4" data-drop="center">
+  <!-- layer-4 -->
+  <path d="M0 601L15 601C30 601 60 601 90 601C120 601 150 601 180 601C210 601 240 601 270 601C300 601 330 601 360 601C390 601 420 601 450 601C480 601 510 601 540 601C570 601 600 601 630 601C660 601 690 601 720 601C750 601 780 601 810 601C840 601 870 601 885 601L900 601L900 419L885 431C870 443 840 467 810 476C780 485 750 479 720 460C690 441 660 409 630 383C600 357 570 337 540 342C510 347 480 377 450 382C420 387 390 367 360 368C330 369 300 391 270 416C240 441 210 469 180 482C150 495 120 493 90 467C60 441 30 391 15 366L0 341Z"
+        fill="#004643"/>
+</svg>
+<!-- ▴▴  end divider ▴▴ -->
+  <div id="section-mission" class="section-wrapper color-2" data-drop="left" data-title="Projects">
+    <div class="io-sentinel"></div>
     <div class="about-section right">
       <div class="text-block">
-        <h3>📢 Contact Me</h3>
-        <p><strong>Email:</strong> <a href="mailto:your@email.com">your@email.com</a><br>
-           <strong>Phone:</strong> +123 456 7890<br>
-           <strong>Location:</strong> City, Country</p>
-        <p><strong>Socials:</strong></p>
-        <ul>
-          <li><a href="https://github.com/yourusername" target="_blank">GitHub</a></li>
-          <li><a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a></li>
-        </ul>
+        <h3>🌟 My Mission</h3>
+        <p>I aim to build software and games that solve real problems, bring
+           people joy, and push the boundaries of creativity and technology.</p>
+      </div>
+      <div class="media-block">
+        <img src="https://picsum.photos/300?mission" alt="Mission"  class="target-pic">
       </div>
     </div>
-  </section>
+    <a href="#section-education" class="next-btn">Next ↓</a>
+  </div>
 
-  <footer>
-    <p>&copy; 2025 Constantinos Papaandrea. All rights reserved.</p>
-  </footer>
+  <div id="section-education" class="section-wrapper color-3" data-drop="right" data-title="Education">
+    <div class="io-sentinel"></div>
+    <div class="about-section left">
+      <div class="text-block">
+        <h3>🎓 Education</h3>
+        <p>BSc in Computer Science – University of Cyprus (2022-2026)<br>
+           Dean’s List, Academic Excellence Scholarship</p>
+      </div>
+      <div class="media-block">
+        <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Education"  class="target-pic">
+      </div>
+    </div>
+    <a href="#contact" class="next-btn">Next ↓</a>
+  </div>
+</section>
+
+<!-- ─── CONTACT ───────────────────────────────────────── -->
+<section id="contact" class="section-wrapper color-4" data-drop="center" data-title="Contact">
+  <div class="io-sentinel"></div>
+  <div class="about-section right">
+    <div class="text-block">
+      <h3>📢 Contact Me</h3>
+      <p><strong>Email:</strong> <a href="mailto:your@email.com">your@email.com</a><br>
+         <strong>Phone:</strong> +123 456 7890<br>
+         <strong>Location:</strong> City, Country</p>
+      <p><strong>Socials:</strong></p>
+      <ul>
+        <li><a href="https://github.com/yourusername" target="_blank">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 Constantinos Papaandrea. All rights reserved.</p>
+</footer>
 <script>
-const drop     = document.getElementById('global-drop');
-const sections = document.querySelectorAll('[data-drop]');
+/*  ════════════════════════════════════════════════════════════
+    WATER-DROP CONTROLLER – slide between .target-pic centres
+    ════════════════════════════════════════════════════════════ */
+
+const SLIDE_MS = 800;                     // ↔ matches CSS transition time
+
+/* ---------- DOM refs --------------------------------------- */
+const drop   = document.getElementById('global-drop');
+const panels = document.querySelectorAll('[data-drop]');
+
+/* ---------- add 50 %-height sentinels to each full page ----- */
+panels.forEach(panel=>{
+  const s = Object.assign(document.createElement('div'),{className:'io-sentinel'});
+  Object.assign(s.style,{
+    position:'absolute', top:'50%', left:0, right:0,
+    height:'1px', pointerEvents:'none'
+  });
+  panel.style.position = 'relative';
+  panel.appendChild(s);
+});
+
+/* left / top tween (if not already in CSS) */
+drop.style.transition =
+  `left ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1),
+   top  ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1)`;
+
+/* ---------- scale presets done in JS ----------------------- */
+const SCALE = {
+  center : 2.00,
+  left   : 2.00,
+  right  : 2.00,
+  bottom : 2.00
+};
+
+/* ---------- helpers ---------------------------------------- */
+
+/* page centre of any element */
+const pageCentre = el=>{
+  const r = el.getBoundingClientRect();
+  return {x:r.left+r.width/2+window.scrollX,
+          y:r.top +r.height/2+window.scrollY};
+};
+
+/* half-size that *includes* current transform:scale */
+const halfSize = ()=>{
+  const r = drop.getBoundingClientRect();    // scaled box
+  return {w:r.width/2, h:r.height/2};
+};
+
+/* place drop so *visual* centre == page coords */
+const placeAt = (pageX,pageY)=>{
+  const {w,h}=halfSize();
+  drop.style.left = pageX - w + 'px';
+  drop.style.top  = pageY - h + 'px';
+};
+
+/* float under <body> (absolute, keeps visual spot) */
+const floatUnderBody = ()=>{
+  if(drop.parentElement!==document.body){
+    const r = drop.getBoundingClientRect();
+    drop.style.left = r.left+window.scrollX+'px';
+    drop.style.top  = r.top +window.scrollY+'px';
+    document.body.appendChild(drop);
+  }
+};
+
+/* ---------- IntersectionObserver --------------------------- */
+let currentPanel=null;
 
 const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
-    if(e.isIntersecting){
-      drop.className = 'water-drop pos-' + e.target.dataset.drop;
-    }
+    if(!e.isIntersecting) return;
+
+    const panel = e.target.parentElement;
+    if(panel===currentPanel) return;          // already active
+    currentPanel = panel;
+
+    const pic = panel.querySelector('.target-pic');
+    if(!pic){ console.warn('No .target-pic in ',panel); return; }
+
+    /* 1 ▸ float under <body> (so we animate in page coords) */
+    floatUnderBody();
+
+    /* 2 ▸ choose scale for this panel */
+    const posName = panel.dataset.drop || 'center';
+    const newScale = SCALE[posName] ?? 1;
+    drop.style.transform = `scale(${newScale})`;
+
+    /* 3 ▸ WAIT one frame so the new scale is applied,
+           then compute sizes & launch the slide */
+    requestAnimationFrame(()=>{
+      const {x,y} = pageCentre(pic);
+      placeAt(x,y);          // kicks off left/top transition
+    });
   });
 },{threshold:0.5});
 
-sections.forEach(sec => io.observe(sec));
+/* observe each sentinel */
+document.querySelectorAll('.io-sentinel').forEach(s=>io.observe(s));
+
+/* ---------- first render ----------------------------------- */
+(()=>{
+  const first = panels[0];
+  const pic   = first.querySelector('.target-pic');
+  if(!pic) return;
+  drop.style.transform = `scale(${SCALE[first.dataset.drop] ?? 1})`;
+  const {x,y}=pageCentre(pic);
+  placeAt(x,y);               // no animation on first paint
+})();
 </script>
+
+
 
 
 </body>

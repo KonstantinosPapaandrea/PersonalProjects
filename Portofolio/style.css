@@ -1,215 +1,183 @@
-/* ────────────────────────────
-   0. RESET & GLOBAL
-   ──────────────────────────── */
+/* ===== RESET ===== */
 *,
 *::before,
-*::after{
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*::after{ box-sizing:border-box; margin:0; padding:0; }
 
-html { scroll-behavior: smooth; }
+html{ scroll-behavior:smooth; }
 
 body{
-  background: #111;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 20px;
-  line-height: 1.8;
-  color: #333;
-  overflow-x: hidden;             /* horizontal scroll off */
+  background:#111;
+  font-family:'Segoe UI',sans-serif;
+  font-size:20px;
+  line-height:1.8;
+  color:#333;
+  overflow-x:hidden;
 }
+/*div{  border:5px solid black !important;
+}*/
+/*  place the 120-px SVG at the bottom, spanning full width   */
+.wave-separator{
+  position: relative;        /* keeps it in normal flow  */
+  width: 100%;
+  height: 240px;             /* == viewBox height        */
+  overflow: hidden;          /* hides the bottom corner  */
+  line-height: 0;   
+ 
+  background-color:#0b3d91 ;
+         /* removes extra white gap  */
+}
+
+/* let the path inherit the “next” colour automatically       */
+.wave-separator svg{
+  width: 100%; height: 100%;
+  display: block;
+  color:#1e1e1e;
+}
+
+/* every path gets fill = the NEXT section’s background       */
+.wave-separator path{ fill: currentColor; }
+p{
+    position:relative;
+
+  z-index: 2;
+}
+/* -------- drop master rule (drop.css) ----------------------- */
 #global-drop{
-  /* responsive size */
-  --size : 60vmin;
 
-  /* master offsets + SCALE  (use the SAME name everywhere) */
-  --x    : 0;      /* -0.5 … 0.5  = % of viewport width  */
-  --y    : 0;      /* -0.5 … 0.5  = % of viewport height */
-  --scale: 2;      /* overall zoom factor                */
-
-  position:fixed;
-  top:50%; left:50%;
-
-  transform:
-    translate(calc(-50% + var(--x) * 50vw),
-              calc(-50% + var(--y) * 50vh))
-    scale(var(--scale));
-
+  position:absolute;
+  transform:scale(var(--scale,1));   /* <-- only scale lives here */
   pointer-events:none;
-  z-index:2;
-  transition:transform .8s cubic-bezier(.6,.2,.3,1);
+  z-index:1;
+  transform-origin: top left;   /* <<< CRUCIAL */
+
+  /* tween left/top; duration must match SLIDE_MS in JS          */
+  transition:left .8s cubic-bezier(.6,.2,.3,1),
+             top  .8s cubic-bezier(.6,.2,.3,1);
+             
 }
 
-/* ─── preset positions (all override --scale) ───── */
-#global-drop.pos-center {
-  --x:0;    --y:0;    --scale:2;
+/* scale presets now work */
+#global-drop.pos-center{ transform: scale(2); }
+#global-drop.pos-left,
+#global-drop.pos-right,
+#global-drop.pos-bottom{ transform: scale(2); }
+
+
+/* ② wrapper version (if you need extra padding or a frame) */
+.pic-wrap{
+  width:240px; aspect-ratio:1/1;
+  border-radius:50%;
+  overflow:hidden;           /* clips inner img               */
+  position:relative; z-index:2;
 }
-#global-drop.pos-left   {
-  --x:-0.7; --y:0;    --scale:1.05;
-}
-#global-drop.pos-right  {
-  --x:0.7;  --y:0;    --scale:.9;
-}
-#global-drop.pos-bottom {
-  --x:0;    --y:0.4;  --scale:1.2;
+.pic-wrap img{ width:100%; height:100%; object-fit:cover; }
+/* ① simplest: circle directly on the <img> */
+/* apply to the element that actually shows pixels */
+/* ⬇  wrapper OR the <img> itself                   */
+/* ===================================================
+   FORCE *every* .target-pic to be a true circle
+   (leave your existing rules – this just patches them)
+   =================================================== */
+img[class="target-pic"]{
+  width:   350px;          /* keep your chosen size      */
+  height:  350px;          /* 👈 NEW — guarantees square */
+  border-radius:50%;       /* 50-percent circle          */
+  overflow:hidden;         /* clip the image             */
+  display:flex;           /* remove inline-IMG gap      */
+  align-items:end;
+  margin:20% !important;
 }
 
 
-/* ────────────────────────────
-   1. HERO (full-screen)
-   ──────────────────────────── */
+
+/* ===== HERO ===== */
 .hero{
-  /* layout */
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  text-align: center;
-
-  /* visuals */
-  position: relative;             /* context for drop */
-  overflow: hidden;               /* clip overspill   */
-  background: #1e1e1e;
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:30px;
+  text-align:center;
+  background:#1e1e1e;
+  overflow:hidden;
 }
 
-/* animated drop as centred backdrop */
-.hero .water-drop{
-  /* 60 % of smaller viewport side */
-  --size: 60vmin;
-
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;                     /* behind text, above bg */
-  pointer-events: none;
-  opacity: .9;
+.hero h1{ font-size:2.2rem; color:#fff; z-index:2;   transform: translateY(1rem);   /* adjust ↑ as you like */
 }
+.hero-buttons{ display:flex; gap:20px; flex-wrap:wrap; z-index:2; transform: translateY(-1rem);  }
 
-/* if a .frame element exists inside .water-drop */
-.water-drop .frame{width:100%;height:100%;}
-
-/* hero content */
-.hero h1{font-size: 3rem; color: #fff;
-z-index:2;}
-
-.hero img{
-  width: 250px; height: 250px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #fff;
+.btn{
+  padding:14px 30px; font-size:1.2rem;
+  background:#f04e31; color:#fff; border-radius:8px;
+  text-decoration:none; transition:background .3s;
 }
+.btn:hover{ background:#d13f27; }
+.btn-secondary{ background:transparent; border:2px solid #fff; }
+.btn-secondary:hover{ background:#fff; color:#1e1e1e; }
 
-.hero-buttons{
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  z-index:2;
-}
-
-
-/* ────────────────────────────
-   2. FULL-SCREEN WRAPPERS
-   ──────────────────────────── */
+/* ===== FULL-SCREEN WRAPPERS ===== */
 .section-wrapper{
-   position:relative;  
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px 20px;
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:60px 20px;
 }
 
-
-/* ────────────────────────────
-   3. ABOUT SECTIONS
-   ──────────────────────────── */
-.aboutMe{
-  font-size: 3.5rem;
-  margin-bottom: 30px;
-  text-align: center;
+.io-sentinel{                /* invisible trigger */
+  position:absolute;
+  top:50%; left:0; right:0;
+  height:1px; pointer-events:none;
 }
+
+/* ===== ABOUT PANELS ===== */
+.aboutMe{ font-size:3.5rem; margin-bottom:30px; text-align:center; }
 
 .about-section{
-  display: flex;
-  flex-direction: column;         /* mobile default   */
-  gap: 40px;
-  align-items: center;
-  text-align: center;
+  display:flex; flex-direction:column; gap:40px;
+  align-items:center; text-align:center;
 }
 
-/* desktop overrides */
-.about-section.left { flex-direction: row;        text-align: left; }
-.about-section.right{ flex-direction: row-reverse;text-align: right; }
+.about-section.right{ flex-direction:row-reverse; text-align:right; }
 
-.text-block   { flex: 1; min-width: 300px; font-size: 1.2rem; }
-.media-block img{ width: 350px; max-width: 100%; border-radius: 12px; }
+.about-section.left{
+  /* 1️⃣  row layout is fine */
+  flex-direction: row;
 
+  /* 2️⃣  let the two real children take all the space */
+  padding: 0;              /* ← remove the 20 % blank column  */
+  gap: 40px;               /* keep *either* gap … */
+  justify-content: space-between;  /* …OR space-between, not both */
 
-/* ────────────────────────────
-   4. BUTTONS
-   ──────────────────────────── */
-.btn{
-  padding: 14px 30px;
-  font-size: 1.2rem;
-  background: #f04e31;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 8px;
-  transition: background .3s;
+  text-align: left;
 }
-.btn:hover       { background: #d13f27; }
 
-.btn-secondary   { background: transparent; border: 2px solid #fff; }
-.btn-secondary:hover{ background: #fff; color: #1e1e1e; }
-
-/* “Next ↓” button */
-.next-btn{
-  align-self: center;
-  font-size: 1.5rem;
-  background: #f04e31;
-  color: #fff;
-  padding: 12px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  margin: 20px 0 40px;
-  transition: background .3s;
+/* optional: make the media block flex as well so it can shrink */
+.media-block{
+  flex: 0 0 350px;         /* fixed width = image width        */
 }
-.next-btn:hover{ background: #d13f27; }
 
+.text-block{
+  flex: 1 1 0;             /* text takes the remaining space   */
+}
 
-/* ────────────────────────────
-   5. COLOR THEMES
-   ──────────────────────────── */
+/* Add to style.css */
+.section-wave{
+  display:block;
+  width:100%;
+  height:750px;          /* divider height (adjust) */
+  line-height:0;         /* removes extra whitespace */
+}
+.next-btn{ composes:btn; margin:20px auto 40px; }
+
+/* ===== COLOUR VARIANTS ===== */
 .color-1{ background:#0b3d91; color:#fff; }
 .color-2{ background:#004643; color:#fff; }
 .color-3{ background:#1b2a49; color:#fff; }
 .color-4{ background:#0d3b66; color:#fff; }
-.color-5{ background:#1f3b4d; color:#fff; }
-.color-6{ background:#0e4d64; color:#fff; }
-.color-7{ background:#0a2239; color:#fff; }
-.color-8{ background:#083d77; color:#fff; }
-.color-9{ background:#2c6e49; color:#fff; }
 
-
-/* ────────────────────────────
-   6. FOOTER
-   ──────────────────────────── */
-footer{
-  background:#111;
-  color:#fff;
-  text-align: center;
-  padding: 40px;
-  font-size: 1.1rem;
-}
-
-
-/* ────────────────────────────
-   7. MISC
-   ──────────────────────────── */
-#about{ display:block; }          /* guard against accidental flex-row */
+/* ===== FOOTER ===== */
+footer{ background:#111; color:#fff; text-align:center; padding:40px; }
