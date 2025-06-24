@@ -13,6 +13,21 @@ body{
   color:#333;
   overflow-x:hidden;
 }
+/* ─── Scroll-reveal base (starts hidden) ────────────────── */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(40px);          /* nudge down 40 px   */
+  transition:
+    opacity   .7s ease-out,
+    transform .7s cubic-bezier(.3,.6,.2,1);
+}
+
+/* ─── When it enters the viewport ───────────────────────── */
+[data-reveal].is-visible{
+  opacity:1;
+  transform:none;                      /* slide into place   */
+}
+
 /*div{  border:5px solid black !important;
 }*/
 /*  place the 120-px SVG at the bottom, spanning full width   */
