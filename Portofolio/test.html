@@ -15,32 +15,7 @@ body{
   color:#fff; overflow-x:hidden;
 }
 
-/* ───── generic stroke look ───── */
-.mesh__stroke{
-  fill:none;
-  stroke:#35d6ff;           /* cyan dots                      */
-  stroke-width:2;
-  stroke-linecap:round;
-  opacity:.7;
-}
 
-/* darker / lighter variations     */
-.mesh__accent{         stroke:#158fa5; }
-.mesh__accent--light{  stroke:#9eeffa; opacity:.45; }
-
-/* ───── marching-dots animation ─ */
-.mesh--march .mesh__stroke{
-  stroke-dasharray:0px 10px;               /* dot = 0 px, gap = 28 px        */
-  animation:march 2s linear infinite;  /* speed ≈ 2 s per cycle          */
-}
-
-@keyframes march{
-  to{ stroke-dashoffset:-10px; }       /* offset equals the gap length   */
-}
-
-/* slow vertical bob */
-.mesh--bob{ animation:bob 16s ease-in-out infinite }
-@keyframes bob{50%{transform:translateY(20px)}}
 
 /* subtle grain overlay (optional) */
 body::after{
@@ -52,26 +27,6 @@ body::after{
 </head>
 <body>
 
-<!-- ▸ Animated triple-curve banner 500 × 500  -->
-<svg class="mesh mesh--march"              
-     viewBox="0 0 500 500"
-     preserveAspectRatio="none"
-     style="width:100vw;height:100vh"         
-     aria-hidden="true">
-
-  <!-- 1️⃣ baseline ---------------------------------------------------- -->
-  <path class="mesh__stroke"
-        d="M  -0.42  -0.09
-           C 535.47 248.42  103.74 248.44
-             103.74 248.44   -51.76 245.90
-             265.15 511.85   271.11 501.42"/>
-
-  <path class="mesh__stroke" d="M 7.439 -7.911 C 7.439 -7.911 541.581 250.225 109.849 250.248 C -45.654 247.709 273.013 510.154 278.972 499.727"/>
-
-
-
-<path class="mesh__stroke" d="M 15.851 -12.764 C 15.851 -12.764 568.577 252.248 119.406 252.271 C -42.378 249.68 292.152 509.738 298.352 499.095"></path>
-</svg>
 
 
 <!-- your page content follows … -->
