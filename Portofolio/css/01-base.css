@@ -1,0 +1,72 @@
+/* =========================
+   Global tokens & body base
+   ========================= */
+:root{
+  /* accent colours you re-use everywhere */
+  --c-accent: #35d6ff;
+  --c-orange: hsl(28 92% 54%);
+}
+
+
+body{
+  background:#111;
+  font-family:'Segoe UI',sans-serif;
+  font-size:20px;
+  line-height:1.8;
+  color:#333;
+  overflow-x:hidden;
+}
+/* ===== COLOUR VARIANTS ===== */
+.color-1{ background:#0b3d91; color:#fff; }
+.color-2{ background:#004643; color:#fff; }
+.color-3{ background:#1b2a49; color:#fff; }
+.color-4{ background:#0d3b66; color:#fff; }
+
+
+/* every path gets fill = the NEXT section’s background       */
+p{
+    position:relative;
+
+  z-index: 2;
+}
+/* ===== FULL-SCREEN WRAPPERS ===== */
+.section-wrapper{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:60px 20px;
+}
+
+.io-sentinel{                /* invisible trigger */
+  position:absolute;
+  top:50%; left:0; right:0;
+  height:1px; pointer-events:none;
+}
+
+
+/* ─── Scroll-reveal base (starts hidden) ────────────────── */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(40px);          /* nudge down 40 px   */
+  transition:
+    opacity   .7s ease-out,
+    transform .7s cubic-bezier(.3,.6,.2,1);
+}
+
+/* ─── When it enters the viewport ───────────────────────── */
+[data-reveal].is-visible{
+  opacity:1;
+  transform:none;                      /* slide into place   */
+}
+
+
+/* optional: make the media block flex as well so it can shrink */
+.media-block{
+  flex: 0 0 350px;         /* fixed width = image width        */
+}
+
+.text-block{
+  flex: 1 1 0;             /* text takes the remaining space   */
+}

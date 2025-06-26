@@ -1,58 +1,5 @@
-/* ===== RESET ===== */
-*,
-*::before,
-*::after{ box-sizing:border-box; margin:0; padding:0; }
-
-html{ scroll-behavior:smooth; }
-/* master wave styling */
 
 
-
-/* ① marching mesh lines – sit at the TOP of .hero */
-.hero-mesh{
-  position:absolute;
-  top:0; left:0;
-  width:100%;
-  height:100%;        /* banner height */
-  overflow:visible;
-  z-index:0;           /* behind h1 + buttons */
-  pointer-events:none;
-}
-
-/* ② dotted stroke */
-.mesh__stroke{
-  fill:none;
-  stroke:#35d6ff;
-  stroke-width:2;
-  stroke-linecap:round;
-  stroke-dasharray:0 10;
-  animation:march 2s linear infinite;
-  opacity:.7;
-}
-@keyframes march{ to{ stroke-dashoffset:-10px; } }
-
-/* ③ wave that matches the hero gradient */
-.hero-wave{
-  position:absolute; bottom:0; left:0;
-  width:100%; height:100%;   /* = viewBox height */
-  display:block; line-height:0;
-}
-
-/* ❸  common line look (the ‘dots’ effect) */
-.mesh__stroke{
-  fill:none;
-  stroke:#35d6ff;
-  stroke-width:2;
-  stroke-linecap:round;
-  stroke-dasharray:0 10;     /* 22-px gaps → dotted rope        */
-  animation:march 2s linear infinite;
-  opacity:.7;
-}
-
-/* ❹  marching-ants keyframes */
-@keyframes march{
-  to{ stroke-dashoffset:-22px; }
-}
 
 body{
   background:#111;
@@ -185,12 +132,12 @@ background:
   overflow:hidden;
 }
 
-.hero h1{ font-size:1rem; color:#fff; z-index:2;   transform: translateY(1rem);   /* adjust ↑ as you like */
+.hero h1{ font-size:2.2rem; color:#fff; z-index:2;   transform: translateY(1rem);   /* adjust ↑ as you like */
 }
 .hero-buttons{ display:flex; gap:20px; flex-wrap:wrap; z-index:2; transform: translateY(-1rem);  }
 
 .btn{
-  padding:7px 15px; font-size:1rem;
+  padding:14px 30px; font-size:1.2rem;
   background:#f04e31; color:#fff; border-radius:8px;
   text-decoration:none; transition:background .3s;
 }
@@ -252,55 +199,7 @@ background:
   height:750px;          /* divider height (adjust) */
   line-height:0;         /* removes extra whitespace */
 }
-/* ─── “Next” call-to-action – bright orange variant ───────── */
-.next-btn{
-  /* inherit the base button look */
-  @extend .btn;                 /* if you’re using Sass / PostCSS “@extend”   */
-  /* OR, when using plain CSS, just keep the shared
-     .btn rule *above* this one so its padding, font-size,
-     border-radius, etc. cascade automatically              */
-
-  /* placement */
-  margin: 20px auto 40px;       /* centred, with breathing room */
-  padding:10px;
-  border-radius:10%;
-  /* colour theme */
-  background: hsl(28 92% 54%);  /* vivid orange               */
-  border: 2px solid hsl(28 92% 46%);
-  color: #fff;                  /* legible on orange          */
-  box-shadow:
-    0 2px 4px rgba(0 0 0 / .15),
-    inset 0 1px 0 rgba(255 255 255 / .15);   /* subtle bevel  */
-
-  /* smooth colour change */
-  transition:
-    background  .25s ease,
-    transform   .15s ease;      /* (used for the “lift” on hover) */
-}
-
-/* hover / focus / active states */
-.next-btn:hover,
-.next-btn:focus{
-  background: hsl(28 92% 46%);  /* a shade darker             */
-  transform: translateY(-2px);  /* tiny upward “lift”         */
-  box-shadow:
-    0 6px 12px rgba(0 0 0 / .25),
-    inset 0 1px 0 rgba(255 255 255 / .20);
-}
-
-.next-btn:active{
-  background: hsl(28 92% 40%);
-  transform: translateY(0);     /* press back down            */
-  box-shadow:
-    0 3px 6px rgba(0 0 0 / .20) inset;
-}
-
-/* optional: keyboard-only focus ring for accessibility */
-.next-btn:focus-visible{
-  outline: 3px solid hsl(48 100% 50% / .9);   /* bright yellow ring */
-  outline-offset: 3px;
-}
-
+.next-btn{ composes:btn; margin:20px auto 40px; }
 
 /* ===== COLOUR VARIANTS ===== */
 .color-1{ background:#0b3d91; color:#fff; }

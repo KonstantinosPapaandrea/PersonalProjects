@@ -5,11 +5,26 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Constantinos Papaandrea — Portfolio</title>
 
-<!-- ─── generic site styles ───────────────────────────── -->
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="css/00-reset.css">
+<link rel="stylesheet" href="css/01-base.css">
+<link rel="stylesheet" href="css/02-utilities.css">
+
+<!-- components -->
+<link rel="stylesheet" href="css/10-components/hero-mesh.css">
+<link rel="stylesheet" href="css/10-components/wave-separator.css">
+<link rel="stylesheet" href="css/10-components/water-drop.css">
+<link rel="stylesheet" href="css/10-components/buttons.css">
+<link rel="stylesheet" href="css/10-components/pictures.css">
+
+<!-- page sections -->
+<link rel="stylesheet" href="css/20-sections/hero.css">
+<link rel="stylesheet" href="css/20-sections/about.css">
+<link rel="stylesheet" href="css/20-sections/contact.css">
+<link rel="stylesheet" href="css/20-sections/footer.css">
+
 
 <!-- ─── animated water-drop styles ────────────────────── -->
-<link rel="stylesheet" href="drop.css">
+<link rel="stylesheet" href="css/drop.css">
 </head>
 
 <body>
@@ -162,211 +177,7 @@ fill="url(#waveGradient)"></path>
 <footer>
   <p>&copy; 2025 Constantinos Papaandrea. All rights reserved.</p>
 </footer>
-<script>
-/*  ════════════════════════════════════════════════════════════
-    WATER-DROP CONTROLLER – slide between .target-pic centres
-    ════════════════════════════════════════════════════════════ */
-
-const SLIDE_MS = 800;                     // ↔ matches CSS transition time
-
-/* ---------- DOM refs --------------------------------------- */
-const drop   = document.getElementById('global-drop');
-const panels = document.querySelectorAll('[data-drop]');
-
-/* ---------- add 50 %-height sentinels to each full page ----- */
-panels.forEach(panel=>{
-  const s = Object.assign(document.createElement('div'),{className:'io-sentinel'});
-  Object.assign(s.style,{
-    position:'absolute', top:'50%', left:0, right:0,
-    height:'1px', pointerEvents:'none'
-  });
-  panel.style.position = 'relative';
-  panel.appendChild(s);
-});
-
-/* Smooth transitioning */
-/* ── Smooth slide 𝘢𝘯𝘥 scale ───────────────────────────── */
-drop.style.transition = `
-  left      ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1),
-  top       ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1),
-  transform ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1)   
-`;
-
-
-/* ---------- scale presets done in JS ----------------------- */
-const SCALE = {
-  center : 1.00,
-  left   : 1.00,
-  right  : 1.00,
-  bottom : 2.00
-};
-
-/* ---------- helpers ---------------------------------------- */
-
-/* returns coordinates of page centre of any element */
-const pageCentre = el=>{
-  const r = el.getBoundingClientRect();
-  return {x:r.left+r.width/2+window.scrollX,
-          y:r.top +r.height/2+window.scrollY};
-};
-
-/* half-size that *includes* current transform:scale */
-const halfSize = ()=>{
-  const r = drop.getBoundingClientRect();    // scaled box
-  return {w:r.width/2, h:r.height/2};
-};
-
-/* place drop so *visual* centre == page coords */
-const placeAt = (pageX,pageY)=>{
-  const {w,h}=halfSize();
-  drop.style.left = pageX - w + 'px';
-  drop.style.top  = pageY - h + 'px';
-};
-
-/* --------------------------------------------------------
-   1.  Store the unscaled size once (first time we run).
---------------------------------------------------------- */
-const NATURAL = {
-  w : drop.offsetWidth,   // measured while scale === 1
-  h : drop.offsetHeight
-};
-
-/* --------------------------------------------------------
-   2.  Helper: half-size if we applied `targetScale`
---------------------------------------------------------- */
-const halfSizeAt = targetScale => ({
-  w : (NATURAL.w * targetScale) / 2,
-  h : (NATURAL.h * targetScale) / 2
-});
-
-/* --------------------------------------------------------
-   3.  Move & scale in the SAME frame
---------------------------------------------------------- */
-function moveAndScale(pageX, pageY, targetScale){
-  // -- set the scale first
-  drop.style.transform = `scale(${targetScale})`;
-
-  // -- compute where the centre has to be
-  const {w, h} = halfSizeAt(targetScale);
-  drop.style.left = pageX - w + 'px';
-  drop.style.top  = pageY - h + 'px';
-}
-
-/* float under <body> so it can move through the whole page */
-const floatUnderBody = ()=>{
-  if(drop.parentElement!==document.body){
-    const r = drop.getBoundingClientRect();
-    drop.style.left = r.left+window.scrollX+'px';
-    drop.style.top  = r.top +window.scrollY+'px';
-    document.body.appendChild(drop);
-  }
-};
-/* ------------------------------------------------------------
-   Re-centre the drop on the current .target-pic
-   (use whatever scale is already applied)
------------------------------------------------------------- */
-function recalcPosition () {
-  if (!currentPanel) return;                     // nothing active yet
-
-  /* the picture the drop is sitting on */
-  const pic = currentPanel.querySelector('.target-pic');
-  if (!pic) return;
-
-  /* its new centre in page-pixels (after resize) */
-  const { x, y } = pageCentre(pic);
-
-  /* read the *current* scale from the inline style
-     → parseFloat because style.transform = "scale(3)"      */
-  const currentScale =
-    parseFloat(drop.style.transform.replace('scale(','')) || 1;
-
-  /* compute & set new left / top so the visual centre is correct */
-  moveAndScale(x, y, currentScale);
-}
-let rAF;
-window.addEventListener('resize', () => {
-  cancelAnimationFrame(rAF);
-  rAF = requestAnimationFrame(recalcPosition);
-});
-
-/* ---------- IntersectionObserver --------------------------- */
-let currentPanel=null;
-/*Get any elements that are at least 50% visible*/
-const io = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting) return;
-
-    const panel = e.target.parentElement;
-    if(panel===currentPanel) return;          // already active
-    currentPanel = panel;
-
-    const pic = panel.querySelector('.target-pic');
-    if(!pic){ console.warn('No .target-pic in ',panel); return; }
-
-    /* 1 ▸ float under <body> (so we animate in page coords) */
-    floatUnderBody();
-
-const posName    = panel.dataset.drop || 'center';
-const targetScale = SCALE[posName] ?? 1;
-
-const {x, y} = pageCentre(pic);   // where the centre HAS to land
-
-// one call → both scale & correct coordinates
-moveAndScale(x, y, targetScale);
-  });
-},{threshold:0.5});
-
-/* observe each sentinel */
-document.querySelectorAll('.io-sentinel').forEach(s=>io.observe(s));
-
-/* ---------- first render ----------------------------------- */
-(()=>{
-  const first = panels[0];
-  const pic   = first.querySelector('.target-pic');
-  if(!pic) return;
-  drop.style.transform = `scale(${SCALE[first.dataset.drop] ?? 1})`;
-  const {x,y}=pageCentre(pic);
-  placeAt(x,y);               // no animation on first paint
-})();
-
-
-
-
-
-
-/* ─── 1. grab all targets once ─────────────────────────────── */
-const revealEls = document.querySelectorAll('[data-reveal]');
-
-/* ─── 2. create observer with generous rootMargin ──────────── */
-const revealIO = new IntersectionObserver((entries, io)=>{
-  entries.forEach(entry=>{
-    if(!entry.isIntersecting) return;
-    entry.target.classList.add('is-visible');
-    io.unobserve(entry.target);        // remove if you want repeat anim
-  });
-},{
-  threshold : 0,                      // first pixel
-  rootMargin: '0px 0px -30% 0px'      // triggers earlier
-});
-
-/* ─── 3. start observing ───────────────────────────────────── */
-revealEls.forEach(el => revealIO.observe(el));
-
-/* ─── 4. one extra “refresh” after everything loaded ───────── */
-window.addEventListener('load', () => {
-  requestAnimationFrame(() => {
-    revealEls.forEach(el => {
-      revealIO.unobserve(el);
-      revealIO.observe(el);
-    });
-  });
-});
-
-</script>
-
-
-  
-
+<script type="module" src="js/main.js"></script>
 
 </body>
 </html>
