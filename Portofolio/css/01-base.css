@@ -22,7 +22,6 @@ body{
 .color-3{ background:#1b2a49; color:#fff; }
 .color-4{ background:#0d3b66; color:#fff; }
 
-
 /* every path gets fill = the NEXT section’s background       */
 p{
     position:relative;
@@ -39,11 +38,6 @@ p{
   padding:60px 20px;
 }
 
-.io-sentinel{                /* invisible trigger */
-  position:absolute;
-  top:50%; left:0; right:0;
-  height:1px; pointer-events:none;
-}
 
 
 /* ─── Scroll-reveal base (starts hidden) ────────────────── */
@@ -62,9 +56,13 @@ p{
 }
 
 
+
 /* optional: make the media block flex as well so it can shrink */
 .media-block{
+  display:flex;
   flex: 0 0 350px;         /* fixed width = image width        */
+  justify-content: center;
+  align-items: center;
 }
 
 .text-block{

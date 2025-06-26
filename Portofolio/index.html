@@ -16,7 +16,9 @@
 <link rel="stylesheet" href="css/10-components/buttons.css">
 <link rel="stylesheet" href="css/10-components/pictures.css">
 
+
 <!-- page sections -->
+ <link rel="stylesheet" href="css/20-sections/wheel.css">
 <link rel="stylesheet" href="css/20-sections/hero.css">
 <link rel="stylesheet" href="css/20-sections/about.css">
 <link rel="stylesheet" href="css/20-sections/contact.css">
@@ -133,6 +135,34 @@ fill="url(#waveGradient)"></path>
         <p>I aim to build software and games that solve real problems, bring
            people joy, and push the boundaries of creativity and technology.</p>
       </div>
+      <!-- ▸ PROJECT CAROUSEL  ...................................... -->
+<section id="projects" class="projects" data-reveal>
+
+  <!-- navigation -->
+  <button class="wheel-btn wheel-btn--prev" aria-label="Previous project">‹</button>
+  <button class="wheel-btn wheel-btn--next" aria-label="Next project">›</button>
+
+  <!-- 3-D wheel container -->
+  <div class="wheel" id="projectWheel">
+
+    <!-- Every .wheel__card = one project -->
+    <article class="wheel__card">
+      <img src="images/project-1.jpg" alt="Screenshot of Project 1">
+      <h3>Project One</h3>
+      <p>Short one-liner describing what the project does.</p>
+    </article>
+
+    <article class="wheel__card">
+      <img src="images/project-2.jpg" alt="Screenshot of Project 2">
+      <h3>Project Two</h3>
+      <p>Another catchy description. Keep it ≤ 2 lines.</p>
+    </article>
+
+    <!-- …add as many cards as you want … -->
+
+  </div>
+</section>
+
       <div class="media-block">
         <img src="https://picsum.photos/300?mission" alt="Mission" class="target-pic pic-wrap">
       </div>
