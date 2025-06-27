@@ -22,16 +22,49 @@
 <!-- page sections -->
  <link rel="stylesheet" href="css/20-sections/projects.css">
 <link rel="stylesheet" href="css/20-sections/hero.css">
+ <link rel="stylesheet" href="css/20-sections/skills.css">
 <link rel="stylesheet" href="css/20-sections/about.css">
 <link rel="stylesheet" href="css/20-sections/contact.css">
 <link rel="stylesheet" href="css/20-sections/footer.css">
+<link rel="stylesheet" href="css/20-sections/header.css">
 
+
+<!--  Devicon 2.2  – 100+ tech logos  -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
 
 <!-- ─── animated water-drop styles ────────────────────── -->
 <link rel="stylesheet" href="css/drop.css">
 </head>
 
 <body>
+<!-- ─── HEADER / NAV ─────────────────────────────────────────── -->
+<header class="site-header" data-reveal>
+  <div class="site-header__inner">
+
+    <!-- logo / brand mark -->
+    <a href="#hero" class="brand">
+      <span class="brand__dot"></span>Constantinos<span class="brand__alt">Dev</span>
+    </a>
+
+    <!-- hamburger toggle (visible < 768 px) -->
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle__bar"></span>
+    </button>
+
+    <!-- main nav -->
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#hero"      >Home</a></li>
+        <li><a href="#about"     >About</a></li>
+        <li><a href="#projects"  >Projects</a></li>
+        <li><a href="#skills"    >Skills</a></li>
+        <li><a href="#contact"   >Contact</a></li>
+      </ul>
+    </nav>
+
+  </div><!-- /.site-header__inner -->
+</header>
 
 <!-- ─── Global, moving water-drop ─────────────────────── -->
 <div id="global-drop" class="water-drop pos-center">
@@ -46,67 +79,115 @@
 
 
 <!-- ─── HERO ──────────────────────────────────────────── -->
-<section class="hero" data-drop="center" data-title="Hero">
-  <svg class="hero-mesh"
-       viewBox="0 0 500 500"
-       preserveAspectRatio="none"
-       aria-hidden="true">
+<section id="hero" class="hero"  data-title="Hero" data-drop="center">
+<div class="hero-inner">
 
-  <!-- 1️⃣ baseline ---------------------------------------------------- -->
-  <path class="mesh__stroke"
-        d="M  -0.42  -0.09
-           C 535.47 248.42  103.74 248.44
-             103.74 248.44   -51.76 245.90
-             265.15 511.85   271.11 501.42"/>
+  <!-- ── FLEX WRAPPER (two columns) ───────────────────── -->
+  <div class="hero__wrap">
 
-  <path class="mesh__stroke" d="M 7.439 -7.911 C 7.439 -7.911 541.581 250.225 109.849 250.248 C -45.654 247.709 273.013 510.154 278.972 499.727"/>
+    <!-- ◂ LEFT column – name + drop target -->
+    <div class="hero__left">
+      <h1 class="target-pic" data-drop="center" data-reveal>Constantinos&nbsp;Papaandrea</h1>
 
+    
+    </div>
 
+    <!-- ▸ RIGHT column – tagline, roles, buttons, cue -->
+    <div class="hero__right">
+      <p class="hero-tagline" data-reveal>
+        I am just DIFFERENT BITCH
+      </p>
 
-<path class="mesh__stroke" d="M 15.851 -12.764 C 15.851 -12.764 568.577 252.248 119.406 252.271 C -42.378 249.68 292.152 509.738 298.352 499.095"></path>
-</svg>
-  <div class="io-sentinel"></div>  <!-- sentinel for IO -->
-  <h1  data-reveal>Constantinos Papaandrea</h1>
-<div class="target-pic" style="width:0.01vw; height:0.01vh;"></div>
-  <div class="hero-buttons">
-    <a href="#section-bio" class="btn">Hire Me</a>
-    <a href="#section-bio" class="btn btn-secondary">About Me</a>
-  </div>
-<div class="wave-separator">
- 
-  <svg viewBox="0 0 900 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" >
-  <defs>
-      <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stop-color="hsl(276 70% 40%)" />
-        <stop offset="100%" stop-color="#0b3d91" />
-      </linearGradient>
-    </defs>
+      <p class="hero-roles" aria-label="My roles">
+        <span id="roleTyper"></span>
+      </p>
 
+      <div class="hero-buttons">
+        <a href="#section-bio" class="btn">Hire&nbsp;Me</a>
+        <a href="#section-bio" class="btn btn-secondary">About&nbsp;Me</a>
+      </div>
 
-<path d="M0 457L12.5 449.3C25 441.7 50 426.3 75 430C100 433.7 125 456.3 150 451C175 445.7 200 412.3 225 409.2C250 406 275 433 300 447.5C325 462 350 464 375 462.2C400 460.3 425 454.7 450 447.3C475 440 500 431 525 435.5C550 440 575 458 600 472.7C625 487.3 650 498.7 675 488C700 477.3 725 444.7 750 436.2C775 427.7 800 443.3 825 452C850 460.7 875 462.3 887.5 463.2L900 464L900 601L887.5 601C875 601 850 601 825 601C800 601 775 601 750 601C725 601 700 601 675 601C650 601 625 601 600 601C575 601 550 601 525 601C500 601 475 601 450 601C425 601 400 601 375 601C350 601 325 601 300 601C275 601 250 601 225 601C200 601 175 601 150 601C125 601 100 601 75 601C50 601 25 601 12.5 601L0 601Z" 
-fill="url(#waveGradient)"></path>
-  </svg>
+      <div class="scroll-hint" aria-hidden="true">⌄</div>
+    </div>
+  </div><!-- /.hero__wrap -->
 </div>
+  <!-- wave separator stays as-is … -->
+  <!-- 7 ▸ wave separator -->
+  <div class="wave-separator">
+    <svg viewBox="0 0 900 600" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="waveGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stop-color="hsl(276 70% 40%)"/>
+          <stop offset="100%" stop-color="#0b3d91"/>
+        </linearGradient>
+      </defs>
+   <path d="M0 457L12.5 449.3C25 441.7 50 426.3 75 430C100 433.7 125 456.3 150 451C175 445.7 200 412.3 225 409.2C250 406 275 433 300 447.5C325 462 350 464 375 462.2C400 460.3 425 454.7 450 447.3C475 440 500 431 525 435.5C550 440 575 458 600 472.7C625 487.3 650 498.7 675 488C700 477.3 725 444.7 750 436.2C775 427.7 800 443.3 825 452C850 460.7 875 462.3 887.5 463.2L900 464L900 601L887.5 601C875 601 850 601 825 601C800 601 775 601 750 601C725 601 700 601 675 601C650 601 625 601 600 601C575 601 550 601 525 601C500 601 475 601 450 601C425 601 400 601 375 601C350 601 325 601 300 601C275 601 250 601 225 601C200 601 175 601 150 601C125 601 100 601 75 601C50 601 25 601 12.5 601L0 601Z" 
+fill="url(#waveGradient)"></path>
+    </svg>
+  </div>
 </section>
 
-<!-- ─── ABOUT / BIO ───────────────────────────────────── -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ─── ABOUT (Bio + Education merged) ───────────────────── -->
 <section id="about">
-  <div id="section-bio" class="section-wrapper color-1" data-drop="right" data-title="About">
+  <div id="section-bio"
+       class="section-wrapper color-1"
+       data-drop="right"
+       data-title="About">
+
     <div class="io-sentinel"></div>
-    <h2 class="aboutMe"  data-reveal>About Me</h2>
+
+    <h2 class="aboutMe" data-reveal>About Me</h2>
+
     <div class="about-section left">
+
+      <!-- ── Bio block ── -->
       <div class="text-block">
-        <h3  data-reveal>👋 Who I Am</h3>
-        <p  data-reveal>I’m a 3rd-year Computer Science student passionate about game
-           development, full-stack projects, and building digital tools that
-           matter.</p>
+        <h3 data-reveal>👋 Who I Am</h3>
+        <p  data-reveal>
+          I’m a 3<sup>rd</sup>-year Computer Science student passionate about
+          game development, full-stack projects, and building digital tools
+          that matter.
+        </p>
+
+        <!-- ── Education block (NEW) ── -->
+        <h3 data-reveal style="margin-top:1.8rem">🎓 Education</h3>
+        <p  data-reveal>
+          BSc in Computer Science — University of Cyprus (2022 – 2026)<br>
+          Dean’s List • Academic Excellence Scholarship
+        </p>
       </div>
+
       <div class="media-block">
-        <img src="photo.jpg" alt="Bio" class="target-pic pic-wrap">
+        <!-- you can swap this for any portrait / campus photo you like -->
+        <img src="photo.jpg"
+             alt="Constantinos Papaandrea"
+             class="target-pic pic-wrap">
       </div>
     </div>
+
     <a href="#projects" class="next-btn">Next ↓</a>
   </div>
+</section>
+
 <!-- ▾▾  Wavy divider – paste inside your HTML  ▾▾ -->
 <svg class="section-wave"
      viewBox="0 0 900 601"
@@ -114,7 +195,7 @@ fill="url(#waveGradient)"></path>
      <defs>
       <linearGradient id="waveGradient2" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%"   stop-color="#0b3d91"/>
-        <stop offset="90%"  stop-color="#dcd7d7" />
+        <stop offset="100%"  stop-color="#2b5db1" />
       </linearGradient>
       
     </defs>
@@ -136,8 +217,23 @@ fill="url(#waveGradient)"></path>
         fill="#111d"/>
 </svg>
 
-<section id="projects" class="projects" data-reveal>
-  <h2 class="section-heading">Projects</h2>
+<section id="projects" class="projects" data-reveal data-drop="top">
+  <svg      width="160" height="160" class="projects__bg target-pic" viewBox="0 0 24 24" aria-hidden="true">
+    <path 
+            d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387
+             .6.113.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416
+             -.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.729.083-.729
+             1.205.084 1.838 1.237 1.838 1.237 1.07 1.834 2.809 1.304 3.494.997
+             .107-.776.42-1.305.763-1.605-2.665-.303-5.466-1.332-5.466-5.931
+             0-1.31.468-2.382 1.236-3.222-.124-.303-.536-1.527.117-3.176
+             0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404
+             1.02.005 2.047.138 3.006.404 2.292-1.553 3.298-1.23 3.298-1.23
+             .654 1.649.242 2.873.118 3.176.77.84 1.235 1.913 1.235 3.222
+             0 4.609-2.804 5.625-5.476 5.921.432.372.824 1.102.824 2.222v3.293
+             c0 .319.192.694.801.576C20.565 21.797 24 17.298 24 12
+             24 5.373 18.627 0 12 0z"/>
+  </svg>
+  <h2  class="section-heading">Projects</h2>
 
   <button class="wheel-btn wheel-btn--prev" aria-label="Previous">‹</button>
   <button class="wheel-btn wheel-btn--next" aria-label="Next">›</button>
@@ -159,48 +255,115 @@ fill="url(#waveGradient)"></path>
 
     <!-- add as many <article> … </article> cards as you like -->
   </div>
+      <a href="#skills" class="next-btn">Next ↓</a>
+
 </section>
+<!-- ▸ SKILLS / TOOLS ─────────────────────────────────────────────── -->
+<section id="skills" class="skills" data-title="Skills" data-reveal data-drop="center">
 
+  <h2 class="section-heading">Skills&nbsp;&amp;&nbsp;Tools</h2>
 
+  <div class="skills__grid">
 
-  <div id="section-education" class="section-wrapper color-3" data-drop="right" data-title="Education">
-    <div class="io-sentinel"></div>
-    <div class="about-section left">
-      <div class="text-block">
-        <h3>🎓 Education</h3>
-        <p>BSc in Computer Science – University of Cyprus (2022-2026)<br>
-           Dean’s List, Academic Excellence Scholarship</p>
-      </div>
-      <div class="media-block">
-        <img src="https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Education"  class="target-pic pic-wrap">
-      </div>
+    <!-- ◂───────────── ① Info panel (updates on hover) -->
+    <aside class="skill-info" id="skillInfo">
+      <h3 id="skillLabel"> </h3>
+      <p  id="skillBlurb">Hover an icon to learn more.</p>
+    </aside>
+
+    <!-- ◂───────────── ② Icon column  -->
+    <ul class="skill-list" id="skillList">
+
+      <li data-skill="HTML&nbsp;/&nbsp;CSS"
+          data-blurb="Semantic markup, CSS Grid / Flexbox, responsive design.">
+        <i class="devicon-html5-plain colored"></i>
+      </li>
+
+      <li data-skill="JavaScript"
+          data-blurb="ES 2023+, bundlers, testing (Vitest / Jest).">
+        <i class="devicon-javascript-plain colored"></i>
+      </li>
+
+      <li data-skill="React"
+          data-blurb="Hooks, Context, performance-first component patterns.">
+        <i class="devicon-react-original colored"></i>
+      </li>
+
+      <li data-skill="Python"
+          data-blurb="Data wrangling, FastAPI &amp; Flask back-ends.">
+        <i class="devicon-python-plain colored"></i>
+      </li>
+
+      <li data-skill="Git / CI"
+          data-blurb="GitHub Actions pipelines → automatic deploys.">
+        <i class="devicon-github-original colored"></i>
+      </li>
+
+    </ul>
+
+    <!-- ◂───────────── ③ Radar chart  -->
+    <div class="radar-box target-pic">
+      <canvas id="skillRadar"
+              aria-label="Radar chart of my skills" role="img"></canvas>
     </div>
-    <a href="#contact" class="next-btn">Next ↓</a>
-  </div>
+
+  </div><!-- /.skills__grid -->
+
+  <!-- fallback if JS disabled -->
+  <noscript>
+    <img src="images/skills-fallback.svg"
+         alt="Static radar chart of my skills" width="400" height="400">
+  </noscript>
+     <a href="#contact" class="next-btn">Next ↓</a>
+
 </section>
+
+ 
 
 <!-- ─── CONTACT ───────────────────────────────────────── -->
-<section id="contact" class="section-wrapper color-4" data-drop="center" data-title="Contact">
+<section id="contact"
+         class="section-wrapper color-4"
+         data-drop="bottom"
+         data-title="Contact">
+
   <div class="io-sentinel"></div>
-  <div class="about-section right">
-    <div class="text-block">
-      <h3>📢 Contact Me</h3>
-      <p><strong>Email:</strong> <a href="mailto:your@email.com">your@email.com</a><br>
-         <strong>Phone:</strong> +123 456 7890<br>
-         <strong>Location:</strong> City, Country</p>
-      <p><strong>Socials:</strong></p>
+
+  <!-- ✨ NEW wrapper that the CSS targets -->
+  <div class="contact-card target-pic">
+
+    <h3>📢 Contact Me</h3>
+
+    <p><strong>Email:</strong>
+       <a href="mailto:your@email.com">your@email.com</a><br>
+       <strong>Phone:</strong> +123 456 7890<br>
+       <strong>Location:</strong> City, Country
+    </p>
+
+    <div>
+      <p><strong>Socials</strong></p>
       <ul>
-        <li><a href="https://github.com/yourusername" target="_blank">GitHub</a></li>
-        <li><a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a></li>
-      </ul>
+  <li class="github">
+      <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+  </li>
+  <li class="linkedin">
+      <a href="https://linkedin.com/in/yourusername" target="_blank">LinkedIn</a>
+  </li>
+</ul>
+
     </div>
+
   </div>
+        <a href="#hero" class="next-btn">Back to Top ↑</a>
+
 </section>
+
 
 <footer>
   <p>&copy; 2025 Constantinos Papaandrea. All rights reserved.</p>
 </footer>
 <script type="module" src="js/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 </body>
 </html>

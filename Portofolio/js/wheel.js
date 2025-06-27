@@ -10,7 +10,7 @@
     /* ----------------------------------------------------------------
        Layout constants – tweak to taste
        -------------------------------------------------------------- */
-    const GAP      = 240;   // px offset of side cards from centre
+    const GAP      = 20;   // px offset of side cards from centre
     const SCALE_IN = 0.70; // side-card scale
     const SCALE_OUT= 0.50; // hidden scale
     const OP_SIDE  = 0.35; // opacity of side cards
@@ -39,13 +39,13 @@
         }
         /* right neighbour (diff 1 or -(n-1)) ------------------- */
         else if (diff === 1 || diff === -(n-1)) {
-          card.style.transform = `translateX(${GAP}px) scale(${SCALE_IN})`;
+          card.style.transform = `translateX(${GAP}vw) scale(${SCALE_IN})`;
           card.style.opacity   = OP_SIDE;
           card.style.zIndex    = 2;
         }
         /* left neighbour (diff n-1 or -1) ---------------------- */
         else if (diff === n-1 || diff === -1) {
-          card.style.transform = `translateX(-${GAP}px) scale(${SCALE_IN})`;
+          card.style.transform = `translateX(-${GAP}vw) scale(${SCALE_IN})`;
           card.style.opacity   = OP_SIDE;
           card.style.zIndex    = 2;
         } 

@@ -26,7 +26,7 @@ drop.style.transition =
    transform ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1)`;
 
 /* ---------- scale presets ---------- */
-const SCALE = { center:1, left:1, right:1, bottom:2 };
+const SCALE = { center:2, left:1, right:1, bottom:2  ,top:2.5};
 
 /* ---------- sizing helpers ---------- */
 const NATURAL = { w: drop.offsetWidth, h: drop.offsetHeight };
@@ -76,10 +76,15 @@ document.querySelectorAll('.io-sentinel').forEach(s => io.observe(s));
 
 /* ---------- first placement ---------- */
 (() => {
+  /* 👉  re-measure now – the SVG is fully parsed at this point */
+  NATURAL.w = drop.offsetWidth;
+  NATURAL.h = drop.offsetHeight;
+
   const first = panels[0];
   const pic   = first.querySelector('.target-pic');
-  if(!pic) return;
-  const {x,y} = pageCentre(pic);
+  if (!pic) return;
+
+  const { x, y } = pageCentre(pic);
   moveAndScale(x, y, SCALE[first.dataset.drop] ?? 1);
 })();
 

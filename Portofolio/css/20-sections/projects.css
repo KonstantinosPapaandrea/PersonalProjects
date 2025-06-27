@@ -9,7 +9,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3rem;                /* space between <h2> and wheel     */
+    gap: 20rem;                /* space between <h2> and wheel     */
+    width:100vw;
+    height:100vh;
   }
   
   /* big section title */
@@ -47,4 +49,17 @@
     object-fit: cover;
     border-radius: 10px;
   }
+  .projects__bg{
+  position:absolute;
+  inset:0;                          /* cover whole section    */
+  margin:auto;
+  width:min(75vmin, 560px);         /* responsive max size    */
+  height:auto;
+  fill:#ffffff;                     /* icon colour            */
+  opacity:0.1;                     /* “fade-out” strength    */
+  filter:blur(1.5px);               /* soften the edges       */
+  pointer-events:none;              /* clicks pass through    */
+  z-index:1;    
+  display:block;                    /* behind wheel & text    */
   
+}
