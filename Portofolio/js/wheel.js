@@ -1,55 +1,91 @@
 /* ============================================================
-   3-D WHEEL CAROUSEL  – v2  (front card gets higher z-index)
+   Simple 3-card wheel – previous | current | next
    ============================================================ */
-const wheel   = document.getElementById('projectWheel');
-const cards   = [...wheel.querySelectorAll('.wheel__card')];
-const btnPrev = wheel.parentElement.querySelector('.wheel-btn--prev');
-const btnNext = wheel.parentElement.querySelector('.wheel-btn--next');
-
-const count   = cards.length;
-const cardDeg = 360 / count;
-let   current = 0;
-
-wheel.style.setProperty('--card-count', count);
-
-/* place cards once */
-cards.forEach((card, i)=>{
-  card.style.setProperty('--rot', `rotateY(${i*cardDeg}deg)`);
-});
-
-/* ── helper ─────────────────────────────────────────────── */
-function updateClasses(){
-  cards.forEach((c,i)=>{
-    const rel = ((i - current) % count + count) % count;   // 0 … n-1
-    /* front-/side/back styling */
-    c.style.setProperty('--visible',      rel<=1||rel>=count-1 ? 1 : .15);
-    c.style.setProperty('--frontScale',   rel===0 ? 1 : .8);
-
-    /* NEW → toggle z-index flag */
-    if (rel === 0) {
-      c.dataset.front = 'true';           // adds  data-front="true"
-    } else {
-      delete c.dataset.front;             // attribute removed → z-index back
+   (() => {
+    const wheel   = document.getElementById('projectWheel');
+    const cards   = [...wheel.querySelectorAll('.wheel__card')];
+    const btnPrev = document.querySelector('.wheel-btn--prev');
+    const btnNext = document.querySelector('.wheel-btn--next');
+  
+    /* ----------------------------------------------------------------
+       Layout constants – tweak to taste
+       -------------------------------------------------------------- */
+    const GAP      = 240;   // px offset of side cards from centre
+    const SCALE_IN = 0.70; // side-card scale
+    const SCALE_OUT= 0.50; // hidden scale
+    const OP_SIDE  = 0.35; // opacity of side cards
+  
+    /* ----------------------------------------------------------------
+       Current index & render
+       -------------------------------------------------------------- */
+    let current = 0;               // centre card idx (0…n-1)
+  
+    function render () {
+      const n = cards.length;
+  
+      cards.forEach((card, i) => {
+        /* distance from current card in the cyclic list: -2…+2 */
+        const diff = (i - current + n) % n;
+  
+        /* reset helper classes */
+        card.classList.remove('is-front');
+  
+        /* centre card (diff 0) -------------------------------- */
+        if (diff === 0) {
+          card.style.transform = `translateX(0) scale(1)`;
+          card.style.opacity   = 1;
+          card.style.zIndex    = 3;
+          card.classList.add('is-front');
+        }
+        /* right neighbour (diff 1 or -(n-1)) ------------------- */
+        else if (diff === 1 || diff === -(n-1)) {
+          card.style.transform = `translateX(${GAP}px) scale(${SCALE_IN})`;
+          card.style.opacity   = OP_SIDE;
+          card.style.zIndex    = 2;
+        }
+        /* left neighbour (diff n-1 or -1) ---------------------- */
+        else if (diff === n-1 || diff === -1) {
+          card.style.transform = `translateX(-${GAP}px) scale(${SCALE_IN})`;
+          card.style.opacity   = OP_SIDE;
+          card.style.zIndex    = 2;
+        } 
+        /* everything else – hide ------------------------------- */
+        else {
+          const far = diff < n/2 ? -220 : 220;  // park off-screen
+          card.style.transform = `translateX(${far}%) scale(${SCALE_OUT})`;
+          card.style.opacity   = 0;
+          card.style.zIndex    = 1;
+        }
+      });
     }
-  });
-}
-
-/* ── rotate wheel ───────────────────────────────────────── */
-function spin(dir){
-  current = (current + dir + count) % count;
-  updateClasses();
-}
-
-btnPrev.addEventListener('click', ()=>spin(-1));
-btnNext.addEventListener('click', ()=>spin( 1));
-updateClasses();
-
-/* optional swipe */
-let startX=null;
-wheel.addEventListener('pointerdown', e=>startX=e.clientX);
-wheel.addEventListener('pointerup',   e=>{
-  if(startX===null) return;
-  const dx = e.clientX - startX;
-  if(Math.abs(dx) > 30) spin(dx>0?-1:1);
-  startX=null;
-});
+  
+    /* ----------------------------------------------------------------
+       Button wiring
+       -------------------------------------------------------------- */
+    btnPrev.addEventListener('click', () => {
+      current = (current - 1 + cards.length) % cards.length;
+      render();
+    });
+  
+    btnNext.addEventListener('click', () => {
+      current = (current + 1) % cards.length;
+      render();
+    });
+  
+    /* ----------------------------------------------------------------
+       Touch-friendly swipe (optional but nice)
+       -------------------------------------------------------------- */
+    let startX = null;
+    wheel.addEventListener('pointerdown', e => startX = e.clientX);
+    wheel.addEventListener('pointerup',   e => {
+      if (startX == null) return;
+      const dx = e.clientX - startX;
+      if      (dx > 40) btnPrev.click();   // swipe → right  = previous
+      else if (dx < -40)btnNext.click();   // swipe ← left   = next
+      startX = null;
+    });
+  
+    /* first paint */
+    render();
+  })();
+  

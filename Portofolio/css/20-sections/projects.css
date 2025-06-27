@@ -1,0 +1,50 @@
+/* ============================================================
+   “PROJECTS” SECTION – heading + wheel wrapper + buttons
+   ========================================================== */
+
+/* section wrapper */
+.projects{
+    position: relative;
+    padding: 6rem 0 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;                /* space between <h2> and wheel     */
+  }
+  
+  /* big section title */
+  .projects .section-heading{
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    color: #fff;
+  }
+  
+  /* -------- navigation buttons ------------------------------ */
+  .wheel-btn{
+    position: absolute;
+    top: 50%; translate: 0 -50%;
+    width: 3rem; aspect-ratio: 1;
+    background: #fff3;
+    border: none;
+    color: #fff;
+    font-size: 2.6rem; line-height: 1;
+    border-radius: 50%;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    transition: background .25s;
+    z-index: 3;
+  }
+  .wheel-btn:hover  { background: #fff6; }
+  .wheel-btn:active { scale: .92;        }
+  
+  .wheel-btn--prev{ left: 1rem; }
+  .wheel-btn--next{ right: 1rem; }
+  
+  /* optional image polish inside a card */
+  .wheel__card img{
+    width: 100%; aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
