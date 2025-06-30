@@ -1,10 +1,10 @@
 /* ─── Skills data – edit here ────────────────────────────────── */
 const skillLabels = [
-  'HTML/CSS', 'JavaScript', 'React',
-  'Node.js',  'C# / Unity', 'SQL'
+  'HTML','CSS','JavaScript', 'React',
+  , 'C# / Unity', 'SQL','Java','C','ASM','Parallelism','Algorithms','GitHub'
 ];
 
-const skillScores = [90, 85, 80, 70, 75, 65]; // 0–100 scale
+const skillScores = [95, 90, 80, 70, 90, 90,95,80,75,80,90,95,95]; // 0–100 scale
 
 /* ─── Build the neon radar chart ─────────────────────────────── */
 const ctx = document.getElementById('skillRadar');

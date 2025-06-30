@@ -20,9 +20,9 @@
 
 
 <!-- page sections -->
- <link rel="stylesheet" href="css/20-sections/projects.css">
+<link rel="stylesheet" href="css/20-sections/projects.css">
 <link rel="stylesheet" href="css/20-sections/hero.css">
- <link rel="stylesheet" href="css/20-sections/skills.css">
+<link rel="stylesheet" href="css/20-sections/skills.css">
 <link rel="stylesheet" href="css/20-sections/about.css">
 <link rel="stylesheet" href="css/20-sections/contact.css">
 <link rel="stylesheet" href="css/20-sections/footer.css">
@@ -86,10 +86,8 @@
   <div class="hero__wrap">
 
     <!-- ◂ LEFT column – name + drop target -->
-    <div class="hero__left">
-      <h1 class="target-pic" data-drop="center" data-reveal>Constantinos&nbsp;Papaandrea</h1>
-
-    
+    <div class="hero__name">
+      <h1 class="target-pic" data-drop="center" data-reveal>Constantinos<br>Papaandrea</h1>
     </div>
 
     <!-- ▸ RIGHT column – tagline, roles, buttons, cue -->
@@ -103,8 +101,8 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="#section-bio" class="btn">Hire&nbsp;Me</a>
         <a href="#section-bio" class="btn btn-secondary">About&nbsp;Me</a>
+        <a href="#section-bio" class="btn">Hire&nbsp;Me</a>
       </div>
 
       <div class="scroll-hint" aria-hidden="true">⌄</div>
@@ -126,23 +124,6 @@ fill="url(#waveGradient)"></path>
     </svg>
   </div>
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -271,35 +252,85 @@ fill="url(#waveGradient)"></path>
       <p  id="skillBlurb">Hover an icon to learn more.</p>
     </aside>
 
-    <!-- ◂───────────── ② Icon column  -->
-    <ul class="skill-list" id="skillList">
+  <!-- ◂───────────── ② Icon column  -->
+<ul class="skill-list" id="skillList">
 
-      <li data-skill="HTML&nbsp;/&nbsp;CSS"
-          data-blurb="Semantic markup, CSS Grid / Flexbox, responsive design.">
-        <i class="devicon-html5-plain colored"></i>
-      </li>
+  <!-- ①  HTML -->
+  <li data-skill="HTML"
+      data-blurb="Standards-compliant, accessible markup.">
+    <i class="devicon-html5-plain colored"></i>
+  </li>
 
-      <li data-skill="JavaScript"
-          data-blurb="ES 2023+, bundlers, testing (Vitest / Jest).">
-        <i class="devicon-javascript-plain colored"></i>
-      </li>
+  <!-- ②  CSS -->
+  <li data-skill="CSS"
+      data-blurb="Modern CSS — Grid, Flexbox, custom-properties, fluid type.">
+    <i class="devicon-css3-plain colored"></i>
+  </li>
 
-      <li data-skill="React"
-          data-blurb="Hooks, Context, performance-first component patterns.">
-        <i class="devicon-react-original colored"></i>
-      </li>
+  <!-- ③  JavaScript -->
+  <li data-skill="JavaScript"
+      data-blurb="ES 2023+, bundlers, unit tests (Vitest / Jest).">
+    <i class="devicon-javascript-plain colored"></i>
+  </li>
 
-      <li data-skill="Python"
-          data-blurb="Data wrangling, FastAPI &amp; Flask back-ends.">
-        <i class="devicon-python-plain colored"></i>
-      </li>
+  <!-- ④  React -->
+  <li data-skill="React"
+      data-blurb="Hooks, Context, performance-first component patterns.">
+    <i class="devicon-react-original colored"></i>
+  </li>
 
-      <li data-skill="Git / CI"
-          data-blurb="GitHub Actions pipelines → automatic deploys.">
-        <i class="devicon-github-original colored"></i>
-      </li>
+  <!-- ⑤  C# / Unity -->
+  <li data-skill="C# / Unity"
+      data-blurb="Gameplay code, Scriptable Objects, ECS &amp; shaders.">
+    <!-- two icons side-by-side -->
+    <i class="devicon-unity-original colored"></i>
+  </li>
 
-    </ul>
+  <!-- ⑥  SQL -->
+  <li data-skill="SQL"
+      data-blurb="Schema design, stored procedures, query optimisation.">
+    <i class="devicon-mysql-plain colored"></i>
+  </li>
+
+  <!-- ⑦  Java -->
+  <li data-skill="Java"
+      data-blurb="OOP, collections, Spring-boot basics.">
+    <i class="devicon-java-plain colored"></i>
+  </li>
+
+  <!-- ⑧  C -->
+  <li data-skill="C"
+      data-blurb="Pointers, memory management, low-level debugging.">
+    <i class="devicon-c-plain colored"></i>
+  </li>
+
+  <!-- ⑨  Assembly -->
+  <li data-skill="Assembly"
+      data-blurb="x86-64 Linux, bit-twiddling, SIMD intrinsics.">
+    <!-- devicon has no generic ASM glyph – fallback to text -->
+    <span class="asm-icon">ASM</span>
+  </li>
+
+  <!-- ⑩  Parallel Programming -->
+  <li data-skill="Parallel&nbsp;Programming"
+      data-blurb="OpenMP, thread pools, lock-free data structures.">
+    <span class="parallel-icon">⇅</span>
+  </li>
+
+  <!-- ⑪  Algorithms -->
+  <li data-skill="Algorithms"
+      data-blurb="Graphs, DP, complexity analysis, contest practice.">
+    <span class="algo-icon">ƒ(n)</span>
+  </li>
+
+  <!-- ⑫  GitHub -->
+  <li data-skill="GitHub"
+      data-blurb="Git flow, PR reviews, Actions CI/CD pipelines.">
+    <i class="devicon-github-original icon--white"></i>
+  </li>
+
+</ul>
+
 
     <!-- ◂───────────── ③ Radar chart  -->
     <div class="radar-box target-pic">

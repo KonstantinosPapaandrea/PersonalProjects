@@ -24,11 +24,15 @@
 }
 
 /* left = name */
-.hero__left h1{
+.hero__name h1{
   font-size:clamp(2.4rem,4vw+1rem,4.2rem);
   line-height:1.1;
   color:#fff;
   z-index: 2;
+  text-align: center;
+  display: flex;
+  justify-content:center;
+  align-items: center;
 }
 
 /* right column text alignment */
