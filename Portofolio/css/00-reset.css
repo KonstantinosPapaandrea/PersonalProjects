@@ -1,7 +1,7 @@
 /* ===== RESET ===== */
 *,
 *::before,
-*::after{ box-sizing:border-box; margin:0; padding:0; }
+*::after{ margin:0; padding:0; }
 
 html{ scroll-behavior:smooth; }
 /* master wave styling */

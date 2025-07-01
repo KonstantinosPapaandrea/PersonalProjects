@@ -13,20 +13,15 @@ body{
   font-family:'Segoe UI',sans-serif;
   font-size:20px;
   line-height:1.8;
-  color:#333;
-  overflow-x:hidden;
+  color:#fff;
+  /*overflow-x:hidden;*/
 }
-/* ===== COLOUR VARIANTS ===== */
-.color-1{ background:#0b3d91; color:#fff; }
-.color-2{ background:#004643; color:#fff; }
-.color-3{ background:#1b2a49; color:#fff; }
-.color-4{ background:#0d3b66; color:#fff; }
+
 
 /* every path gets fill = the NEXT section’s background       */
 p{
     position:relative;
 
-  z-index: 2;
 }
 /* ===== FULL-SCREEN WRAPPERS ===== */
 .section-wrapper{
@@ -66,5 +61,9 @@ p{
 }
 
 .text-block{
-  flex: 1 1 0;             /* text takes the remaining space   */
+  display:flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  gap:5vh;
 }

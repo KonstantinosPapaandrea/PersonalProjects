@@ -1,0 +1,66 @@
+@property --angle{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;    
+}
+  
+  /* 1) your panel itself sits above the section */
+  .dark-highlight-box {
+    position: relative;       /* create its own stacking context */
+    z-index: 10;              /* higher than the section’s (auto) */
+    /* no more direct background here! */
+    padding: 2em;
+    max-width: 50vw;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 10px;
+  }
+
+  
+    /* 2) gradient halo behind everything */
+    .dark-highlight-box::before {
+        content: "";
+        position: absolute;
+        inset: -5px;              /* 10px outside on all sides */
+        background: white;
+        border-radius: inherit;
+        z-index: -1;        
+      }
+      
+      /* 3) panel’s dark fill, above the section’s blue, but under your content */
+      .dark-highlight-box::after {
+        content: "";
+        position: absolute;
+        inset: 0;                  /* exactly cover the panel area */
+        background: #1a1a1a;
+        border-radius: inherit;
+        z-index: -1;                /* above the rim’s 0, below text (which is at 10) */
+      }
+  /* 2) gradient halo behind everything */
+  .dark-highlight-box:hover::before {
+    content: "";
+    position: absolute;
+    inset: -5px;              /* 10px outside on all sides */
+    background: conic-gradient(from var(--angle), transparent 70%, white);
+    border-radius: inherit;
+    z-index: -1;        
+    animation: spin 3s linear infinite;
+}
+  
+  /* 3) panel’s dark fill, above the section’s blue, but under your content */
+  .dark-highlight-box:hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;                  /* exactly cover the panel area */
+    background: #1a1a1a;
+    border-radius: inherit;
+    z-index: -1;                /* above the rim’s 0, below text (which is at 10) */
+  }
+  @keyframes spin{
+    from{
+        --angle:0deg;
+    }
+    to{
+        --angle: 360deg;
+    }
+  }

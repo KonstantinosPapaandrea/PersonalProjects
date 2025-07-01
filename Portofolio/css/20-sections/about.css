@@ -5,6 +5,7 @@
 .about-section{
   display:flex; flex-direction:column; gap:40px;
   align-items:center; text-align:center;
+ 
 }
 
 .about-section.right{ flex-direction:row-reverse; text-align:right; }
@@ -19,4 +20,7 @@
   justify-content: space-between;  /* …OR space-between, not both */
 
   text-align: left;
+}
+.about{ background-color:#0b3d91;
+  z-index: -2;
 }

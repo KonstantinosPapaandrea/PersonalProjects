@@ -6,28 +6,45 @@
 <title>Curved Mesh Background</title>
 
 <style>
-/* ─── baseline reset / page look — keep your own styles ─── */
-*{margin:0;box-sizing:border-box}
-html,body{height:100%}
-body{
-  background:#0c1017;          /* fallback if SVG fails */
-  font-family:system-ui,sans-serif;
-  color:#fff; overflow-x:hidden;
-}
+/* ─── Dark panel with animated orbiting highlight ─── */
 
+.dark-highlight-box {
+    background: #1a1a1a;
+    color: #f5f5f5;
+    margin:0 auto;
+    padding:2em;
+    max-width: 50vw;
+    text-align: center;
+    
+    border-radius:10px;
+    position:relative;
+    
+  }
+  
 
+  /* mask that hides everything *inside* the box so only the rim shows */
+  .dark-highlight-box::after,.dark-highlight-box::before {
+    content:'';
+    position: absolute;
+    height:100%;
+    width: 100%;
+    background-image:conic-gradient(red,green);
+    top: 50%;
+    left:50%;
+    translate:-50% -50%;
+    z-index:-1;
+    padding:10px;
+    border-radius:10px;
+  }
+  
 
-/* subtle grain overlay (optional) */
-body::after{
-  content:""; position:fixed; inset:0;
-  background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAwCAYAAACJi8yPAAAACXBIWXMAAAsTAAALEwEAmpwYAAA...") repeat;
-  mix-blend-mode:soft-light; opacity:.05; pointer-events:none; z-index:-2;
-}
+  
+
 </style>
 </head>
 <body>
 
-
+<p class="dark-highlight-box"></p>
 
 <!-- your page content follows … -->
 
