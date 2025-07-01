@@ -48,6 +48,21 @@ function floatUnderBody(){
     document.body.appendChild(drop);
   }
 }
+// helper to re-position the drop under the current panel
+function refreshDropPosition() {
+  if (!currentPanel) return;
+  const pic = currentPanel.querySelector('.target-pic');
+  if (!pic) return;
+
+  // read the current scale
+  const m = drop.style.transform.match(/scale\(([^)]+)\)/);
+  const scale = m ? parseFloat(m[1]) : 1;
+
+  // find the live centre
+  const { x, y } = pageCentre(pic);
+  moveAndScale(x, y, scale);
+}
+
 
 /* ---------- main IO logic ---------- */
 let currentPanel = null;
@@ -90,15 +105,15 @@ document.querySelectorAll('.io-sentinel').forEach(s => io.observe(s));
 
 /* ---------- keep centre correct on resize ---------- */
 let rAF;
+
+// on resize you already have:
 window.addEventListener('resize', () => {
   cancelAnimationFrame(rAF);
-  rAF = requestAnimationFrame(() => {
-    if(!currentPanel) return;
-    const pic = currentPanel.querySelector('.target-pic');
-    if(!pic) return;
-    const { x,y } = pageCentre(pic);
-    const scale   = parseFloat(drop.style.transform.replace('scale(',''))
-                  || 1;
-    moveAndScale(x, y, scale);
-  });
+  rAF = requestAnimationFrame(refreshDropPosition);
+});
+
+// **add this** on scroll (and on any other event that can move things)
+window.addEventListener('scroll', () => {
+  cancelAnimationFrame(rAF);
+  rAF = requestAnimationFrame(refreshDropPosition);
 });
