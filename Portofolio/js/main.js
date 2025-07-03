@@ -7,5 +7,6 @@ import './scrollReveal.js';
 import './wheel.js'; 
 import './skills.js';
 import './typewriter.js';
-//import './wheel-spin.js'         //  after utils / waterDrop / scrollReveal
+import './explode.js';
+import './overlay.js'
 /* future: import other features here  */

@@ -1,0 +1,28 @@
+/* ─── FULL-SCREEN PLAY OVERLAY ─── */
+.intro-overlay {
+    position: fixed;
+    inset: 0;                      /* top:0; right:0; bottom:0; left:0; */
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;                 /* above everything else */
+  }
+  
+  .intro-play-btn {
+    font-size: 2rem;
+    padding: 1rem 2rem;
+    background: var(--c-accent, #35d6ff);
+    color: #111;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .intro-play-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 1rem rgba(0,0,0,0.6);
+  }
+  

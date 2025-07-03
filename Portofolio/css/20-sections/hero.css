@@ -1,13 +1,15 @@
 /* ─── HERO LAYOUT  ------------------------------------------------- */
 .hero{
   height:100vh;
-  width:100vw;
+  width:100%;
+  max-width:100vw;
+  
   display:flex;               /* keeps wave + mesh positioned */
   flex-direction:column;
   justify-content:center;
   align-items: center;
   position:relative;
-  padding:0 5vw;
+  padding:0;
   overflow:hidden;
   background:
       radial-gradient(circle at 50% 40%,transparent 0 60%,#0006 100%),
@@ -101,7 +103,7 @@
   /* your existing styles… */
   font-size: clamp(4rem, 15vw, 10rem);
   line-height: 1.1;
-  font-weight: 900;
+  
   text-transform: uppercase;
   letter-spacing: 0.5rem;
   text-align: center;
@@ -152,4 +154,3 @@
 @keyframes shine {
   100% { left: 200%; opacity: 0;}
 }
-

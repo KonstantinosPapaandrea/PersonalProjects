@@ -1,0 +1,76 @@
+.welcome h1 > span {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+  }
+  
+  /* ─── WELCOME WORDS: INITIAL OFFSCREEN POSITIONS ─── */
+  .welcome h1 > span[data-reveal]:not(.is-visible)[data-reveal-from="left"] {
+    display: inline-block; /* allow it to move independently */
+    transform: translateX(-30vw) !important;
+  }
+  .welcome h1 > span[data-reveal]:not(.is-visible)[data-reveal-from="right"] {
+    display: inline-block;
+    transform: translateX(30vw) !important;
+  }
+  /* bottom uses your default var(--reveal-distance), so no override needed */
+  
+  /* ─── WELCOME WORDS: SNAPPY TRANSITIONS ─── */
+  .welcome h1 > span[data-reveal] {
+    display: inline-block;
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1) !important;
+  }
+  
+  /* ─── WELCOME WORDS: FINAL VISIBLE STATE ─── */
+  .welcome h1 > span[data-reveal].is-visible {
+    opacity: 1        !important;
+    transform: none   !important;
+  }
+  /* first word appears instantly */
+  .welcome h1 > span[data-reveal]:nth-of-type(1) {
+    transition-delay: 0s !important;
+  }
+  
+  /* second word after 0.1s */
+  .welcome h1 > span[data-reveal]:nth-of-type(2) {
+    transition-delay: 1s !important;
+  }
+  
+  /* third word after 0.2s */
+  .welcome h1 > span[data-reveal]:nth-of-type(3) {
+    transition-delay: 2s !important;
+  }
+  /* ─── PARTICLE EXPLOSION ─── */
+  .particle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--color, #0ff);
+    border-radius: 50%;
+    pointer-events: none;
+    /* two‐part animation: shoot + fade */
+    animation-name: shoot, fade;
+    animation-duration: var(--duration, 0.6s),
+                        var(--duration, 0.6s);
+    animation-delay:    var(--delay, 0s),
+                        var(--delay, 0s);
+    animation-timing-function: ease-out, linear;
+    animation-fill-mode: forwards, forwards;
+  }
+  
+  @keyframes shoot {
+    from {
+      transform: translate(0,0) scale(1);
+    }
+    to {
+      transform: translate(var(--dx), var(--dy)) scale(0);
+    }
+  }
+  
+  @keyframes fade {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  

@@ -1,15 +1,17 @@
 /* ===== RESET ===== */
 *,
 *::before,
-*::after{ margin:0; padding:0; }
+*::after{ margin:0; padding:0;
+ }
 
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; 
+overflow-x:hidden;}
 /* master wave styling */
 
 
-/*
+
 div{  border:5px solid black !important;
-}*/
+}
 
 
 
