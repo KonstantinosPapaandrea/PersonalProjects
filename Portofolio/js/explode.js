@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1) Create & preload the explosion audio
-    const boom = new Audio('/sounds/8-bit-explosion_F.wav');
+    const boom = new Audio('./sounds/8-bit-explosion_F.wav');
     boom.preload = 'auto';
     let boomUnlocked = false;
   
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const dir = wordEl.getAttribute('data-reveal-from');
       const isVert = dir === 'top' || dir === 'bottom';
   
-      const count = 12;
+      const count = 100;
       for (let i = 0; i < count; i++) {
         const p = document.createElement('span');
         p.className = 'particle';

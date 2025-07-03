@@ -5,61 +5,69 @@
 /* section wrapper */
 .projects{
     position: relative;
-    padding: 6rem 0 8rem;
+    padding: 6rem 0 2rem;           /* Reduced bottom padding */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20rem;                /* space between <h2> and wheel     */
-    width:100vw;
-    height:100vh;
-  }
-  
-  /* big section title */
-  .projects .section-heading{
+    gap: 5rem;                      /* Reduced gap between the heading and wheel */
+    width: 100vw;
+    height: 100vh;                  /* Ensure the height doesn't exceed 100vh */
+    max-height: 100%;
+}
+
+/* big section title */
+.projects .section-heading{
     font-size: clamp(2.2rem, 4vw, 3.5rem);
     text-transform: uppercase;
     letter-spacing: .03em;
     color: #fff;
-  }
-  
-  /* -------- navigation buttons ------------------------------ */
-  .wheel-btn{
+}
+
+/* -------- navigation buttons ------------------------------ */
+.wheel-btn{
     position: absolute;
-    top: 50%; translate: 0 -50%;
-    width: 3rem; aspect-ratio: 1;
+    top: 50%; 
+    translate: 0 -50%;
+    width: 3rem; 
+    aspect-ratio: 1;
     background: #fff3;
     border: none;
     color: #fff;
-    font-size: 2.6rem; line-height: 1;
+    font-size: 2.6rem; 
+    line-height: 1;
     border-radius: 50%;
     backdrop-filter: blur(4px);
     cursor: pointer;
     transition: background .25s;
     z-index: 3;
-  }
-  .wheel-btn:hover  { background: #fff6; }
-  .wheel-btn:active { scale: .92;        }
-  
-  .wheel-btn--prev{ left: 1rem; }
-  .wheel-btn--next{ right: 1rem; }
-  
-  /* optional image polish inside a card */
-  .wheel__card img{
-    width: 100%; aspect-ratio: 16 / 9;
+}
+.wheel-btn:hover  { background: #fff6; }
+.wheel-btn:active { scale: .92; }
+
+/* Positioning the navigation buttons */
+.wheel-btn--prev{ left: 1rem; }
+.wheel-btn--next{ right: 1rem; }
+
+/* optional image polish inside a card */
+.wheel__card img{
+    width: 100%; 
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     border-radius: 10px;
-  }
-  .projects__bg{
-  position:absolute;
-  inset:0;                          /* cover whole section    */
-  margin:auto;
-  width:min(75vmin, 560px);         /* responsive max size    */
-  height:auto;
-  fill:#ffffff;                     /* icon colour            */
-  opacity:0.1;                     /* “fade-out” strength    */
-  filter:blur(1.5px);               /* soften the edges       */
-  pointer-events:none;              /* clicks pass through    */
-  z-index:1;    
-  display:block;                    /* behind wheel & text    */
-  
+}
+
+.projects__bg {
+    position: absolute;
+    inset: 0; /* Cover whole section */
+    margin: auto;
+    width: 50%;  /* Take full width of the section */
+    max-width: 50vmin; /* Limit width for large screens */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 75vmin; /* Limit height for large screens */
+    fill: #ffffff; /* Icon color */
+    opacity: 0.1;  /* "Fade-out" strength */
+    filter: blur(1.5px); /* Soften the edges */
+    pointer-events: none; /* Clicks pass through */
+    z-index: 1;    
+    display: block; /* Behind wheel & text */
 }

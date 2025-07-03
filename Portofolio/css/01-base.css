@@ -7,10 +7,15 @@
   --c-orange: hsl(28 92% 54%);
 }
 
-
+@font-face {
+  font-family: 'WelcomeFont'; /* Name the font family */
+  src: url('/Portofolio/fonts/04B_30__.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 body{
   background:#111;
-  font-family:'Segoe UI',sans-serif;
+  font-family:'WelcomeFont',sans-serif;
   font-size:20px;
   line-height:1.8;
   color:#fff;
@@ -50,4 +55,14 @@ p{
   justify-content: space-evenly;
   align-items: center;
   gap:5vh;
+}
+.level-text {
+  position: absolute;          /* Absolute positioning relative to .hero__wrap */
+  top: 25%;                 /* Align it to the bottom (adjust as needed) */
+  right: 10%;                     /* Align it to the left side */
+  margin: 20px;                /* Add some margin for spacing */
+  font-size: 5rem;             /* Adjust the font size */
+  color: #fff;                 /* Text color (white) */
+  font-family: 'WelcomeFont', monospace;
+  z-index: 2;                  /* Ensure it stays above other content */
 }

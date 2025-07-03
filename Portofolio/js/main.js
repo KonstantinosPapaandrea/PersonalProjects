@@ -6,7 +6,8 @@ import './waterDrop.js';
 import './scrollReveal.js';
 import './wheel.js'; 
 import './skills.js';
-import './typewriter.js';
+//import './typewriter.js';
 import './explode.js';
 import './overlay.js'
+import './progress.js'
 /* future: import other features here  */

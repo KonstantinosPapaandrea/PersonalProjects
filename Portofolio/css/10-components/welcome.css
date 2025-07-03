@@ -1,8 +1,55 @@
-.welcome h1 > span {
-    position: relative;
-    display: inline-block;
-    overflow: visible;
+@font-face {
+  font-family: 'WelcomeFont'; /* Name the font family */
+  src: url('/Portofolio/fonts/04B_30__.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.welcome {
+  position: absolute;    /* Use absolute positioning to place it relative to its first positioned (not static) ancestor */
+  top: 10%;             /* Align the bottom to 0 (from the bottom of the parent container) */
+  left: 50%;             /* Align to 50% from the left */
+  transform: translateX(-50%); /* Adjust by 50% of its own width to perfectly center */
+  width: 100%;           /* Ensure it takes full width */
+  text-align: center;    /* Align text inside */
+}
+
+.welcome h1 {
+  position: relative;
+  font-size: clamp(4rem, 4vw, 30rem);   /* Responsive font size */
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  color: #e0e0e0;  /* Softer off-white */
+  margin: 0;
+  font-family: 'WelcomeFont', monospace;
+
+  /* Softer glow with blue/green hues */
+  text-shadow:
+    0 0 4px rgba(0, 255, 255, 0.5),     /* light cyan glow */
+    0 0 8px rgba(0, 200, 255, 0.4),     /* brighter cyan */
+    0 0 16px rgba(0, 150, 200, 0.3),    /* soft blue */
+    0 0 32px rgba(0, 100, 150, 0.2);    /* deep blue glow */
+
+  /* Start them invisible and scaled down */
+  opacity: 0;
+  transform: scale(0.8);
+  animation: welcome-pop 0.1s ease-out 0.3s forwards;
+}
+
+
+/* subtle “pop + fade-in” */
+@keyframes welcome-pop {
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
+}
+.welcome h1 > span {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
   
   /* ─── WELCOME WORDS: INITIAL OFFSCREEN POSITIONS ─── */
   .welcome h1 > span[data-reveal]:not(.is-visible)[data-reveal-from="left"] {

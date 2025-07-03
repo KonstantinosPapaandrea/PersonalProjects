@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="css/10-components/data-reveal.css">
 <link rel="stylesheet" href="css/10-components/welcome.css">
 <link rel="stylesheet" href="css/10-components/overlay.css">
+<link rel="stylesheet" href="css/10-components/progress.css">
+
 
 
 <!-- page sections -->
@@ -50,6 +52,9 @@
 <!-- ─── HEADER / NAV ─────────────────────────────────────────── -->
 <header class="site-header">
   <div class="site-header__inner">
+   <div class="progress-bar">
+    <div class="progress-bar-filled"></div>
+  </div>
 
     <!-- logo / brand mark -->
     <a href="#hero" class="brand">
@@ -90,38 +95,30 @@
 <!-- ─── HERO ──────────────────────────────────────────── -->
 <section id="hero" class="hero"  data-title="Hero" data-drop="center">
 <div class="hero-inner">
- <div class="welcome">
+
+
+  <!-- ── FLEX WRAPPER (two columns) ───────────────────── -->
+  <div class="hero__wrap">
+    <div class="welcome">
   <h1 data-text="WELCOME TO MY PORTFOLIO">
     <span data-reveal data-reveal-from="left">WELCOME</span>
     <span data-reveal data-reveal-from="right">TO MY</span><br>
     <span data-reveal data-reveal-from="bottom">PORTFOLIO</span>
   </h1>
 </div>
-
-  <!-- ── FLEX WRAPPER (two columns) ───────────────────── -->
-  <div class="hero__wrap">
-   
     <!-- ◂ LEFT column – name + drop target -->
     <div class="hero__name">
-      <h2 class="target-pic" data-drop="center">Constantinos<br>Papaandrea</h1>
+      <h1 class="target-pic" data-drop="center">Constantinos<br>Papaandrea</h1>
     </div>
-
+    <div>
+      <p data-reveal class="level-text">Level 1</p>
+    </div>
     <!-- ▸ RIGHT column – tagline, roles, buttons, cue -->
-    <div data-reveal class="dark-highlight-box hero__right" data-reveal-from="right">
-      <p class="hero-tagline" data-reveal>
-        I am just DIFFERENT BITCH
-      </p>
-
-      <p class="hero-roles" aria-label="My roles">
-        <span id="roleTyper"></span>
-      </p>
-
+    <div data-reveal class="hero__right" data-reveal-from="right">
       <div class="hero-buttons">
-        <a href="#section-bio" class="btn btn-secondary">About&nbsp;Me</a>
-        <a href="#section-bio" class="btn">Hire&nbsp;Me</a>
+        <a href="#about" class="next-btn">Level&nbsp;2</a>
+        <div class="scroll-hint" aria-hidden="true">⌄</div>
       </div>
-
-      <div class="scroll-hint" aria-hidden="true">⌄</div>
     </div>
   </div><!-- /.hero__wrap -->
 </div>
@@ -144,8 +141,8 @@ fill="url(#waveGradient)"></path>
 
 
 <!-- ─── ABOUT (Bio + Education merged) ───────────────────── -->
-<section class="about">
-  <div id="section-bio"
+<section class="about section">
+  <div id="about"
        class="section-wrapper"
        data-drop="right"
        data-title="About">
@@ -175,7 +172,9 @@ fill="url(#waveGradient)"></path>
         </p>
       </div>
       </div>
-
+ <div>
+      <p data-reveal class="level-text">Level 2</p>
+    </div>
       <div class="media-block">
         <!-- you can swap this for any portrait / campus photo you like -->
         <img src="photo.jpg"
@@ -184,7 +183,7 @@ fill="url(#waveGradient)"></path>
       </div>
     </div>
 
-    <a href="#projects" class="next-btn">Next ↓</a>
+    <a href="#projects" class="next-btn" data-level="level-3" disabled>Level 3</a>
   </div>
 </section>
 
@@ -217,8 +216,8 @@ fill="url(#waveGradient)"></path>
         fill="#111d"/>
 </svg>
 
-<section id="projects" class="projects" data-drop="top">
-  <svg      width="160" height="160" class="projects__bg target-pic" viewBox="0 0 24 24" aria-hidden="true">
+<section id="projects" class="projects section" data-drop="top">
+  <svg class="projects__bg target-pic" viewBox="0 0 24 24" aria-hidden="true">
     <path 
             d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387
              .6.113.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416
@@ -237,7 +236,9 @@ fill="url(#waveGradient)"></path>
 
   <button class="wheel-btn wheel-btn--prev" aria-label="Previous">‹</button>
   <button class="wheel-btn wheel-btn--next" aria-label="Next">›</button>
-
+ <div>
+      <p data-reveal class="level-text">Level 3</p>
+    </div>
   <div class="wheel" id="projectWheel">
 
     <article class="wheel__card">
@@ -255,14 +256,16 @@ fill="url(#waveGradient)"></path>
 
     <!-- add as many <article> … </article> cards as you like -->
   </div>
-      <a href="#skills" class="next-btn">Next ↓</a>
+      <a href="#skills" class="next-btn" data-level="level-4"disabled>Level 4</a>
 
 </section>
 <!-- ▸ SKILLS / TOOLS ─────────────────────────────────────────────── -->
-<section id="skills" class="skills" data-title="Skills" data-drop="center">
+<section id="skills" class="skills section" data-title="Skills" data-drop="center">
 
   <h2 class="section-heading">Skills&nbsp;&amp;&nbsp;Tools</h2>
-
+ <div>
+      <p data-reveal class="level-text">Level 4</p>
+    </div>
   <div class="skills__grid">
 
     <!-- ◂───────────── ① Info panel (updates on hover) -->
@@ -364,7 +367,7 @@ fill="url(#waveGradient)"></path>
     <img src="images/skills-fallback.svg"
          alt="Static radar chart of my skills" width="400" height="400">
   </noscript>
-     <a href="#contact" class="next-btn">Next ↓</a>
+     <a href="#contact" class="next-btn" data-level="level-5"disabled>Level 5</a>
 
 </section>
 
@@ -372,12 +375,14 @@ fill="url(#waveGradient)"></path>
 
 <!-- ─── CONTACT ───────────────────────────────────────── -->
 <section id="contact"
-         class="section-wrapper"
+         class="section-wrapper section"
          data-drop="bottom"
          data-title="Contact">
 
   <div class="io-sentinel"></div>
-
+ <div>
+      <p data-reveal class="level-text">Level 5</p>
+    </div>
   <!-- ✨ NEW wrapper that the CSS targets -->
   <div class="contact-card target-pic" data-reveal data-reveal-from="bottom">
     <h3>📢 Contact Me</h3>
@@ -402,7 +407,7 @@ fill="url(#waveGradient)"></path>
     </div>
 
   </div>
-        <a href="#hero" class="next-btn">Back to Top ↑</a>
+        <a href="#hero" class="next-btn" disabled>Back to Top ↑</a>
 
 </section>
 
