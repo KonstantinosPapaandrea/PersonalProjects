@@ -1,56 +1,67 @@
-window.addEventListener("scroll", function() {
-  const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+// 1) Scroll‐progress bar
+window.addEventListener("scroll", () => {
+  const scrollPercent =
+    (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
   document.querySelector('.progress-bar-filled').style.width = scrollPercent + '%';
 });
-document.addEventListener('DOMContentLoaded', () => {
-  const nextBtns = document.querySelectorAll('.next-btn');  // Get all "next" links
-  const sections = document.querySelectorAll('.section');   // Get all sections
-  let passedSections = [];  // Array to track which sections have been passed
 
-  // Function to show the "Level Up!" message
+document.addEventListener('DOMContentLoaded', () => {
+  // 2) Grab all your “Next” buttons and the corresponding sections
+  const nextBtns    = document.querySelectorAll('.next-btn');
+  const sections    = document.querySelectorAll('.section');
+  const navLinks    = document.querySelectorAll('.main-nav a');
+  let passedSections = []; // Which sections have actually been clicked
+
+  // 3) "Level Up!" pop‐up
   function showLevelUp() {
-    const levelUpMessage = document.createElement('div');
-    levelUpMessage.classList.add('level-up');
-    levelUpMessage.textContent = "Level Up!";
-    
-    // Append to body
-    document.body.appendChild(levelUpMessage);
-    
-    // Remove the message after the animation ends
-    setTimeout(() => {
-      levelUpMessage.remove();
-    }, 1500); // Remove after 1.5s (duration of the animation)
+    const msg = document.createElement('div');
+    msg.className = 'level-up';
+    msg.textContent = 'Level Up!';
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 1500);
   }
 
-  // Enable the link for the next section after leveling up
-  function enableNextLink(index) {
-    if (!passedSections.includes(sections[index])) {
-      passedSections.push(sections[index]);
-      nextBtns[index].disabled = false;  // Enable the next link for this section
-      nextBtns[index].style.pointerEvents = 'auto'; // Enable interaction
-      nextBtns[index].style.opacity = '1'; // Restore opacity
+  // 4) Enable a “Next” button by index
+  function enableNextLink(idx) {
+    if (idx < nextBtns.length) {
+      nextBtns[idx].disabled        = false;
+      nextBtns[idx].style.pointerEvents = 'auto';
+      nextBtns[idx].style.opacity       = '1';
     }
   }
 
-  // Event listener for .next-btn
+  function enableNavLinkById(id) {
+    const link = document.querySelector(`.main-nav a[href="#${id}"]`);
+    if (!link) return;
+    link.classList.remove('nav-link--disabled');
+    link.removeAttribute('aria-disabled');
+  }
+  
+
+  // 6) Wire up each Next button
   nextBtns.forEach((btn, index) => {
     btn.addEventListener('click', () => {
-      const section = sections[index];  // Get the section corresponding to the clicked link
-      
-      // Check if this section has already been passed
-      if (passedSections.includes(section)) {
-        console.log("Already leveled up this section!");
-        return; // Do nothing if the section is already passed
+      const sec = sections[index];
+      const id  = sec.id;
+
+      // If already clicked, do nothing
+      if (passedSections.includes(sec)) {
+        console.log(`Section "${id}" already leveled up.`);
+        return;
       }
 
-      // Mark the section as passed
-      passedSections.push(section);
+      // Mark this section as passed
+      passedSections.push(sec);
+      console.log('Passed:', passedSections.map(s => s.id));
 
-      // Trigger the level-up message animation
+      // Show the animation
       showLevelUp();
 
-      // Enable the next section's link once this one is unlocked
-      enableNextLink(index + 1);  // Enable the link for the next section
+      // Enable the header link for *this* section
+      enableNavLinkById(id);
+
+      // Also enable the *next* section’s Next‐button
+      enableNextLink(index + 1);
     });
   });
 });

@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: 'WelcomeFont'; /* Name the font family */
-  src: url('/Portofolio/fonts/04B_30__.TTF') format('truetype');
+  src: url('/fonts/04B_30__.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

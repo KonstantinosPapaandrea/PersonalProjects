@@ -34,3 +34,14 @@
   0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
   100% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
 }
+/* greyed out, no clicks */
+.nav-link--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+
+/* optional: show focus outline if you ever re-enable via keyboard */
+.nav-link--disabled:focus {
+  outline: none;
+}
