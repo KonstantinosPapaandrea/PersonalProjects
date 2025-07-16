@@ -6,12 +6,13 @@
   <style>
     /* Make canvas fill the screen */
     body, html { margin: 0; padding: 0; overflow: hidden; }
-    canvas { display: block; }
+    canvas { display: block;background-color: #1e1e1e; }
   </style>
 </head>
 <body>
   <canvas id="gameCanvas"></canvas>
 <!-- index.html -->
-<script type="module" src="js/main.js"></script>
+  <script src="https://unpkg.com/matter-js@0.19.0/build/matter.min.js"></script>
+<script type="module" src="./js/main.js"></script>
 </body>
 </html>

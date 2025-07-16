@@ -1,45 +1,43 @@
 // ball.js
+// =======
+// Wraps a Matter.js circle as your Ball.
+
+const { Bodies, Body, World } = Matter;
+
 export class Ball {
-    constructor(x, y, radius, vx, vy) {
-      this.initial = { x, y, vx, vy };
-      this.x = x;
-      this.y = y;
-      this.radius = radius;
-      this.vx = vx;
-      this.vy = vy;
-    }
-  
-    update(dt, canvasWidth, canvasHeight) {
-      this.x += this.vx * dt;
-      this.y += this.vy * dt;
-  
-      // Bounce off left/right
-      if (this.x + this.radius > canvasWidth || this.x - this.radius < 0) {
-        this.vx *= -1;
-        this.x = Math.max(this.radius, Math.min(canvasWidth - this.radius, this.x));
+  /**
+   * @param {Matter.World} world
+   * @param {number} x
+   * @param {number} y
+   * @param {number} radius
+   * @param {number} vx
+   * @param {number} vy
+   */
+  constructor(world, x, y, radius, vx, vy) {
+    this.radius = radius;
+
+    // Create the ball body: restitution/friction as before,
+    // plus collisionFilter.group = -1 so balls never collide with each other.
+    this.body = Bodies.circle(x, y, radius, {
+      restitution:    1,
+      friction:       0,
+      frictionStatic: 0,
+      frictionAir:    0,
+      label:          'ball',
+      collisionFilter: {
+        group: -1
       }
-      // Bounce off top
-      if (this.y - this.radius < 0) {
-        this.vy *= -1;
-        this.y = this.radius;
-      }
-      // **Note:** We no longer bounce off bottom here—Game handles misses.
-    }
-  
-    draw(ctx) {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = '#3498db';
-      ctx.fill();
-      ctx.closePath();
-    }
-  
-    /** Reset position & velocity back to initial values */
-    reset() {
-      this.x  = this.initial.x;
-      this.y  = this.initial.y;
-      this.vx = this.initial.vx * (Math.random() > 0.5 ? 1 : -1); // randomize direction
-      this.vy = this.initial.vy * -1; // always start moving upward
-    }
+    });
+
+    World.add(world, this.body);
+    Body.setVelocity(this.body, { x: vx, y: vy });
   }
-  
+
+  draw(ctx) {
+    const { x, y } = this.body.position;
+    ctx.beginPath();
+    ctx.arc(x, y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = '#f3f3f3';
+    ctx.fill();
+  }
+}
