@@ -1,8 +1,7 @@
 // main.js
-// =======
-import { Game } from './game.js';
+import { Game } from './game-main.js';
 
-window.addEventListener('load', () => {
-  const game = new Game('gameCanvas');
+window.addEventListener('DOMContentLoaded', () => {
+  const game = new Game('gameCanvas', 0);
   game.start();
 });
