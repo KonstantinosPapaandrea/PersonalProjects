@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas Animation Hello World</title>
+  <style>
+    /* Make canvas fill the screen */
+    body, html { margin: 0; padding: 0; overflow: hidden; }
+    canvas { display: block;background-color: #1e1e1e; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+<!-- Load the engine first -->
+<script src="../MygameEngine/engine.js"></script>
+<script src="Paddle.js"></script>
+<script src="Ball.js"></script>
+<script src="Brick.js"></script>
+<!-- Then load the game -->
+<script src="breakout.js"></script>
+</body>
+</html>
