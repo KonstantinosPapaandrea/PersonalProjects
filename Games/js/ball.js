@@ -12,11 +12,13 @@ export class Ball {
       frictionAir:    0,
       label:          'ball',
       collisionFilter:{ group: -1 }
+      
     });
     World.add(world, this.body);
 
     // 1) set initial velocity
     Body.setVelocity(this.body, { x: vx, y: vy });
+    
     // 2) remember its “ideal” speed
     this.speed = Math.hypot(vx, vy);
   }

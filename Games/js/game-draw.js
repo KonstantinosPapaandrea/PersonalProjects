@@ -22,6 +22,27 @@ export default function drawGame() {
     const { x, y }         = b.body.position;   // current center of ball
     const { x: vx, y: vy } = b.body.velocity;   // current velocity vector
     const speed = Math.hypot(vx, vy);           // magnitude of velocity
+// After drawing balls / paddle / blocks / powerups:
+
+if (this.debugContacts && this.debugContacts.length) {
+  this.ctx.save();
+  this.ctx.strokeStyle = 'red';
+  this.ctx.lineWidth   = 2;
+  for (const dc of this.debugContacts) {
+    // draw a short line for the normal
+    this.ctx.beginPath();
+    this.ctx.moveTo(dc.x, dc.y);
+    this.ctx.lineTo(dc.x + dc.nx * 50, dc.y + dc.ny * 50);
+    this.ctx.stroke();
+
+    // optionally draw depth as text
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText(dc.depth.toFixed(1), dc.x + 5, dc.y - 5);
+  }
+  this.ctx.restore();
+  // clear for next frame
+  this.debugContacts.length = 0;
+}
 
     // Only draw arrow if the ball is moving
     /*if (speed > 0) {

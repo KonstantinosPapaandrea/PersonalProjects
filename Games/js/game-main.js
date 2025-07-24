@@ -34,8 +34,8 @@ export class Game {
     this.world.gravity.y = 0;
 
     //    - Increase solver iterations to reduce tunneling and improve collision accuracy
-    this.engine.positionIterations   = 10;
-    this.engine.velocityIterations   = 10;
+    this.engine.positionIterations   =30;
+    this.engine.velocityIterations   = 30;
     this.engine.constraintIterations = 4;
 
     // 2) Canvas setup
@@ -74,8 +74,18 @@ export class Game {
   // We use an arrow function so that `this` inside always points to our Game instance.
   loop = (timestamp) => {
     // a) Compute how much time passed since last frame (in seconds)
-    const dt = (timestamp - this.lastStamp) / 1000;
-    this.lastStamp = timestamp;
+let dt = (timestamp - this.lastStamp) / 1000;
+ const MAX_DT = 1 / 30;
+  if (dt > MAX_DT) dt = MAX_DT;
+
+if (dt > 0.03) {
+  console.warn(`Large dt: ${dt.toFixed(3)}s`);
+}
+// also log solver iterations on startup
+console.log(
+  `iters: pos=${this.engine.positionIterations}` +
+  ` vel=${this.engine.velocityIterations}`
+);    this.lastStamp = timestamp;
 
     // b) Update game state (move paddle, balls, powerups, etc.)
     this.update(dt);
