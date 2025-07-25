@@ -1,59 +1,53 @@
 // ==============================
-// ENGINE CORE
+// ENGINE v0.2 – With Collision System
 // ==============================
 
 // ---- GameObject Base Class ----
-// This is the parent class that ALL objects
-// will inherit from. It handles position, size, velocity, and basic rendering.
-
 class GameObject {
   constructor(x, y, width, height, color = "white") {
-    this.x = x; //x-coords
-    this.y = y; //y-coords
-    this.width = width; //width
-    this.height = height; //height
-    this.color = color; //color
-    this.vx = 0; //horizontal velocity
-    this.vy = 0; //vertical velocity
-    this.active = true; // useful for removing objects later
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+    this.vx = 0;
+    this.vy = 0;
+    this.active = true;
+    this.collider = true; // ✅ participates in collisions
   }
 
   update(dt) {
-    // Move the object based on velocity and delta time
     this.x += this.vx * dt;
     this.y += this.vy * dt;
   }
 
   render(ctx) {
-    // Default render method: draw a filled rectangle
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
-    destroy() {
-    //  Call this when you want to remove the object from the game
+
+  onCollision(other) {
+    // ✅ To be overridden by subclasses
+  }
+
+  destroy() {
     this.active = false;
   }
 }
 
 // ---- Input Manager ----
-// Handles all keyboard input in one place.
-// Future games can reuse it for WASD, arrows, space, etc.
 const Input = {
-  keys: {}, // Stores pressed keys as true/false
+  keys: {},
   init() {
-    // Track when keys are pressed
     window.addEventListener("keydown", e => (this.keys[e.key] = true));
-    // Track when keys are released
     window.addEventListener("keyup", e => (this.keys[e.key] = false));
   },
   isDown(key) {
-    // Helper to check if a specific key is pressed
     return this.keys[key] === true;
   }
 };
-// ---- Collision Helper (AABB) ----
-// AABB = Axis-Aligned Bounding Box collision detection.
-// Checks if two rectangles overlap.
+
+// ---- Collision Helper (AABB)
 function isColliding(a, b) {
   return (
     a.x < b.x + b.width &&
@@ -64,49 +58,72 @@ function isColliding(a, b) {
 }
 
 // ---- Engine Core ----
-// Handles the main game loop, updates, and rendering for all objects.
-
 class Engine {
-  constructor(canvasId, width, height) {
-    this.canvas = document.getElementById(canvasId);  // Reference to <canvas>
-    this.ctx = this.canvas.getContext("2d");          // Drawing context (2D)
+  constructor(canvasId, width = window.innerWidth, height = window.innerHeight) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx = this.canvas.getContext("2d");
+    this.setSize(width, height);
+
+    this.lastTime = 0;
+    this.objects = [];
+    this.running = false;
+
+    this.handleResize();
+  }
+
+  setSize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    this.lastTime = 0;     // Tracks last frame timestamp (for delta time calculation)
-    this.objects = [];     // Stores all GameObjects in the scene
-    this.running = false;  // Controls if the game loop is running
+  }
+
+  handleResize() {
+    window.addEventListener("resize", () => {
+      this.setSize(window.innerWidth, window.innerHeight);
+      if (this.onResize) this.onResize(this.canvas.width, this.canvas.height);
+    });
   }
 
   addObject(obj) {
-    // Add any object (Ball, Paddle, Brick) to be managed by the engine
     this.objects.push(obj);
   }
 
   start() {
-    // Start the engine loop
     this.running = true;
-    Input.init();           // Initialize keyboard input
+    Input.init();
     requestAnimationFrame(this.loop.bind(this));
   }
 
   loop(timestamp) {
     if (!this.running) return;
 
-    // ---- Delta Time Calculation ----
-    // dt ~ 1 when running at 60fps. Multiplying velocities by dt makes movement
-    // framerate-independent.
-    let dt = (timestamp - this.lastTime) / 16.67;
+    const dt = (timestamp - this.lastTime) / 16.67;
     this.lastTime = timestamp;
 
     // ---- Update ----
     this.objects.forEach(obj => obj.update(dt));
-  //  Remove destroyed objects
-  this.objects = this.objects.filter(obj => obj.active);
+
+    // ---- Collision Detection ----
+    for (let i = 0; i < this.objects.length; i++) {
+      for (let j = i + 1; j < this.objects.length; j++) {
+        const a = this.objects[i];
+        const b = this.objects[j];
+
+        if (!a.active || !b.active || !a.collider || !b.collider) continue;
+
+        if (isColliding(a, b)) {
+          a.onCollision(b);
+          b.onCollision(a);
+        }
+      }
+    }
+
+    // ✅ Auto-remove destroyed objects
+    this.objects = this.objects.filter(obj => obj.active);
+
     // ---- Render ----
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Clear canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.objects.forEach(obj => obj.render(this.ctx));
 
-    // ---- Next Frame ----
     requestAnimationFrame(this.loop.bind(this));
   }
 }
