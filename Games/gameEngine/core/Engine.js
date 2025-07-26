@@ -1,64 +1,7 @@
-// ==============================
-// ENGINE v0.2 – With Collision System
-// ==============================
+import { Input } from "./Input.js";
+import { isColliding } from "./Collision.js";
 
-// ---- GameObject Base Class ----
-class GameObject {
-  constructor(x, y, width, height, color = "white") {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-    this.color = color;
-    this.vx = 0;
-    this.vy = 0;
-    this.active = true;
-    this.collider = true; // ✅ participates in collisions
-  }
-
-  update(dt) {
-    this.x += this.vx * dt;
-    this.y += this.vy * dt;
-  }
-
-  render(ctx) {
-    ctx.fillStyle = this.color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-  }
-
-  onCollision(other) {
-    // ✅ To be overridden by subclasses
-  }
-
-  destroy() {
-    this.active = false;
-  }
-}
-
-// ---- Input Manager ----
-const Input = {
-  keys: {},
-  init() {
-    window.addEventListener("keydown", e => (this.keys[e.key] = true));
-    window.addEventListener("keyup", e => (this.keys[e.key] = false));
-  },
-  isDown(key) {
-    return this.keys[key] === true;
-  }
-};
-
-// ---- Collision Helper (AABB)
-function isColliding(a, b) {
-  return (
-    a.x < b.x + b.width &&
-    a.x + a.width > b.x &&
-    a.y < b.y + b.height &&
-    a.y + a.height > b.y
-  );
-}
-
-// ---- Engine Core ----
-class Engine {
+export class Engine {
   constructor(canvasId, width = window.innerWidth, height = window.innerHeight) {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext("2d");
@@ -117,7 +60,7 @@ class Engine {
       }
     }
 
-    // ✅ Auto-remove destroyed objects
+    // ---- Remove Destroyed Objects ----
     this.objects = this.objects.filter(obj => obj.active);
 
     // ---- Render ----

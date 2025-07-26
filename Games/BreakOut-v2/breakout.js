@@ -2,6 +2,8 @@
 // BREAKOUT GAME (Responsive Scaling)
 // ==============================
 
+import { Engine } from "../gameEngine/core/Engine.js";
+import { GameObject } from "../gameEngine/core/GameObject.js";
 // ---- 1. Virtual Resolution ----
 const VIRTUAL_WIDTH = 500;
 const VIRTUAL_HEIGHT = 320;
