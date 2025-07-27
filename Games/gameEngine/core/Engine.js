@@ -11,7 +11,6 @@ export class Engine {
     this.objects = [];
     this.running = false;
 
-    this.handleResize();
   }
 
   setSize(width, height) {
@@ -19,14 +18,39 @@ export class Engine {
     this.canvas.height = height;
   }
 
-  handleResize() {
-    window.addEventListener("resize", () => {
-      this.setSize(window.innerWidth, window.innerHeight);
-      if (this.onResize) this.onResize(this.canvas.width, this.canvas.height);
-    });
-  }
+ handleResize(scaleObjects = false) {
+  window.addEventListener("resize", () => {
+    const oldWidth = this.canvas.width;
+    const oldHeight = this.canvas.height;
+
+    // ✅ Update canvas size immediately
+    this.setSize(window.innerWidth, window.innerHeight);
+
+    if (scaleObjects) {
+      const scaleX = this.canvas.width / oldWidth;
+      const scaleY = this.canvas.height / oldHeight;
+
+      // ✅ Scale all active objects proportionally
+      this.objects.forEach(obj => {
+        obj.x *= scaleX;
+        obj.y *= scaleY;
+        obj.width *= scaleX;
+        obj.height *= scaleY;
+
+        if (obj.vx) obj.vx *= scaleX;
+        if (obj.vy) obj.vy *= scaleY;
+      });
+    }
+
+    // ✅ Trigger custom resize callback (optional for manual adjustments)
+    if (this.onResize) {
+      this.onResize(this.canvas.width, this.canvas.height, scaleObjects);
+    }
+  });
+}
 
   addObject(obj) {
+      obj.engine = this; 
     this.objects.push(obj);
   }
 

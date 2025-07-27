@@ -1,18 +1,17 @@
-// ---- Paddle Class ----
-// Simple horizontal movement based on arrow keys.
+import { GameObject } from "../gameEngine/core/GameObject.js";
+import { Input } from "../gameEngine/core/Input.js";
 
-class Paddle extends GameObject {
+export class Paddle extends GameObject {
   update(dt) {
-    // Control with Arrow keys
     if (Input.isDown("ArrowLeft")) this.vx = -20;
     else if (Input.isDown("ArrowRight")) this.vx = 20;
     else this.vx = 0;
 
     super.update(dt);
 
-    // Stay inside canvas bounds
     if (this.x < 0) this.x = 0;
-    if (this.x + this.width > engine.canvas.width)
-      this.x = engine.canvas.width - this.width;
+    if (this.x + this.width > this.engine.canvas.width) {
+      this.x = this.engine.canvas.width - this.width;
+    }
   }
 }
