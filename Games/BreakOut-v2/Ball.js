@@ -11,6 +11,10 @@ export class Ball extends GameObject {
     this.vy = 0;
     this.paddle = null;
   }
+canCollideWith(other) {
+  // Balls don't need to collide with other balls or power-ups
+  return other.constructor.name !== "Ball" && other.constructor.name !== "PowerUp";
+}
 
   update(dt) {
     if (this.stuck && this.paddle) {
@@ -20,7 +24,7 @@ export class Ball extends GameObject {
       if (Input.isDown(" ")) {
         this.stuck = false;
         this.vx = 0;
-        this.vy = -10;
+        this.vy = -20;
       }
       return;
     }

@@ -20,12 +20,20 @@ const paddle = new Paddle(
   "blue"
 );
 
-const ball = new Ball(240, 200, 8, "red");
+const ball = new Ball(240, 200, 15, "red");
 ball.paddle = paddle;
 
 // ✅ Generate a responsive map
-const bricks = createMap(engine, 8, 30); // 8 rows, 14 columns
 
+const bricks = createMap(
+  engine,
+  20,   // rows
+  100,  // columns
+  50,  // marginTop
+  5,  // marginSide
+  10,  // gapX (horizontal spacing)
+  10    // gapY (vertical spacing)
+);
 engine.addObject(paddle);
 engine.addObject(ball);
 

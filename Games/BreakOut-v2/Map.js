@@ -7,18 +7,28 @@ import { Brick } from "./Brick.js";
  * @param {number} cols - Number of brick columns.
  * @param {number} marginTop - Space from the top.
  * @param {number} marginSide - Space from left & right.
+ * @param {number} gapX - Horizontal gap between bricks.
+ * @param {number} gapY - Vertical gap between bricks.
  * @returns {Brick[]} Array of bricks added to the engine.
  */
-export function createMap(engine, rows = 6, cols = 10, marginTop = 50, marginSide = 30) {
+export function createMap(
+  engine,
+  rows = 6,
+  cols = 10,
+  marginTop = 50,
+  marginSide = 30,
+  gapX = 4,
+  gapY = 4
+) {
   const canvasWidth = engine.canvas.width;
   const canvasHeight = engine.canvas.height;
 
   // ---- Calculate brick sizes dynamically ----
-  const totalGapX = (cols - 1) * 4; // 4px gap between bricks
+  const totalGapX = (cols - 1) * gapX;
   const totalWidthAvailable = canvasWidth - (2 * marginSide) - totalGapX;
   const brickWidth = totalWidthAvailable / cols;
 
-  const totalGapY = (rows - 1) * 4; // vertical gap
+  const totalGapY = (rows - 1) * gapY;
   const maxBrickHeight = canvasHeight / 3; // use 1/3 of screen for bricks
   const brickHeight = (maxBrickHeight - totalGapY) / rows;
 
@@ -26,10 +36,9 @@ export function createMap(engine, rows = 6, cols = 10, marginTop = 50, marginSid
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const x = marginSide + col * (brickWidth + 4);
-      const y = marginTop + row * (brickHeight + 4);
+      const x = marginSide + col * (brickWidth + gapX);
+      const y = marginTop + row * (brickHeight + gapY);
 
-      // Example: make top row unbreakable
       const breakable = row !== 0;
       const color = breakable ? "green" : "grey";
 

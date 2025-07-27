@@ -6,6 +6,10 @@ export class PowerUp extends GameObject {
     this.vy = 3; // falls down slowly
     this.effect = effect; // function executed when collected
   }
+canCollideWith(other) {
+  // Power-ups only care about paddle
+  return other.constructor.name === "Paddle";
+}
 
   update(dt) {
     super.update(dt);

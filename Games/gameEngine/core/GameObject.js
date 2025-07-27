@@ -8,12 +8,17 @@ export class GameObject {
     this.vx = 0;
     this.vy = 0;
     this.active = true;
-    this.collider = true; // ✅ participates in collisions
+    this.collider = true;
+    this.engine = null;
+
+    this.static = false; // ✅ If true, object never moves (e.g., bricks, walls)
   }
 
   update(dt) {
-    this.x += this.vx * dt;
-    this.y += this.vy * dt;
+    if (!this.static) {
+      this.x += this.vx * dt;
+      this.y += this.vy * dt;
+    }
   }
 
   render(ctx) {
@@ -21,8 +26,9 @@ export class GameObject {
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 
-  onCollision(other) {
-    // ✅ Override in subclasses (e.g., Ball vs Brick)
+  onCollision(other) {}
+  canCollideWith(other) {
+    return true;
   }
 
   destroy() {
