@@ -2,6 +2,13 @@ import { GameObject } from "../gameEngine/core/GameObject.js";
 import { Input } from "../gameEngine/core/Input.js";
 
 export class Paddle extends GameObject {
+  constructor(x, y, width, height, color = "blue") {
+    super(x, y, width, height, color);
+
+    this.collisionGroup = "paddle";
+    this.collidesWith = ["ball","powerup"];
+  }
+
   update(dt) {
     if (Input.isDown("ArrowLeft")) this.vx = -20;
     else if (Input.isDown("ArrowRight")) this.vx = 20;
@@ -14,4 +21,5 @@ export class Paddle extends GameObject {
       this.x = this.engine.canvas.width - this.width;
     }
   }
+  
 }

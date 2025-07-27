@@ -6,11 +6,25 @@ export class Brick extends GameObject {
     super(x, y, width, height, color);
     this.breakable = breakable;
     this.static = true; // ✅ For QuadTree optimization
+    this.collisionGroup = "brick";
+  this.collidesWith = ["ball"]; // ✅ Only cares about balls
   }
 
   canCollideWith(other) {
     return other.constructor.name === "Ball";
   }
+destroy() {
+  this.active = false;
+  if (this.static) this.engine._staticLayerDirty = true;
+
+  const remaining = this.engine.objects.some(
+    o => o.static && o.active && o.breakable
+  );
+if (!remaining) {
+  window.dispatchEvent(new CustomEvent("gameWon"));
+}
+}
+
 
   onCollision(other) {
     if (!this.breakable) return;
@@ -26,7 +40,7 @@ export class Brick extends GameObject {
           20,
           "orange",
           () => {
-            this.spawnTripleBalls(200); // ✅ MAX BALL LIMIT = 30
+            this.spawnTripleBalls(500); // ✅ MAX BALL LIMIT = 30
           }
         );
         this.engine.addObject(powerUp);
@@ -34,29 +48,26 @@ export class Brick extends GameObject {
     }
   }
 
-  spawnTripleBalls(maxBalls = 500) {
-    const activeBalls = this.engine.objects.filter(
-      obj => obj.constructor.name === "Ball" && obj.active
-    );
+  spawnTripleBalls(maxBalls = 200) {
+   let balls = this.engine.objects.filter(o => o.constructor.name === "Ball" && o.active);
+  let ballCount = balls.length;
 
-    activeBalls.forEach(ball => {
-      for (let i = 0; i < 2; i++) {
-        const currentBallCount = this.engine.objects.filter(
-          obj => obj.constructor.name === "Ball" && obj.active
-        ).length;
+  balls.forEach(b => {
+  for (let i = 0; i < 2; i++) {
+    if (ballCount >= maxBalls) return;
 
-        if (currentBallCount >= maxBalls) return;
+    const nb = new b.constructor(b.x, b.y, b.radius, b.color);
 
-        const newBall = new ball.constructor(
-          ball.x,
-          ball.y,
-          ball.radius,
-          ball.color
-        );
-        newBall.vx = (Math.random() - 0.5) * 6;
-        newBall.vy = -Math.abs(ball.vy || -4);
-        this.engine.addObject(newBall);
-      }
-    });
+    // ✅ Random horizontal speed (-3 to 3)
+    nb.vx = (Math.random() - 0.5) * 6;
+
+    // ✅ Keep same vertical direction, add ±10% variation
+    const variation = 0.1 * Math.abs(b.vy); // 10% of original speed
+    nb.vy = b.vy + (Math.random() * variation * 2 - variation);
+
+    this.engine.addObject(nb);
+    ballCount++;
   }
+});
+}
 }

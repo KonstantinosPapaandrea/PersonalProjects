@@ -3,18 +3,16 @@ import { Input } from "../gameEngine/core/Input.js";
 import { Brick } from "./Brick.js";
 
 export class Ball extends GameObject {
-  constructor(x, y, radius, color) {
+  constructor(x, y, radius, color = "red") {
     super(x, y, radius * 2, radius * 2, color);
     this.radius = radius;
     this.stuck = true;
+    this.paddle = null;
     this.vx = 0;
     this.vy = 0;
-    this.paddle = null;
+    this.collisionGroup = "ball";
+  this.collidesWith = ["brick", "paddle"]; // ✅ Only checks these groups
   }
-canCollideWith(other) {
-  // Balls don't need to collide with other balls or power-ups
-  return other.constructor.name !== "Ball" && other.constructor.name !== "PowerUp";
-}
 
   update(dt) {
     if (this.stuck && this.paddle) {
@@ -24,61 +22,115 @@ canCollideWith(other) {
       if (Input.isDown(" ")) {
         this.stuck = false;
         this.vx = 0;
-        this.vy = -20;
+        this.vy = -8; // ✅ Lowered initial speed for better collisions
       }
       return;
     }
 
-    super.update(dt);
+    // ✅ Clamp max speed to prevent tunneling
+    const MAX_SPEED = 10;
+    this.vx = Math.max(-MAX_SPEED, Math.min(this.vx, MAX_SPEED));
+    this.vy = Math.max(-MAX_SPEED, Math.min(this.vy, MAX_SPEED));
 
-    if (this.x < 0 || this.x + this.width > this.engine.canvas.width) this.vx *= -1;
-    if (this.y < 0) this.vy *= -1;
-  if (this.y + this.height > this.engine.canvas.height) {
-  this.destroy(); // ✅ remove this ball
+    // ✅ Sub-stepping: split movement into smaller steps for better collision detection
+  const steps = Math.ceil(Math.abs(this.vx) + Math.abs(this.vy)) / 5; 
 
-  // ✅ Check if there are any balls left
-  const ballsLeft = this.engine.objects.some(obj => obj.constructor.name === "Ball");
-    console.log(ballsLeft);
-  if (!ballsLeft) {
-    console.log("Game Over");
-    this.engine.running = false;
+    const stepDt = dt / steps;
+
+    for (let i = 0; i < steps; i++) {
+      super.update(stepDt);
+
+      // ✅ Bounce off walls within sub-steps
+      if (this.x < 0) {
+        this.x = 0;
+        this.vx *= -1;
+      }
+      if (this.x + this.width > this.engine.canvas.width) {
+        this.x = this.engine.canvas.width - this.width;
+        this.vx *= -1;
+      }
+      if (this.y < 0) {
+        this.y = 0;
+        this.vy *= -1;
+      }
+      if (this.y + this.height > this.engine.canvas.height) {
+        this.destroy(); // ✅ Remove ball when out of bounds
+        const anyLeft = this.engine.objects.some(
+          o => o.constructor.name === "Ball" && o.active
+        );
+        if (!anyLeft) {
+          console.log("Game Over");
+          this.engine.running = false;
+        }
+        break;
+      }
+    }
   }
-}
 
+  canCollideWith(other) {
+    return (
+      other.constructor.name !== "Ball" &&
+      other.constructor.name !== "PowerUp"
+    );
   }
 
   onCollision(other) {
     if (other.constructor.name === "Paddle") {
       this.vy = -Math.abs(this.vy);
-      let hitPos = (this.x + this.radius - (other.x + other.width / 2)) / (other.width / 2);
-      this.vx = hitPos * 4;
+      const hitPos =
+        (this.x + this.radius - (other.x + other.width / 2)) /
+        (other.width / 2);
+      this.vx = hitPos * 5; // ✅ Slightly increased horizontal control
     }
 
     if (other instanceof Brick) {
-      const overlapX = (this.x + this.width / 2 < other.x + other.width / 2)
-        ? (this.x + this.width - other.x)
-        : (other.x + other.width - this.x);
+if (other.collisionGroup === "brick" || other.collisionGroup === "unbreakable") {
+  // Basic vertical/horizontal response
+  if (Math.abs(this.vy) > Math.abs(this.vx)) {
+    this.vy *= -1;
+    this.y = this.vy > 0 ? other.y + other.height : other.y - this.height;
+  } else {
+    this.vx *= -1;
+    this.x = this.vx > 0 ? other.x + other.width : other.x - this.width;
+  }
+}
 
-      const overlapY = (this.y + this.height / 2 < other.y + other.height / 2)
-        ? (this.y + this.height - other.y)
-        : (other.y + other.height - this.y);
+      // ✅ Better side detection
+      const overlapX =
+        this.x + this.width / 2 < other.x + other.width / 2
+          ? this.x + this.width - other.x
+          : other.x + other.width - this.x;
+
+      const overlapY =
+        this.y + this.height / 2 < other.y + other.height / 2
+          ? this.y + this.height - other.y
+          : other.y + other.height - this.y;
 
       if (overlapX < overlapY) {
-        this.vx = (this.x + this.width / 2 < other.x + other.width / 2)
-          ? -Math.abs(this.vx)
-          : Math.abs(this.vx);
+        this.vx =
+          this.x + this.width / 2 < other.x + other.width / 2
+            ? -Math.abs(this.vx)
+            : Math.abs(this.vx);
       } else {
-        this.vy = (this.y + this.height / 2 < other.y + other.height / 2)
-          ? -Math.abs(this.vy)
-          : Math.abs(this.vy);
+        this.vy =
+          this.y + this.height / 2 < other.y + other.height / 2
+            ? -Math.abs(this.vy)
+            : Math.abs(this.vy);
       }
     }
+    
   }
 
   render(ctx) {
     ctx.fillStyle = this.color;
     ctx.beginPath();
-    ctx.arc(this.x + this.radius, this.y + this.radius, this.radius, 0, Math.PI * 2);
+    ctx.arc(
+      this.x + this.radius,
+      this.y + this.radius,
+      this.radius,
+      0,
+      Math.PI * 2
+    );
     ctx.fill();
   }
 }

@@ -5,6 +5,8 @@ export class PowerUp extends GameObject {
     super(x, y, width, height, color);
     this.vy = 3; // falls down slowly
     this.effect = effect; // function executed when collected
+  this.collisionGroup = "powerup";
+    this.collidesWith = ["paddle"];
   }
 canCollideWith(other) {
   // Power-ups only care about paddle
