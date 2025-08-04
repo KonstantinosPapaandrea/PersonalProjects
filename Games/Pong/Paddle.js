@@ -1,35 +1,31 @@
+// Paddle.js (Pong-style paddle)
 import { GameObject } from "../gameEngine/core/GameObject.js";
 import { Input } from "../gameEngine/core/Input.js";
 
 export class Paddle extends GameObject {
-  constructor(x, y, width, height, color = "white", speed = 200) {
+  constructor(x, y, width, height, color = "white", speed,name) {
     super(x, y, width, height, color);
-    this.speed = speed; // units per second
-
+    this.speed = speed;
     this.collisionGroup = "paddle";
     this.collidesWith = ["ball"];
-  }
-
-  handleMovement(dt) {
-    // Reset velocity each frame; no accumulation
-    this.vx = 0;
-    this.vy = 0;
-
-    if (Input.isDown("ArrowUp")) {
-      this.vy = -this.speed; // moving up
-    } else if (Input.isDown("ArrowDown")) {
-      this.vy = this.speed; // moving down
-    }
+    this.name=name;
   }
 
   update(dt) {
-    // Process input first
-    this.handleMovement(dt);
+// inside update(dt) or similar per-frame logic
+this.vy = 0; // reset first
 
-    // Apply movement (super uses vx/vy * dt)
+if (this.name === "Player2") {
+  if (Input.isDown("ArrowUp")) this.vy = -this.speed;
+  else if (Input.isDown("ArrowDown")) this.vy = this.speed;
+} else {
+  if (Input.isDown("w") || Input.isDown("W")) this.vy = -this.speed;
+  else if (Input.isDown("s") || Input.isDown("S")) this.vy = this.speed;
+}
+   
     super.update(dt);
 
-    // Optional: clamp to canvas bounds if you have access to engine
+    // Clamp to canvas
     if (this.engine) {
       if (this.y < 0) this.y = 0;
       if (this.y + this.height > this.engine.canvas.height)
