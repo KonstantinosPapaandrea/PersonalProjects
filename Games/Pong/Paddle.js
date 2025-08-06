@@ -26,10 +26,13 @@ if (this.name === "Player2") {
     super.update(dt);
 
     // Clamp to canvas
-    if (this.engine) {
+      if (this.engine) {
       if (this.y < 0) this.y = 0;
-      if (this.y + this.height > this.engine.canvas.height)
-        this.y = this.engine.canvas.height - this.height;
+      // ← CHANGED: use logical height
+      const H = this.engine._cssHeight;
+      if (this.y + this.height > H) {
+        this.y = H - this.height;
+      }
     }
   }
 }

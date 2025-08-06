@@ -33,16 +33,21 @@ export class Ball extends GameObject {
     this.vy = Math.sin(angle) * this.baseSpeed;
   }
 
+ 
   reset() {
     this.stuck = true;
     this.vx = 0;
     this.vy = 0;
 
     if (this.engine) {
-      this.x = this.engine.canvas.width / 2 - this.radius;
-      this.y = this.engine.canvas.height / 2 - this.radius;
+      // ← CHANGED: use CSS pixels instead of backing store pixels
+      const W = this.engine._cssWidth;
+      const H = this.engine._cssHeight;
+      this.x = W / 2 - this.radius;
+      this.y = H / 2 - this.radius;
     }
   }
+
 
   onCollision(other) {
     if (other.collisionGroup === "paddle") {
@@ -77,25 +82,27 @@ export class Ball extends GameObject {
     }
   }
 
-  update(dt) {
+ update(dt) {
     if (this.stuck) {
-      // stay centered if stuck
       if (this.engine) {
-        this.x = this.engine.canvas.width / 2 - this.radius;
-        this.y = this.engine.canvas.height / 2 - this.radius;
+        const W = this.engine._cssWidth;
+        const H = this.engine._cssHeight;
+        this.x = W / 2 - this.radius;
+        this.y = H / 2 - this.radius;
       }
       return;
     }
 
     super.update(dt);
 
-    // bounce top/bottom
+    // bounce top/bottom in CSS coords
     if (this.y < 0) {
       this.y = 0;
       this.vy = Math.abs(this.vy);
     }
-    if (this.y + this.height > this.engine.canvas.height) {
-      this.y = this.engine.canvas.height - this.height;
+    // ← CHANGED: compare to logical height
+    if (this.y + this.height > this.engine._cssHeight) {
+      this.y = this.engine._cssHeight - this.height;
       this.vy = -Math.abs(this.vy);
     }
   }

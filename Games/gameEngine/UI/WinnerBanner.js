@@ -1,4 +1,4 @@
-import { UIElement } from ".UIElement.js";
+import { UIElement } from "./UIElement.js";
 
 export class WinnerBanner extends UIElement {
   constructor(checkFn) {
