@@ -17,7 +17,7 @@ canCollideWith(other) {
     super.update(dt);
 
     // Remove if it falls out of the screen
-    if (this.y > this.engine.canvas.height) {
+    if (this.y > this.engine._cssHeight) {
       this.destroy();
     }
   }

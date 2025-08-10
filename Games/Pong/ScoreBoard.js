@@ -33,17 +33,43 @@ export class Scoreboard {
     }
   }
 
+// File: Scoreboard.js
+
+  /* …ctor, addPointToLeft/Right, _scoreReset, update stay the same… */
+
   render(ctx) {
+    // Padding from the top edge
     const padding = 10;
-    ctx.fillStyle = "rgba(0,0,0,0.5)";
+
+    // We want to draw text in CSS pixels, not device pixels.
+    // ctx.canvas.width is backing-store size (CSS size × DPR).
+    // clientWidth is the CSS-pixel width you see on screen.
+    const visibleWidth = ctx.canvas.clientWidth;
+
+    // Semi-transparent black behind the score
+    ctx.fillStyle = "rgba(0,0,0,0)";
+    ctx.fillRect(0, 0, visibleWidth, 40);  // draw a background bar
+
+    // White text in monospace, centered
+    ctx.fillStyle = "white";
     ctx.font = "24px monospace";
     ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    const w = ctx.canvas.width;
-    // Left
-    ctx.fillStyle = "white";
-    ctx.fillText(`${this.leftName}: ${this.leftScore}`, w * 0.25, 30);
-    // Right
-    ctx.fillText(`${this.rightName}: ${this.rightScore}`, w * 0.75, 30);
+    // Draw left player’s name and score at 25% of visible width
+    ctx.fillText(
+      `${this.leftName}: ${this.leftScore}`,  // text to render
+      visibleWidth * 0.25,                     // x-position
+      padding + 20                             // y-position (half of 40px bar)
+    );
+
+    // Draw right player’s name and score at 75% of visible width
+    ctx.fillText(
+      `${this.rightName}: ${this.rightScore}`, // text to render
+      visibleWidth * 0.75,                     // x-position
+      padding + 20                             // y-position
+    );
   }
 }
+
+

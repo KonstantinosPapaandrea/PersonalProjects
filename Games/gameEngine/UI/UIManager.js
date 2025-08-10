@@ -1,9 +1,19 @@
 /**
- * UIManager – Generic on‑top UI layer
+ * UIManager
+ * -----------------------------------------------------------------------------
+ * Role: Collects lightweight UI elements and draws them after the game world.
  *
- * Collects lightweight “UI elements” (pause screens, overlays, HUDs, banners)
- * and drives their update & render calls after the main game world.
+ * Public API (use these):
+ * - new UIManager(engine)
+ * - add(element) / remove(element)  // element gets element.engine = engine
+ * - update(dt)                      // forwards to elements
+ * - render(ctx)                     // forwards to elements (screen space)
+ *
+ * Expectations:
+ * - UI elements draw in CSS pixel space (no viewport transform).
+ * - Use engine._cssWidth/_cssHeight when you need screen size.
  */
+
 export class UIManager {
   constructor(engine) {
     this.engine = engine;

@@ -1,77 +1,104 @@
-// File: CanvasManager.js
-import { Renderer } from "./Renderer.js";
+// File: gameEngine/core/CanvasManager.js
 
+import { Renderer } from "./Renderer.js";           // to rebuild statics after resize
+import { Viewport } from "../util/Viewport.js";     // to recompute world→screen mapping
 /**
- * CanvasManager – Manages high-DPI (retina) rendering
- * - Backing store size = CSS size * devicePixelRatio
- * - CSS size stays at logical pixels (window.innerWidth/innerHeight)
- * - Contexts are scaled so 1 unit = 1 CSS pixel
+ * CanvasManager
+ * -----------------------------------------------------------------------------
+ * Role: Owns canvas sizing for crisp rendering on high‑DPI screens.
+ *
+ * Public API (use these):
+ * - setSize(engine, cssW, cssH)       → Set CSS size and backing store (DPR‑aware).
+ * - setDisplaySize(engine, cssW, cssH)→ Change CSS size only (rare).
+ * - handleDisplayResize(engine)       → Attach resize listener and run once.
+ * - removeResizeListener(engine)      → Detach listener on teardown.
+ *
+ * Collaborators:
+ * - Viewport.update(engine)  → recompute world→screen mapping after size change.
+ * - Renderer.buildStaticLayers(engine) → rebuild cached static layers post‑resize.
+ *
+ * Helpers / Internals:
+ * - Tracks engine._cssWidth/_cssHeight and invalidates engine._staticMeta to
+ *   force static rebuild on next draw.
+ *
+ * Invariants:
+ * - Main ctx is scaled so “1 draw unit == 1 CSS pixel.”
+ * - Backing store = CSS size × devicePixelRatio (rounded).
  */
+
+
 export const CanvasManager = {
   /**
-   * Resize both the main canvas and (if it exists) the staticCanvas
-   * to full device-pixel resolution, then scale contexts appropriately.
-   *
-   * @param {Engine} engine
-   * @param {number} cssWidth   Logical width in CSS pixels
-   * @param {number} cssHeight  Logical height in CSS pixels
+   * Set backing store and CSS size; scale main context by DPR.
    */
   setSize(engine, cssWidth, cssHeight) {
+    // Store CSS size on engine for world/renderer logic
     const dpr = window.devicePixelRatio || 1;
-
-    // Store CSS size on engine for reference
     engine._cssWidth  = cssWidth;
     engine._cssHeight = cssHeight;
 
-    // 1) Backing store
+    // Backing store in device pixels (round to integers)
     engine.canvas.width  = Math.floor(cssWidth  * dpr);
     engine.canvas.height = Math.floor(cssHeight * dpr);
 
-    // 2) CSS size
-    engine.canvas.style.width  = `${cssWidth}px`;
-    engine.canvas.style.height = `${cssHeight}px`;
+    // CSS layout size (logical pixels)
+    engine.canvas.style.width  = cssWidth  + "px";
+    engine.canvas.style.height = cssHeight + "px";
 
-    // 3) Scale the main context
-    const ctx = engine.ctx;
-    ctx.resetTransform();          // clear any previous scaling
-    ctx.scale(dpr, dpr);
+    // Scale the main context so 1 unit == 1 CSS pixel
+    try { engine.ctx.resetTransform(); } catch { engine.ctx.setTransform(1,0,0,1,0,0); }
+    engine.ctx.scale(dpr, dpr);
+    engine.ctx.imageSmoothingEnabled = true;
 
-    // 4) If staticCanvas exists, resize & scale it too
-    if (engine.staticCanvas && engine.staticCtx) {
-      engine.staticCanvas.width  = engine.canvas.width;
-      engine.staticCanvas.height = engine.canvas.height;
-
-      const sctx = engine.staticCtx;
-      sctx.resetTransform();
-      sctx.scale(dpr, dpr);
-    }
+    // Invalidate static caches (they depend on size/DPR/viewport)
+    if (engine.staticCanvases) engine.staticCanvases.clear();
+    if (engine.staticCtxs)     engine.staticCtxs.clear();
+    engine._staticMeta = null; // force rebuild on next draw
   },
 
   /**
-   * For high-DPI resizing: always updates backing + CSS sizes on window resize.
-   * @param {Engine} engine
+   * Only change the CSS (on-screen) size; rarely useful.
+   */
+  setDisplaySize(engine, cssWidth, cssHeight) {
+    engine._cssWidth  = cssWidth;
+    engine._cssHeight = cssHeight;
+    engine.canvas.style.width  = cssWidth  + "px";
+    engine.canvas.style.height = cssHeight + "px";
+    // Note: no backing/DPR changes here
+  },
+
+  /**
+   * Attach window resize listener; recompute size, viewport and statics.
    */
   handleDisplayResize(engine) {
     const resizeHandler = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      this.setSize(engine, w, h);
-      // Rebuild the static layer at the new size
-      Renderer.buildStaticLayer(engine);
+      // Compute new CSS size from the window (you can customize this)
+      const cssW = Math.floor(window.innerWidth);
+      const cssH = Math.floor(window.innerHeight);
+
+      // 1) Apply new sizes + DPR
+      this.setSize(engine, cssW, cssH);
+
+      // 2) Recompute viewport mapping (world→screen)
+      Viewport.update(engine);
+
+      // 3) Rebuild static layer caches for new size/DPR/viewport
+      Renderer.buildStaticLayers(engine);
     };
 
+    // Attach and run once
     window.addEventListener("resize", resizeHandler);
-    resizeHandler(); // initial call
     engine._resizeHandler = resizeHandler;
+    resizeHandler();
   },
 
   /**
-   * If you ever need to stop listening (e.g. on teardown), call this.
+   * Detach the resize listener (call from Engine.destroy()).
    */
   removeResizeListener(engine) {
     if (engine._resizeHandler) {
       window.removeEventListener("resize", engine._resizeHandler);
-      delete engine._resizeHandler;
+      engine._resizeHandler = null;
     }
-  }
+  },
 };

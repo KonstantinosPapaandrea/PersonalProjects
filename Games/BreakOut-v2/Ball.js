@@ -19,7 +19,7 @@ export class Ball extends GameObject {
       this.x = this.paddle.x + this.paddle.width / 2 - this.radius;
       this.y = this.paddle.y - this.height - 2;
 
-      if (Input.isDown(" ")) {
+      if (Input.isKeyDown(" ")) {
         this.stuck = false;
         this.vx = 0;
         this.vy = -8; // ✅ Lowered initial speed for better collisions
@@ -41,19 +41,21 @@ export class Ball extends GameObject {
       super.update(stepDt);
 
       // ✅ Bounce off walls within sub-steps
-      if (this.x < 0) {
+         const W = this.engine.world.width;
+        const H = this.engine.world.height;
+     if (this.x < 0) {
         this.x = 0;
         this.vx *= -1;
       }
-      if (this.x + this.width > this.engine.canvas.width) {
-        this.x = this.engine.canvas.width - this.width;
+      if (this.x + this.width > W) {
+        this.x = W - this.width;
         this.vx *= -1;
       }
       if (this.y < 0) {
         this.y = 0;
         this.vy *= -1;
       }
-      if (this.y + this.height > this.engine.canvas.height) {
+    if (this.y + this.height > H) {
         this.destroy(); // ✅ Remove ball when out of bounds
         const anyLeft = this.engine.objects.some(
           o => o.constructor.name === "Ball" && o.active

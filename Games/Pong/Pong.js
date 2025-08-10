@@ -1,123 +1,87 @@
 // File: Pong.js
-import { Scoreboard } from "./Scoreboard.js";
+// ────────────────────────────────────────────────────────────────────────────
+// Pong main: create a fixed-size WORLD and let the Viewport map it to the
+// canvas on every resize. All gameplay (ball/paddles) stays in WORLD units.
+// ────────────────────────────────────────────────────────────────────────────
 
-import { Engine } from "../gameEngine/core/Engine.js";
-import { Ball } from "./Ball.js";
-import { Paddle } from "./Paddle.js";
-import { Input } from "../gameEngine/core/Input.js";
-import { ScaleFromCenter, easeOutQuad } from "../gameEngine/Animation/Scale.js";
+import { Engine } from "../gameEngine/core/Engine.js";                 // engine core
+import { Ball }   from "./Ball.js";                                    // ball (world coords)
+import { Paddle } from "./Paddle.js";                                  // paddle (world coords)
+import { Scoreboard } from "./ScoreBoard.js";                          // overlay (CSS coords OK)
+import { Input }  from "../gameEngine/core/Input.js";                  // keyboard
+import { ScaleFromCenter, easeOutQuad } from "../gameEngine/Animation/Scale.js"; // optional FX
 
-const engine = new Engine("gameCanvas", window.innerWidth, window.innerHeight);
+// 1) Pick a fixed "design" WORLD size. The Viewport will letterbox/scale it.
+//    Do NOT use window size here; that's CSS space.
+const WORLD_W = 1280;  // world width (game units)
+const WORLD_H = 720;   // world height (game units)
 
-// 2) use logical (CSS) size instead of raw window.*
-const middleWidth  = engine._cssWidth  / 2;  // ← CHANGED
-const middleHeight = engine._cssHeight / 2;  // ← CHANGED
+// 2) Boot the engine with that WORLD size. CanvasManager will still size the
+//    canvas to the window and DPR, and Viewport will map WORLD→CSS.
+const engine = new Engine("gameCanvas", WORLD_W, WORLD_H);
 
-// rest of your constants unchanged...
-const ballRadius = 5;
-const startSpeed = 5;
-const paddleWidth = 5;
-const paddleHeight = 100;
-const paddleSideMargin = 20;
-const paddleSpeed = 5;
+// 3) WORLD-scaled gameplay constants. These never change with window size.
+//    (If you want to balance the “feel”, change these numbers—not CSS.)
+const PADDLE_W   = 16;    // world px
+const PADDLE_H   = 140;
+const PADDLE_S   = 20;   // speed in world px/s
+const SIDE_GAP   = 28;    // gap from world edge
+const BALL_R     = 8;
+const BALL_SPEED = 10;   // world px/s
 
-// create objects
-const ball = new Ball(middleWidth, middleHeight, ballRadius, "white", startSpeed);
-// enable improved collision handling if desired
-ball.useCCD = true;
-ball.substepEnabled = true;
-ball.maxMoveRatio = 0.3;
+// 4) Create gameplay objects at WORLD positions (not CSS).
+const ball = new Ball(WORLD_W / 2, WORLD_H / 2, BALL_R, "white", BALL_SPEED);
+ball.layer = "default"; // render on gameplay layer
 
-
-const paddle1 = new Paddle(
-  paddleSideMargin,
-  middleHeight - paddleHeight / 2,
-  paddleWidth,
-  paddleHeight,
-  "white",
-  paddleSpeed,
-  "Player1"
+// Left paddle anchored to WORLD left
+const leftPaddle = new Paddle(
+  SIDE_GAP,                            // x in WORLD space
+  (WORLD_H - PADDLE_H) / 2,            // centered in WORLD
+  PADDLE_W, PADDLE_H, "white", PADDLE_S, "Player1"
 );
+leftPaddle.layer = "default";
 
-const paddle2 = new Paddle(
-  engine._cssWidth - paddleSideMargin - paddleWidth, // ← CHANGED
-  middleHeight - paddleHeight / 2,
-  paddleWidth,
-  paddleHeight,
-  "white",
-  paddleSpeed,
-  "Player2"
+// Right paddle anchored to WORLD right
+const rightPaddle = new Paddle(
+  WORLD_W - SIDE_GAP - PADDLE_W,       // x in WORLD space
+  (WORLD_H - PADDLE_H) / 2,
+  PADDLE_W, PADDLE_H, "white", PADDLE_S, "Player2"
 );
+rightPaddle.layer = "default";
 
-// Pong.js — after engine.start():
-
-// keep paddles stuck to left/right on any resize
-window.addEventListener("resize", () => {
-  // engine._cssWidth is updated by CanvasManager.handleDisplayResize
-  paddle1.x =   paddleSideMargin;
-  paddle2.x =   engine._cssWidth
-              - paddleSideMargin
-              - paddleWidth;
-});
-
-// you may also want to re-center the ball if it's stuck:
-window.addEventListener("resize", () => {
-  if (ball.stuck) ball.reset();
-});
-
-// add to engine
+// 5) Add to engine
 engine.addObject(ball);
-engine.addObject(paddle1);
-engine.addObject(paddle2);
-const scoreboard = new Scoreboard(ball, "Player1", "Player2");
-engine.ui.add(scoreboard);
+engine.addObject(leftPaddle);
+engine.addObject(rightPaddle);
 
-// start engine
+// 6) UI overlay (CSS space is fine for overlays)
+const hud = new Scoreboard(ball, "Player1", "Player2");
+engine.ui.add(hud);
+
+// 7) Start engine
 engine.start();
 
-// launch on space
+// 8) Launch ball with Space
 window.addEventListener("keydown", (e) => {
-  if (e.code === "Space") {
-    ball.launch();
-  }
+  if (e.code === "Space") ball.launch();
 });
 
-function checkOutOfBounds() {
+// 9) World‑space “referee” that awards points when ball leaves WORLD bounds.
+//    IMPORTANT: use engine.world.width (WORLD), not CSS width.
+function checkScoring() {
+  const W = engine.world.width; // world width (fixed)
   if (ball.x + ball.width < 0) {
-    scoreboard.addPointToRight(); // right player scores
-    console.log("Player 2 scores!");
-  } else if (ball.x > engine.canvas.width) {
-    scoreboard.addPointToLeft();
-    console.log("Player 1 scores!");
+    hud.addPointToRight();      // ball out on left → right scores
+  } else if (ball.x > W) {
+    hud.addPointToLeft();       // ball out on right → left scores
   }
-  requestAnimationFrame(checkOutOfBounds);
+  requestAnimationFrame(checkScoring);
 }
+requestAnimationFrame(checkScoring);
 
-requestAnimationFrame(checkOutOfBounds);
+// 10) Optional intro animation on paddles (purely visual)
+leftPaddle.width = 0; leftPaddle.height = 0;
+ScaleFromCenter(leftPaddle, PADDLE_W, PADDLE_H, 400, easeOutQuad);
 
-// animate paddles from center (grow effect)
-paddle.width = 0;
-paddle.height = 0;
-ScaleFromCenter(
-  paddle,
-  paddleWidth,
-  paddleHeight,
-  500,
-  easeOutQuad,
-  () => {
-    console.log("Paddle1 size animation complete");
-  }
-);
-
-paddle2.width = 0;
-paddle2.height = 0;
-ScaleFromCenter(
-  paddle2,
-  paddleWidth,
-  paddleHeight,
-  500,
-  easeOutQuad,
-  () => {
-    console.log("Paddle2 size animation complete");
-  }
-);
+rightPaddle.width = 0; rightPaddle.height = 0;
+ScaleFromCenter(rightPaddle, PADDLE_W, PADDLE_H, 400, easeOutQuad);

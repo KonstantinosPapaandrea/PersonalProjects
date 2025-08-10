@@ -1,70 +1,65 @@
+// File: Map.js
 import { Brick } from "./Brick.js";
 
 /**
  * Creates a brick map with different patterns and brick types.
- * @param {Engine} engine
- * @param {string} pattern - "grid", "pyramid", "checkerboard", "diamond"
- * @param {number} rows
- * @param {number} cols
- * @param {number} marginTop
- * @param {number} marginSide
- * @param {number} gapX
- * @param {number} gapY
+ * Patterns: "grid", "pyramid", "checkerboard", "diamond"
  */
 export function createMap(
   engine,
   pattern = "grid",
-  rows = 20,
-  cols = 100,
+  rows = 6,
+  cols = 10,
   marginTop = 50,
   marginSide = 5,
   gapX = 5,
   gapY = 5
 ) {
-  const canvasWidth = engine.canvas.width;
-  const canvasHeight = engine.canvas.height;
+  const W = engine.world.width;
+  const H = engine.world.height;
+  // --- Compute brick size (guard against negative/too-small values) ---
+  const totalGapX = Math.max(0, (cols - 1) * gapX);
+  const availW = Math.max(0, W - 2 * marginSide - totalGapX);
+  const brickWidth = Math.max(1, availW / cols);
 
-  const totalGapX = (cols - 1) * gapX;
-  const totalWidthAvailable = canvasWidth - (2 * marginSide) - totalGapX;
-  const brickWidth = totalWidthAvailable / cols;
-
-  const totalGapY = (rows - 1) * gapY;
-  const maxBrickHeight = canvasHeight / 3;
-  const brickHeight = (maxBrickHeight - totalGapY) / rows;
+  const totalGapY = Math.max(0, (rows - 1) * gapY);
+  const maxRegionH = Math.max(0, H / 3 - totalGapY);   // keep bricks in top third
+  const brickHeight = Math.max(1, maxRegionH / rows);
 
   const bricks = [];
+  const centerCol = Math.floor(cols / 2);
+  const midRow = Math.floor(rows / 2);
 
-  for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-      // ✅ Calculate position
-      const x = marginSide + col * (brickWidth + gapX);
-      const y = marginTop + row * (brickHeight + gapY);
-
-      // ✅ Pattern logic
-      let placeBrick = true;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      let place = true;
       switch (pattern) {
-        case "pyramid":
-          if (col < (cols / 2 - row / 2) || col > (cols / 2 + row / 2)) placeBrick = false;
+        case "pyramid": {
+          // Widen by one column per side each row (top row = 1 brick at center)
+          const left  = Math.max(0, centerCol - r);
+          const right = Math.min(cols - 1, centerCol + r);
+          place = (c >= left && c <= right);
           break;
-
+        }
+        case "diamond": {
+          // Manhattan-distance diamond centered in the grid
+          place = (Math.abs(r - midRow) + Math.abs(c - centerCol) <= midRow);
+          break;
+        }
         case "checkerboard":
-          if ((row + col) % 2 !== 0) placeBrick = false;
+          place = ((r + c) % 2 === 0);
           break;
-
-        case "diamond":
-          const mid = rows / 2;
-          if (Math.abs(col - cols / 2) > Math.abs(mid - row)) placeBrick = false;
-          break;
-
         case "grid":
         default:
-          placeBrick = true;
+          place = true;
       }
+      if (!place) continue;
 
-      if (!placeBrick) continue;
+      const x = marginSide + c * (brickWidth + gapX);
+      const y = marginTop  + r * (brickHeight + gapY);
 
-      // ✅ Brick Type (randomized for fun)
-      const breakable = Math.random() > 0.2 || row > 1; // top rows harder
+      // Slight variety: top rows tougher
+      const breakable = Math.random() > 0.2 || r > 1;
       const color = breakable ? "green" : "grey";
 
       const brick = new Brick(x, y, brickWidth, brickHeight, color, breakable);

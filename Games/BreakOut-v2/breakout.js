@@ -40,13 +40,13 @@ function loadLevel(index) {
   createMap(engine, cfg.pattern, cfg.rows, cfg.cols);
 
   // 4) reset paddle & ball (you already have these created once)
-  paddle.x = (engine.canvas.width - paddle.width) / 2;
-  paddle.y = engine.canvas.height - paddle.height - 30;
+  paddle.x = (engine.world.width - paddle.width) / 2;
+  paddle.y = engine.world.height - paddle.height - 30;
   paddle.vx = paddle.vy = 0;
   paddle.active = true;
 
   ball.stuck = true;
-  ball.x = engine.canvas.width / 2 - ball.radius;
+  ball.x = engine.world.width / 2 - ball.radius;
   ball.y = paddle.y - ball.height - 2;
   ball.vx = ball.vy = 0;
   ball.active = true;
@@ -55,15 +55,15 @@ function loadLevel(index) {
   engine.addObject(ball);
 
   // 5) rebuild the static brick layer **via Renderer**, not engine
-  Renderer.buildStaticLayer(engine);
+  Renderer.buildStaticLayers(engine);
 }
 
 // ─── CREATE PADDLE & BALL ONCE ───────────────────────────────────────
-const paddleWidth  = window.innerWidth / 7;
+const paddleWidth  = engine.world.width / 7;
 const paddleHeight = 20;
 const paddle = new Paddle(
-  (window.innerWidth - paddleWidth) / 2,
-  window.innerHeight - paddleHeight - 30,
+  (engine.world.width - paddleWidth) / 2,
+  engine.world.height - paddleHeight - 30,
   paddleWidth,
   paddleHeight,
   "blue"
@@ -76,7 +76,7 @@ ball.paddle = paddle;
 // Main Menu
 const mainMenu = {
   update() {
-    if (GameStateManager.state === "init" && Input.isDown("Enter")) {
+    if (GameStateManager.state === "init" && Input.isKeyDown("Enter")) {
       GameStateManager.setState("running");
       engine.ui.remove(mainMenu);
       loadLevel(currentLevel);
@@ -84,7 +84,7 @@ const mainMenu = {
   },
   render(ctx) {
     if (GameStateManager.state !== "init") return;
-    const W = engine.canvas.width, H = engine.canvas.height;
+    const W = engine.world.width, H = engine.world.height;
     ctx.fillStyle = "#222"; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = "white"; ctx.font = "56px sans-serif"; ctx.textAlign = "center";
     ctx.fillText("BREAKOUT", W/2, H/2 - 40);
@@ -98,7 +98,7 @@ engine.ui.add({
   update() {},
   render(ctx) {
     if (!GameStateManager.isPaused()) return;
-    const W = engine.canvas.width, H = engine.canvas.height;
+    const W = engine.world.width, H = engine.world.height;
     ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(0,0,W,H);
     ctx.fillStyle = "white"; ctx.font = "40px sans-serif"; ctx.textAlign = "center";
     ctx.fillText("⏸ PAUSED", W/2, H/2);
@@ -110,7 +110,7 @@ engine.ui.add({
   update() {},
   render(ctx) {
     if (!winner) return;
-    const W = engine.canvas.width, H = engine.canvas.height;
+    const W = engine.world.width, H = engine.world.height;
     ctx.fillStyle = "rgba(0,0,0,0.5)"; ctx.fillRect(0,0,W,H);
     ctx.fillStyle = "yellow"; ctx.font = "60px Arial"; ctx.textAlign = "center";
     ctx.fillText("🏆 YOU WIN!", W/2, H/2);

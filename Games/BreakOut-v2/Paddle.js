@@ -10,16 +10,14 @@ export class Paddle extends GameObject {
   }
 
   update(dt) {
-    if (Input.isDown("ArrowLeft")) this.vx = -20;
-    else if (Input.isDown("ArrowRight")) this.vx = 20;
+    if (Input.isKeyDown("ArrowLeft")) this.vx = -20;
+    else if (Input.isKeyDown("ArrowRight")) this.vx = 20;
     else this.vx = 0;
 
     super.update(dt);
-
+    const W = this.engine.world.width;   // ← world units
     if (this.x < 0) this.x = 0;
-    if (this.x + this.width > this.engine.canvas.width) {
-      this.x = this.engine.canvas.width - this.width;
-    }
+    if (this.x + this.width > W) this.x = W - this.width;
   }
   
 }

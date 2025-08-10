@@ -3,9 +3,10 @@ import { Input }     from "../core/Input.js";
 import { GameStateManager } from "../util/GameStateManager.js";
 
 export class MainMenu extends UIElement {
-  constructor(onStart) {
+  constructor(onStart,name) {
     super();
     this.onStart = onStart;
+    this.name=name;
   }
 
   update() {
@@ -22,7 +23,7 @@ export class MainMenu extends UIElement {
     ctx.fillStyle = "white";
     ctx.font = "56px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("BREAKOUT", width / 2, height / 2 - 40);
+    ctx.fillText(this.name, width / 2, height / 2 - 40);
     ctx.font = "24px sans-serif";
     ctx.fillText("Press ENTER to Start", width / 2, height / 2 + 20);
   }

@@ -1,38 +1,49 @@
-// Paddle.js (Pong-style paddle)
+// File: Paddle.js
+// ────────────────────────────────────────────────────────────────────────────
+// Pong paddle in WORLD coordinates. Never reads CSS size; clamps to world.
+// ────────────────────────────────────────────────────────────────────────────
 import { GameObject } from "../gameEngine/core/GameObject.js";
-import { Input } from "../gameEngine/core/Input.js";
+import { Input }      from "../gameEngine/core/Input.js";
 
 export class Paddle extends GameObject {
-  constructor(x, y, width, height, color = "white", speed,name) {
-    super(x, y, width, height, color);
-    this.speed = speed;
+  /**
+   * @param {number} x         WORLD x (left/top in world units)
+   * @param {number} y         WORLD y
+   * @param {number} width     WORLD width
+   * @param {number} height    WORLD height
+   * @param {string} color
+   * @param {number} speed     WORLD px/s
+   * @param {string} name      "Player1" or "Player2" (controls)
+   */
+  constructor(x, y, width, height, color = "white", speed, name = "Player1") {
+    super(x, y, width, height, color); // ← WORLD space
+    this.speed = speed;                // ← WORLD px/s
     this.collisionGroup = "paddle";
-    this.collidesWith = ["ball"];
-    this.name=name;
+    this.collidesWith   = ["ball"];
+    this.name = name;
   }
 
   update(dt) {
-// inside update(dt) or similar per-frame logic
-this.vy = 0; // reset first
+    // Reset vertical velocity each frame
+    this.vy = 0;
 
-if (this.name === "Player2") {
-  if (Input.isDown("ArrowUp")) this.vy = -this.speed;
-  else if (Input.isDown("ArrowDown")) this.vy = this.speed;
-} else {
-  if (Input.isDown("w") || Input.isDown("W")) this.vy = -this.speed;
-  else if (Input.isDown("s") || Input.isDown("S")) this.vy = this.speed;
-}
-   
+    // Keyboard controls (no CSS here)
+    if (this.name === "Player2") {
+      if (Input.isKeyDown("ArrowUp"))   this.vy = -this.speed;
+      if (Input.isKeyDown("ArrowDown")) this.vy =  this.speed;
+    } else {
+      if (Input.isKeyDown("w") || Input.isKeyDown("W")) this.vy = -this.speed;
+      if (Input.isKeyDown("s") || Input.isKeyDown("S")) this.vy =  this.speed;
+    }
+
+    // Integrate position via base class (uses vx/vy*dt)
     super.update(dt);
 
-    // Clamp to canvas
-      if (this.engine) {
+    // Clamp to WORLD HEIGHT (not CSS)
+    if (this.engine) {
+      const H = this.engine.world.height;   // ← WORLD height
       if (this.y < 0) this.y = 0;
-      // ← CHANGED: use logical height
-      const H = this.engine._cssHeight;
-      if (this.y + this.height > H) {
-        this.y = H - this.height;
-      }
+      if (this.y + this.height > H) this.y = H - this.height;
     }
   }
 }
