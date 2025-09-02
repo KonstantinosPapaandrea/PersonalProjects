@@ -50,7 +50,7 @@
 
 /* optional image polish inside a card */
 .wheel__card img{
-    width: 100%; 
+    
     aspect-ratio: 16 / 9;
     object-fit: cover;
     border-radius: 10px;

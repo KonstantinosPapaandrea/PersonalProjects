@@ -23,4 +23,6 @@
 }
 .about{ background-color:#0b3d91;
   z-index: -2;
+  padding:10%;
+  height:100vh;
 }
