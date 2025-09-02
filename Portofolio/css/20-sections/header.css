@@ -9,6 +9,7 @@
 .site-header {
   position: sticky;
   top: 0;
+  align-items: center;
   inset-inline: 0;
   z-index: 999;
   height:15vh;
@@ -16,13 +17,15 @@
   backdrop-filter: blur(6px);
   border-bottom: 1px solid #ffffff0f;
   box-shadow: 0 2px 6px rgb(0 0 0 / .35);
-  padding: 1.5rem 0;              /* vertical padding */
+             /* vertical padding */
 }
 
 /* ─── INNER FLEX CONTAINER ────────────────────────────────── */
 .site-header__inner {
+  height: 100%;
   max-width: 100vw;
   margin-inline: auto;
+  position: relative;
   padding: 0 2rem;               /* horizontal padding */
   display: flex;
   align-items: center;
@@ -30,13 +33,7 @@
   gap: 5rem;                     /* consistent gap between children */
 }
 
-/* push nav elements to the right on desktop */
-@media (min-width: 768px) {
-  .nav-toggle,
-  .main-nav {
-    margin-left: auto;
-  }
-}
+
 
 /* ─── BRAND MARK ───────────────────────────────────────────── */
 .brand {
@@ -146,27 +143,79 @@
   transform: translateY(0) rotate(-45deg);
 }
 
-/* ─── MOBILE NAV (max-width: 767px) ───────────────────────── */
-@media (max-width: 767px) {
-  .nav-toggle {
-    display: block;
-  }
+/* ===== BASE (applies everywhere before MQs) ===== */
+.nav-toggle { display: none; }           /* hidden by default */
+.main-nav {                              /* assume desktop-style is allowed */
+  display: flex;                         /* you can keep your existing desktop styles */
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ===== DESKTOP & UP ===== */
+@media (min-width: 768px) {
+  .nav-toggle { display: none !important; }      /* never show burger on desktop */
   .main-nav {
-    position: fixed;
-    inset-inline: 0;
-    top: 100%;                /* directly below header */
-    background: #0e1725f2;
-    backdrop-filter: blur(6px);
-    transform: translateY(-100%);
-    transition: transform .4s ease;
-  }
-  .main-nav[data-open="true"] {
-    transform: translateY(0);
-  }
-  .main-nav ul {
-    flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.5rem 0;
-    text-align: center;
+    display: flex !important;                    /* force desktop nav visible */
+    position: static !important;                 /* cancel any mobile positioning */
+    max-height: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
   }
 }
+
+/* ===== MOBILE ONLY ===== */
+@media (max-width: 767px) {
+  .nav-toggle { display: inline-grid !important; place-items: center; }
+
+  /* Hide the desktop nav by default on mobile */
+  .main-nav {
+    position: absolute;              /* anchor under header row */
+    inset-inline: 0;
+    top: 100%;
+    background: #0e1725f2;
+    border-bottom: 1px solid #ffffff14;
+    display: block !important;       /* keep it in the flow for animation… */
+    max-height: 0;                   /* …but collapsed */
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    visibility: hidden;
+    transition:
+      max-height 300ms ease,
+      opacity 200ms ease,
+      transform 250ms ease,
+      visibility 0s linear 300ms;    /* hide after collapse finishes */
+    z-index: 1000;
+  }
+
+  /* When header/menu is open, reveal it */
+  .site-header.is-open .main-nav,
+  .main-nav[data-open="true"] {      /* supports either JS pattern */
+    max-height: 80svh;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+    transition-delay: 0s;            /* show immediately */
+  }
+
+  /* stack links vertically */
+  .main-nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: .5rem 0;
+    margin: 0;
+  }
+  .main-nav a { padding: 0.9rem 1rem; display: block; }
+
+  .site-header{
+    height:7vh;
+  }
+}
+
+/* Safety: header container needs positioning so absolute menu anchors correctly */
+.site-header__inner { position: relative; }

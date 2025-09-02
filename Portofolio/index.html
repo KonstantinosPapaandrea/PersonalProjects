@@ -50,34 +50,34 @@
   </div>
   
 <!-- ─── HEADER / NAV ─────────────────────────────────────────── -->
+<!-- index.html (header) -->
 <header class="site-header">
   <div class="site-header__inner">
-   <div class="progress-bar">
-    <div class="progress-bar-filled"></div>
-  </div>
+    <div class="progress-bar"><div class="progress-bar-filled"></div></div>
 
-    <!-- logo / brand mark -->
     <a href="#hero" class="brand">
       <span class="brand__dot"></span>Constantinos<span class="brand__alt">Dev</span>
     </a>
 
-    <!-- hamburger toggle (visible < 768 px) -->
-    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+    <!-- add aria-controls -->
+    <button class="nav-toggle" aria-label="Toggle navigation"
+            aria-expanded="false" aria-controls="primary-nav">
       <span class="nav-toggle__bar"></span>
     </button>
 
-    <nav class="main-nav">
+    <!-- add id -->
+    <nav id="primary-nav" class="main-nav" data-open="false">
       <ul>
         <li><a href="#hero">Home</a></li>
-        <li><a href="#about" class="nav-link--disabled" aria-disabled="true">About</a></li>
+        <li><a href="#about"   class="nav-link--disabled" aria-disabled="true">About</a></li>
         <li><a href="#projects" class="nav-link--disabled" aria-disabled="true">Projects</a></li>
-        <li><a href="#skills" class="nav-link--disabled" aria-disabled="true">Skills</a></li>
-        <li><a href="#contact" class="nav-link--disabled" aria-disabled="true">Contact</a></li>
+        <li><a href="#skills"   class="nav-link--disabled" aria-disabled="true">Skills</a></li>
+        <li><a href="#contact"  class="nav-link--disabled" aria-disabled="true">Contact</a></li>
       </ul>
     </nav>
-    
-  </div><!-- /.site-header__inner -->
+  </div>
 </header>
+
 
 <!-- ─── Global, moving water-drop ─────────────────────── -->
 <div id="global-drop" class="water-drop pos-center">

@@ -10,4 +10,5 @@ import './skills.js';
 import './explode.js';
 import './overlay.js'
 import './progress.js'
+import './hamburger.js'
 /* future: import other features here  */

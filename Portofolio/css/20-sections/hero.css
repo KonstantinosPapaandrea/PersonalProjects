@@ -26,7 +26,7 @@
 
 /* ── FLEX WRAPPER (two columns) ───────────────────── */
 .hero__wrap {
-
+  padding-top:0;
   display: flex;
   flex-direction: column;
   justify-content: center;     /* Centers vertically */
@@ -38,7 +38,7 @@
 /* LEFT COLUMN – name */
 .hero__name h1 {
   font-size: clamp(2rem, 2vw, 4rem);
-  padding-top:5vh;
+  padding-top:1vh;
   line-height: 1.1;
   color: #fff;
   text-align: center;
@@ -61,7 +61,7 @@
 /* SCROLL HINT – centered at the bottom */
 .scroll-hint {
   font-size: 2.2rem;
-  color: #ffffff88;
+  color: #ffffff;
   animation: bob 2.8s ease-in-out infinite;
   display: flex;
   justify-content: center;     /* Centers horizontally */
