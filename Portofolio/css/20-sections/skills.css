@@ -5,11 +5,12 @@
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:3.5rem;
+  gap:0.5rem;
   text-align:center;
   height:100vh;
   width:100%;
   max-width:100vw;
+  padding-top:15vh;
 }
 
 /* ─── heading ───────────────────────────────────────────────────── */
@@ -79,7 +80,7 @@
 .skill-list{
   list-style:none;
   margin:0; padding:0;
-display:grid; grid-template-columns:repeat(2,4.5rem);
+display:grid; grid-template-columns:repeat(3,3rem);
 
   gap:1.2rem;
 }
@@ -88,9 +89,9 @@ display:grid; grid-template-columns:repeat(2,4.5rem);
      ┌── icon ──┐
      └─ label ─┘                                       */
   display:inline-grid;
-  grid-template-rows: 4.5rem auto;   /* 4.5 rem = icon square */
+  grid-template-rows: 3rem auto;   /* 4.5 rem = icon square */
   place-items:center;                /* center icon & text    */
-  width:4.5rem;                      /* enforce square tile   */
+  width:3rem;                      /* enforce square tile   */
   margin-inline:auto;                /* keep tiles aligned    */
   gap:.4rem;
   cursor:pointer;
@@ -129,7 +130,7 @@ display:grid; grid-template-columns:repeat(2,4.5rem);
 .radar-box{
   position:relative;
   width:100%;
-  max-width:420px;         /* same size you used before */
+  max-width:25vw;         /* same size you used before */
   aspect-ratio:1/1;
 }
 .radar-box canvas{

@@ -6,7 +6,7 @@
 }
 .welcome {
   position: absolute;    /* Use absolute positioning to place it relative to its first positioned (not static) ancestor */
-  top: 0%;             /* Align the bottom to 0 (from the bottom of the parent container) */
+  top: 15vh;             /* Align the bottom to 0 (from the bottom of the parent container) */
   left: 50%;             /* Align to 50% from the left */
   transform: translateX(-50%); /* Adjust by 50% of its own width to perfectly center */
   width: 100%;           /* Ensure it takes full width */

@@ -4,12 +4,11 @@
 
 /* section wrapper */
 .projects{
+    padding-top:10%;
     position: relative;
-    padding: 6rem 0 2rem;           /* Reduced bottom padding */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5rem;                      /* Reduced gap between the heading and wheel */
     width: 100vw;
     height: 100vh;                  /* Ensure the height doesn't exceed 100vh */
     max-height: 100%;
@@ -22,39 +21,11 @@
     letter-spacing: .03em;
     color: #fff;
 }
+.section-heading{
+    z-index: 1;
+}
 
 /* -------- navigation buttons ------------------------------ */
-.wheel-btn{
-    position: absolute;
-    top: 50%; 
-    translate: 0 -50%;
-    width: 3rem; 
-    aspect-ratio: 1;
-    background: #fff3;
-    border: none;
-    color: #fff;
-    font-size: 2.6rem; 
-    line-height: 1;
-    border-radius: 50%;
-    backdrop-filter: blur(4px);
-    cursor: pointer;
-    transition: background .25s;
-    z-index: 3;
-}
-.wheel-btn:hover  { background: #fff6; }
-.wheel-btn:active { scale: .92; }
-
-/* Positioning the navigation buttons */
-.wheel-btn--prev{ left: 1rem; }
-.wheel-btn--next{ right: 1rem; }
-
-/* optional image polish inside a card */
-.wheel__card img{
-    
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: 10px;
-}
 
 .projects__bg {
     position: absolute;

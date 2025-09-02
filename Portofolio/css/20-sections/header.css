@@ -11,6 +11,7 @@
   top: 0;
   inset-inline: 0;
   z-index: 999;
+  height:15vh;
   background: #0e1725e6;
   backdrop-filter: blur(6px);
   border-bottom: 1px solid #ffffff0f;

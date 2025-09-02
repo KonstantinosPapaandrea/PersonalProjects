@@ -1,0 +1,96 @@
+/* 📱 Global phone layout fixes (≤480px wide) */
+@media (max-width: 480px) {
+
+  /* General typography scaling */
+  body {
+    font-size: 10px !important;  /* reset */
+    line-height: 1.5;
+  }
+
+  /* Header */
+  .site-header__inner {
+    max-width: 100%;
+    
+    padding: 0 1rem;
+  }
+  .brand {
+    font-size: 0.5rem;
+  }
+
+  /* Hero */
+  .hero {
+    height: auto;              /* let content drive height */
+    padding: 4rem 1rem 2rem;
+  }
+  .hero__name h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+  .welcome h1 {
+    font-size: clamp(1.8rem, 8vw, 3rem);
+    letter-spacing: 0.2rem;
+  }
+  .scroll-hint {
+    font-size: 1rem;
+  }
+  .level-text {
+    font-size: 1.5rem;
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  /* About section */
+  .about-section.left {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .dark-highlight-box {
+    max-width: 90vw;
+    padding: 1rem;
+  }
+
+  /* Projects / Wheel */
+  .projects {
+    height: auto;
+    padding: 3rem 1rem;
+    gap: 2rem;
+  }
+  .wheel {
+    width: 100%;
+    height: auto;
+  }
+  .wheel__card {
+    position: relative;
+    transform: none !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+    margin-bottom: 1rem;
+  }
+
+  /* Skills */
+  .skills {
+    height: auto;
+    padding: 3rem 1rem;
+  }
+  .skill-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: .8rem;
+  }
+
+  /* Contact */
+  .contact-card {
+    padding: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  .contact-card h3 {
+    font-size: 1.6rem;
+  }
+
+  /* Footer */
+  footer {
+    padding: 1.2rem;
+    font-size: .85rem;
+  }
+}
