@@ -1,6 +1,6 @@
 :root {
   /* Change this to rem, %, vw/vh—whatever “scale” you need */
-  --reveal-distance: 50rem;
+  --reveal-distance: 10rem;
 }
 
 /* base hidden state */

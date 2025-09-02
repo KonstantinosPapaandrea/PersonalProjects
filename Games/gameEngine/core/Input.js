@@ -22,9 +22,9 @@
 
 export class Input {
   // --- Internal state ---------------------------------------------------------
-  static keys       = new Set();               // keys currently down
-  static pointerPos = { x: 0, y: 0 };          // last known window coords
-  static pointerDown = false;                  // mouse/touch down?
+  static keys = new Set();                  // keys currently down
+  static pointerPos = { x: 0, y: 0 };       // last known window coords
+  static pointerDown = false;               // mouse/touch down?
 
   // --- Lifecycle --------------------------------------------------------------
   static init() {
@@ -55,20 +55,19 @@ export class Input {
   }
 
   // --- Public queries ---------------------------------------------------------
-  static isKeyDown(key)  { return Input.keys.has(key); }
-  static isPointerDown() { return Input.pointerDown;   }
+  static isKeyDown(key) { return Input.keys.has(key); } // canonical
+  static isDown(key)    { return Input.isKeyDown(key); } // back‑compat alias
+
+  static isPointerDown() { return Input.pointerDown; }
   static getPointerPos() { return { ...Input.pointerPos }; }
 
   /**
    * Convert window/client pointer coords → canvas CSS coords (top-left = 0,0).
-   * Use when drawing UI or when you need CSS-pixel positions.
+   * Use when drawing UI or when you need CSS‑pixel positions.
    */
   static getPointerPosInCanvas(canvas) {
     const rect = canvas.getBoundingClientRect();
-    return {
-      x: Input.pointerPos.x - rect.left,
-      y: Input.pointerPos.y - rect.top
-    };
+    return { x: Input.pointerPos.x - rect.left, y: Input.pointerPos.y - rect.top };
   }
 
   /**
@@ -76,21 +75,14 @@ export class Input {
    * Use this in gameplay (drag paddles, aim, etc.).
    */
   static getPointerPosInWorld(engine) {
-    // 1) Start with CSS-pixel position relative to the canvas
-    const p = Input.getPointerPosInCanvas(engine.canvas);
-
-    // 2) Undo the viewport mapping: remove letterbox then divide by scale
-    const vp = engine.viewport; // {scale, offsetX, offsetY}
-    return {
-      x: (p.x - vp.offsetX) / vp.scale,
-      y: (p.y - vp.offsetY) / vp.scale
-    };
+    const p  = Input.getPointerPosInCanvas(engine.canvas);  // CSS pixels
+    const vp = engine.viewport;                              // {scale,offsetX,offsetY}
+    return { x: (p.x - vp.offsetX) / vp.scale, y: (p.y - vp.offsetY) / vp.scale };
   }
 
   // --- Private handlers -------------------------------------------------------
   static _onKeyDown(e) {
     Input.keys.add(e.key);
-    // Optional: prevent page scroll for common game keys
     if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) e.preventDefault();
   }
   static _onKeyUp(e) {
@@ -98,42 +90,12 @@ export class Input {
     if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(e.key)) e.preventDefault();
   }
 
-  static _onPointerDown(e) {
-    Input.pointerDown = true;
-    Input.pointerPos = { x: e.clientX, y: e.clientY };
-    e.preventDefault();
-  }
-  static _onPointerUp(e) {
-    Input.pointerDown = false;
-    Input.pointerPos = { x: e.clientX, y: e.clientY };
-    e.preventDefault();
-  }
-  static _onPointerMove(e) {
-    Input.pointerPos = { x: e.clientX, y: e.clientY };
-    // Note: no preventDefault here to allow selection outside canvas
-  }
+  static _onPointerDown(e) { Input.pointerDown = true;  Input.pointerPos = { x: e.clientX, y: e.clientY }; e.preventDefault(); }
+  static _onPointerUp(e)   { Input.pointerDown = false; Input.pointerPos = { x: e.clientX, y: e.clientY }; e.preventDefault(); }
+  static _onPointerMove(e) { Input.pointerPos = { x: e.clientX, y: e.clientY }; /* no preventDefault here */ }
 
-  static _onTouchStart(e) {
-    const t = e.changedTouches[0];
-    Input.pointerDown = true;
-    Input.pointerPos = { x: t.clientX, y: t.clientY };
-    e.preventDefault();
-  }
-  static _onTouchEnd(e) {
-    const t = e.changedTouches[0];
-    Input.pointerDown = false;
-    Input.pointerPos = { x: t.clientX, y: t.clientY };
-    e.preventDefault();
-  }
-  static _onTouchMove(e) {
-    const t = e.changedTouches[0];
-    Input.pointerPos = { x: t.clientX, y: t.clientY };
-    e.preventDefault();
-  }
-  // In Input.js (class body)
-static isDown(key) { 
-  // helper alias so old code like MainMenu keeps working
-  return Input.isKeyDown(key); 
+  static _onTouchStart(e) { const t = e.changedTouches[0]; Input.pointerDown = true;  Input.pointerPos = { x: t.clientX, y: t.clientY }; e.preventDefault(); }
+  static _onTouchEnd(e)   { const t = e.changedTouches[0]; Input.pointerDown = false; Input.pointerPos = { x: t.clientX, y: t.clientY }; e.preventDefault(); }
+  static _onTouchMove(e)  { const t = e.changedTouches[0]; Input.pointerPos = { x: t.clientX, y: t.clientY }; e.preventDefault(); }
 }
 
-}

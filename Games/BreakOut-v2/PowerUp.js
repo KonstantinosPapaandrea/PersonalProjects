@@ -1,30 +1,26 @@
+// File: PowerUp.js
 import { GameObject } from "../gameEngine/core/GameObject.js";
 
 export class PowerUp extends GameObject {
   constructor(x, y, width = 20, height = 20, color = "orange", effect = null) {
     super(x, y, width, height, color);
-    this.vy = 3; // falls down slowly
-    this.effect = effect; // function executed when collected
-  this.collisionGroup = "powerup";
-    this.collidesWith = ["paddle"];
+    this.vy = 3;                 // Physics will move us down over time
+    this.effect = effect;
+
+    this.collisionGroup = "powerup";
+    this.collidesWith   = ["paddle"]; // only collides with paddle
   }
-canCollideWith(other) {
-  // Power-ups only care about paddle
-  return other.constructor.name === "Paddle";
-}
+
+  canCollideWith(other) { return other.constructor.name === "Paddle"; }
 
   update(dt) {
-    super.update(dt);
-
-    // Remove if it falls out of the screen
-    if (this.y > this.engine._cssHeight) {
-      this.destroy();
-    }
+    // No manual motion; Physics integrates. Just handle off-screen cleanup.
+    if (this.y > this.engine.world.height) this.destroy();
   }
 
   onCollision(other) {
     if (other.constructor.name === "Paddle" && this.effect) {
-      this.effect(); // ✅ Trigger power-up effect
+      this.effect();
       this.destroy();
     }
   }

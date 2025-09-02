@@ -84,7 +84,7 @@ const mainMenu = {
   },
   render(ctx) {
     if (GameStateManager.state !== "init") return;
-    const W = engine.world.width, H = engine.world.height;
+    const W = engine._cssWidth, H = engine._cssHeight;
     ctx.fillStyle = "#222"; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = "white"; ctx.font = "56px sans-serif"; ctx.textAlign = "center";
     ctx.fillText("BREAKOUT", W/2, H/2 - 40);
@@ -130,3 +130,4 @@ window.addEventListener("keydown", e => {
 
 // ─── START GAME LOOP ─────────────────────────────────────────────────
 engine.start();
+console.log("Game started");

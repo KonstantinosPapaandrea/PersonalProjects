@@ -1,6 +1,6 @@
 /* ─── HERO LAYOUT  ------------------------------------------------- */
 .hero {
-  height: 100vh;
+  height: 120vh;
   width: 100%;
   max-width: 100vw;
   display: flex;               /* keeps wave + mesh positioned */
@@ -39,7 +39,8 @@
 
 /* LEFT COLUMN – name */
 .hero__name h1 {
-  font-size: clamp(2.4rem, 2vw, 4.2rem);
+  font-size: clamp(2rem, 2vw, 4rem);
+  padding-top:5vh;
   line-height: 1.1;
   color: #fff;
   text-align: center;
@@ -49,17 +50,6 @@
   z-index: 2;
 }
 
-/* LEVEL 1 TEXT – absolute position at bottom left */
-.level-text {
-  position: absolute;          /* Absolute positioning relative to .hero__wrap */
-  bottom: 50%;                 /* Align it to the bottom (adjust as needed) */
-  right: 10%;                     /* Align it to the left side */
-  margin: 20px;                /* Add some margin for spacing */
-  font-size: 5rem;             /* Adjust the font size */
-  color: #fff;                 /* Text color (white) */
-  font-family: 'WelcomeFont', monospace;
-  z-index: 2;                  /* Ensure it stays above other content */
-}
 
 /* HERO BUTTONS – centered in .hero__right */
 .hero-buttons {

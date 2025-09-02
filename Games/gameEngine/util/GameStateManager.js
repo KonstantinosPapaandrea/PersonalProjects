@@ -1,60 +1,55 @@
-let engine = null;
+// File: gameEngine/util/GameStateManager.js
+
+let engine = null;  // back-ref to the engine so we can fix dt on resume
+
 /**
  * GameStateManager
  * -----------------------------------------------------------------------------
- * Role: Tiny global state controller (e.g., "running" | "paused" | "init").
- *
- * Public API (use these):
- * - setEngine(engine)   // enables pause→resume timestamp fix
- * - setState(name)      // change to any string state; triggers onChange
- * - togglePause()       // pause/unpause; resumes loop smoothly
- * - isPaused() / is(name) / isRunning()
- * - reset()             // set state back to "running"
- *
- * Helpers / Internals:
- * - onChange callback (optional) invoked on transitions.
- * - When resuming, resets engine.lastTime to avoid a dt spike.
+ * Tiny global state controller (e.g., "init" | "running" | "paused").
+ * Pausing keeps the loop running (Engine already draws UI with dt=0).
  */
-
 export const GameStateManager = {
-  state: "running",
-  onChange: null,
+  state: "running",      // default state
+  onChange: null,        // optional callback: (newState) => void
 
-  setEngine(e) {
-    engine = e;
-  },
+  /** Inject engine so we can adjust timing on resume */
+  setEngine(e) { engine = e; },
 
+  /** Set any state string; calls onChange if provided */
   setState(newState) {
     if (this.state !== newState) {
       this.state = newState;
       if (this.onChange) this.onChange(newState);
-      console.log(this.state);
+      // Removed console.log spam; add your own debug hook if needed.
     }
   },
 
+  /** Toggle paused ↔ running with dt spike protection on resume */
   togglePause() {
     if (this.state === "paused") {
+      // → RESUME
+      console.log("Resuming game");
       this.setState("running");
       if (engine) {
-        engine.lastTime = performance.now(); // ✅ Fix timestamp jump
-        requestAnimationFrame(engine.loop.bind(engine));
+        // Prevent a huge dt in the next frame after being paused
+        engine.lastTime = performance.now();
       }
+      // Do NOT call requestAnimationFrame here; Engine.loop already schedules.
     } else {
+      // → PAUSE
       this.setState("paused");
-    }
+  
+      console.log("Game paused");}
   },
 
-  isPaused() {
-    return this.state === "paused";
-  },
-  is(state) {
-    return this.state === state;
-  },
-  isRunning() {
-    return this.state === "running";
-  },
+  /** Convenience checks */
+  isPaused()  { return this.state === "paused";  },
+  isRunning() { return this.state === "running"; },
+  is(name)    { return this.state === name;      },
 
+  /** Reset back to running (e.g., after menus) with dt spike protection */
   reset() {
     this.setState("running");
+    if (engine) engine.lastTime = performance.now();
   }
 };

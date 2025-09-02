@@ -1,87 +1,102 @@
 // File: Pong.js
-// ────────────────────────────────────────────────────────────────────────────
-// Pong main: create a fixed-size WORLD and let the Viewport map it to the
-// canvas on every resize. All gameplay (ball/paddles) stays in WORLD units.
-// ────────────────────────────────────────────────────────────────────────────
+// -----------------------------------------------------------------------------
+// Main wiring: WORLD gameplay + UI overlays (CSS space).
+// -----------------------------------------------------------------------------
+import { Engine }          from "../gameEngine/core/Engine.js";
+import { Input }           from "../gameEngine/core/Input.js";
+import { GameStateManager } from "../gameEngine/util/GameStateManager.js";
 
-import { Engine } from "../gameEngine/core/Engine.js";                 // engine core
-import { Ball }   from "./Ball.js";                                    // ball (world coords)
-import { Paddle } from "./Paddle.js";                                  // paddle (world coords)
-import { Scoreboard } from "./ScoreBoard.js";                          // overlay (CSS coords OK)
-import { Input }  from "../gameEngine/core/Input.js";                  // keyboard
-import { ScaleFromCenter, easeOutQuad } from "../gameEngine/Animation/Scale.js"; // optional FX
+import { Ball }    from "./Ball.js";      // WORLD ball       :contentReference[oaicite:2]{index=2}
+import { Paddle }  from "./Paddle.js";    // WORLD paddles    :contentReference[oaicite:3]{index=3}
+import { Scoreboard } from "./ScoreBoard.js"; // UI element  :contentReference[oaicite:4]{index=4}
 
-// 1) Pick a fixed "design" WORLD size. The Viewport will letterbox/scale it.
-//    Do NOT use window size here; that's CSS space.
-const WORLD_W = 1280;  // world width (game units)
-const WORLD_H = 720;   // world height (game units)
+import { PongMainMenu }     from "./UI/PongMainMenu.js";
+import { PongPauseOverlay } from "./UI/PongPauseOverlay.js";
+import { PongWinBanner }    from "./UI/PongWinBanner.js";
+import { ServeCountdown }   from "./UI/ServeCountdown.js";
 
-// 2) Boot the engine with that WORLD size. CanvasManager will still size the
-//    canvas to the window and DPR, and Viewport will map WORLD→CSS.
+// ----- WORLD size (design resolution) ----------------------------------------
+const WORLD_W = 1280;
+const WORLD_H = 720;
+
+// ----- Boot engine & GSM -----------------------------------------------------
 const engine = new Engine("gameCanvas", WORLD_W, WORLD_H);
+GameStateManager.setEngine(engine);
+GameStateManager.setState("init"); // start at menu
 
-// 3) WORLD-scaled gameplay constants. These never change with window size.
-//    (If you want to balance the “feel”, change these numbers—not CSS.)
-const PADDLE_W   = 16;    // world px
-const PADDLE_H   = 140;
-const PADDLE_S   = 20;   // speed in world px/s
-const SIDE_GAP   = 28;    // gap from world edge
-const BALL_R     = 8;
-const BALL_SPEED = 10;   // world px/s
+// ----- Create gameplay objects (WORLD space) ---------------------------------
+const PADDLE_W = 16, PADDLE_H = 140, PADDLE_S = 20, SIDE_GAP = 28;
+const BALL_R = 8, BALL_SPEED = 10;
 
-// 4) Create gameplay objects at WORLD positions (not CSS).
 const ball = new Ball(WORLD_W / 2, WORLD_H / 2, BALL_R, "white", BALL_SPEED);
-ball.layer = "default"; // render on gameplay layer
+ball.layer = "default";
 
-// Left paddle anchored to WORLD left
-const leftPaddle = new Paddle(
-  SIDE_GAP,                            // x in WORLD space
-  (WORLD_H - PADDLE_H) / 2,            // centered in WORLD
-  PADDLE_W, PADDLE_H, "white", PADDLE_S, "Player1"
-);
+const leftPaddle = new Paddle(SIDE_GAP, (WORLD_H - PADDLE_H) / 2, PADDLE_W, PADDLE_H, "white", PADDLE_S, "Player1");
 leftPaddle.layer = "default";
 
-// Right paddle anchored to WORLD right
-const rightPaddle = new Paddle(
-  WORLD_W - SIDE_GAP - PADDLE_W,       // x in WORLD space
-  (WORLD_H - PADDLE_H) / 2,
-  PADDLE_W, PADDLE_H, "white", PADDLE_S, "Player2"
-);
+const rightPaddle = new Paddle(WORLD_W - SIDE_GAP - PADDLE_W, (WORLD_H - PADDLE_H) / 2, PADDLE_W, PADDLE_H, "white", PADDLE_S, "Player2");
 rightPaddle.layer = "default";
 
-// 5) Add to engine
+// Add to engine
 engine.addObject(ball);
 engine.addObject(leftPaddle);
 engine.addObject(rightPaddle);
 
-// 6) UI overlay (CSS space is fine for overlays)
-const hud = new Scoreboard(ball, "Player1", "Player2");
+// ----- Scoreboard (UI) -------------------------------------------------------
+const hud = new Scoreboard(ball, "Player1", "Player2", /*target*/5, /*cooldown ms*/1200);
 engine.ui.add(hud);
 
-// 7) Start engine
-engine.start();
-
-// 8) Launch ball with Space
+// ----- UI: key capture for "press once" semantics ----------------------------
+window.__lastKey = null;
 window.addEventListener("keydown", (e) => {
-  if (e.code === "Space") ball.launch();
+  window.__lastKey = e.key;             // store last pressed key
+  if (e.key === " ") {                  // SPACE to serve when allowed
+    if (GameStateManager.isRunning() && hud.canServe() && ball.stuck) ball.launch();
+  }
+  if (e.key === "p" || e.key === "P") GameStateManager.togglePause(); // pause toggle
 });
 
-// 9) World‑space “referee” that awards points when ball leaves WORLD bounds.
-//    IMPORTANT: use engine.world.width (WORLD), not CSS width.
+// ----- UI: main menu ---------------------------------------------------------
+engine.ui.add(new PongMainMenu({
+  onStart: () => {
+    // Reset the round and allow serve; leave ball stuck until SPACE
+    hud.lastResetTime = performance.now() - hud.cooldown; // serve immediately
+  }
+}));
+
+// ----- UI: pause overlay -----------------------------------------------------
+engine.ui.add(new PongPauseOverlay());
+
+// ----- UI: post-point countdown ---------------------------------------------
+
+// ----- UI: win banner --------------------------------------------------------
+engine.ui.add(new PongWinBanner(
+  () => hud.getWinnerName(),
+  () => {
+    // On ENTER after a point/win → reset for next serve or match
+    const winner = hud.getWinnerName();
+    if (winner) {
+      // Hard reset the match scores
+      hud.leftScore = 0; hud.rightScore = 0;
+    }
+    // Reset serve cooldown
+    hud.lastResetTime = performance.now() - hud.cooldown;
+    // Back to running (ensure menu is gone)
+    GameStateManager.setState("running");
+  }
+));
+
+// ----- Scoring referee (WORLD bounds) ----------------------------------------
 function checkScoring() {
-  const W = engine.world.width; // world width (fixed)
+  const W = engine.world.width;
   if (ball.x + ball.width < 0) {
-    hud.addPointToRight();      // ball out on left → right scores
+    hud.addPointToRight();                   // left out → right scores
   } else if (ball.x > W) {
-    hud.addPointToLeft();       // ball out on right → left scores
+    hud.addPointToLeft();                    // right out → left scores
   }
   requestAnimationFrame(checkScoring);
 }
 requestAnimationFrame(checkScoring);
 
-// 10) Optional intro animation on paddles (purely visual)
-leftPaddle.width = 0; leftPaddle.height = 0;
-ScaleFromCenter(leftPaddle, PADDLE_W, PADDLE_H, 400, easeOutQuad);
-
-rightPaddle.width = 0; rightPaddle.height = 0;
-ScaleFromCenter(rightPaddle, PADDLE_W, PADDLE_H, 400, easeOutQuad);
+// ----- Start engine loop -----------------------------------------------------
+engine.start();

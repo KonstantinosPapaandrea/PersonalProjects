@@ -1,46 +1,36 @@
-/**
- * UIManager
- * -----------------------------------------------------------------------------
- * Role: Collects lightweight UI elements and draws them after the game world.
- *
- * Public API (use these):
- * - new UIManager(engine)
- * - add(element) / remove(element)  // element gets element.engine = engine
- * - update(dt)                      // forwards to elements
- * - render(ctx)                     // forwards to elements (screen space)
- *
- * Expectations:
- * - UI elements draw in CSS pixel space (no viewport transform).
- * - Use engine._cssWidth/_cssHeight when you need screen size.
- */
+// UIManager.js — patch to treat undefined `active` as true
 
 export class UIManager {
   constructor(engine) {
-    this.engine = engine;
-    this.uiElements = [];
+    this.engine = engine;      // back-ref to engine
+    this.uiElements = [];      // ordered list
   }
 
-  /** Add a UI element (must implement update(dt) and/or render(ctx)) */
   add(element) {
-    element.engine = this.engine;
+    element.engine = this.engine;       // let UI read sizes/state
+    // If element.active is undefined, default it to true so plain objects work.
+    if (element.active === undefined) element.active = true;   // <-- added
     this.uiElements.push(element);
   }
 
-  /** Remove a UI element */
   remove(element) {
     this.uiElements = this.uiElements.filter(e => e !== element);
   }
 
-  /** Call update on all UI elements */
+  clear() { this.uiElements.length = 0; }
+
   update(dt) {
-    for (let el of this.uiElements) {
+    for (const el of this.uiElements) {
+      // Skip only when explicitly deactivated; undefined counts as active.
+      if (!el || el.active === false) continue;                // <-- changed
       if (typeof el.update === "function") el.update(dt);
     }
   }
 
-  /** Draw all UI elements on top of the game */
   render(ctx) {
-    for (let el of this.uiElements) {
+    for (const el of this.uiElements) {
+      // Skip only when explicitly deactivated; undefined counts as active.
+      if (!el || el.active === false) continue;                // <-- changed
       if (typeof el.render === "function") el.render(ctx);
     }
   }

@@ -1,6 +1,6 @@
 
 /* ===== ABOUT PANELS ===== */
-.aboutMe{ font-size:3.5rem; margin-bottom:30px; text-align:center; }
+.aboutMe{ font-size:2rem; margin-bottom:30px; text-align:center; }
 
 .about-section{
   display:flex; flex-direction:column; gap:40px;

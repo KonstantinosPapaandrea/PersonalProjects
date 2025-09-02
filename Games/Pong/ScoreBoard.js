@@ -1,75 +1,79 @@
-// File: Scoreboard.js (or define inline in Pong.js)
+// File: ScoreBoard.js
+// -----------------------------------------------------------------------------
+// UI element for scores. Draws in CSS pixels; keeps round state helpers.
+// -----------------------------------------------------------------------------
 export class Scoreboard {
-  constructor(ball, leftPaddleName = "Player1", rightPaddleName = "Player2") {
-    this.leftScore = 0;
+  constructor(ball, leftPaddleName = "Player1", rightPaddleName = "Player2", targetScore = 5, cooldownMs = 800) {
+    this.engine = null;               // injected by UIManager.add()
+    this.active = true;               // render by default
+
+    this.leftScore  = 0;
     this.rightScore = 0;
-    this.ball = ball; // for reset hook
-    this.leftName = leftPaddleName;
-    this.rightName = rightPaddleName;
-    this.lastResetTime = 0;
-    this.cooldown = 500; // ms before allowing relaunch after score
+    this.leftName   = leftPaddleName;
+    this.rightName  = rightPaddleName;
+
+    this.targetScore = targetScore;   // points to win the match
+    this.cooldown    = cooldownMs;    // ms after a point before serve allowed
+    this.lastResetTime = 0;           // timestamp of last score
+
+    this.ball = ball;                 // reference to game ball (to reset/launch)
   }
 
-  addPointToLeft() {
-    this.leftScore++;
-    this._scoreReset();
-  }
-  addPointToRight() {
-    this.rightScore++;
-    this._scoreReset();
-  }
+  // ----- scoring API ----------------------------------------------------------
+  addPointToLeft()  { this.leftScore++;  this._scoreReset(); }
+  addPointToRight() { this.rightScore++; this._scoreReset(); }
 
   _scoreReset() {
-    // reset ball and delay auto-launch
+    // Reset the ball to center and mark when we can serve again
     this.ball.reset();
     this.lastResetTime = performance.now();
   }
 
-  update(dt) {
-    // auto-launch after short delay
-    if (this.ball.stuck && performance.now() - this.lastResetTime > this.cooldown) {
-      // could auto-launch or wait for space
-      // this.ball.launch(); // uncomment to auto-start
-    }
+  // Winner detection (string or null)
+  getWinnerName() {
+    if (this.leftScore  >= this.targetScore) return this.leftName;
+    if (this.rightScore >= this.targetScore) return this.rightName;
+    return null;
   }
 
-// File: Scoreboard.js
+  // Milliseconds left until serve is allowed (for countdown overlay)
+  getMillisUntilServe() {
+    const elapsed = performance.now() - this.lastResetTime;
+    return Math.max(0, this.cooldown - elapsed);
+  }
 
-  /* …ctor, addPointToLeft/Right, _scoreReset, update stay the same… */
+  // Convenience “can serve now?”
+  canServe() { return this.getMillisUntilServe() <= 0; }
+
+  update(dt) {
+    // Auto-launch after cooldown (optional; keep manual launch if you prefer)
+    // if (this.ball.stuck && this.canServe()) this.ball.launch();
+  }
 
   render(ctx) {
-    // Padding from the top edge
-    const padding = 10;
+    // Draw along the top in CSS pixels
+    const W = this.engine?._cssWidth  ?? ctx.canvas.clientWidth;
+    const H = this.engine?._cssHeight ?? ctx.canvas.clientHeight;
 
-    // We want to draw text in CSS pixels, not device pixels.
-    // ctx.canvas.width is backing-store size (CSS size × DPR).
-    // clientWidth is the CSS-pixel width you see on screen.
-    const visibleWidth = ctx.canvas.clientWidth;
+    // Background strip
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.fillRect(0, 0, W, 48);
 
-    // Semi-transparent black behind the score
-    ctx.fillStyle = "rgba(0,0,0,0)";
-    ctx.fillRect(0, 0, visibleWidth, 40);  // draw a background bar
-
-    // White text in monospace, centered
+    // Text
     ctx.fillStyle = "white";
-    ctx.font = "24px monospace";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    // Draw left player’s name and score at 25% of visible width
-    ctx.fillText(
-      `${this.leftName}: ${this.leftScore}`,  // text to render
-      visibleWidth * 0.25,                     // x-position
-      padding + 20                             // y-position (half of 40px bar)
-    );
+    ctx.font = "20px monospace";
+    ctx.fillText(`${this.leftName}: ${this.leftScore}`,  W * 0.25, 24);
+    ctx.fillText(`${this.rightName}: ${this.rightScore}`, W * 0.75, 24);
 
-    // Draw right player’s name and score at 75% of visible width
-    ctx.fillText(
-      `${this.rightName}: ${this.rightScore}`, // text to render
-      visibleWidth * 0.75,                     // x-position
-      padding + 20                             // y-position
-    );
+    // Serve hint (center)
+    const winner = this.getWinnerName();
+    if (!winner) {
+      ctx.font = "14px monospace";
+      const serveHint = this.canServe() ? "Press SPACE to serve" : `Serve in ${Math.ceil(this.getMillisUntilServe()/1000)}…`;
+      ctx.fillText(serveHint, W * 0.5, 24);
+    }
   }
 }
-
-

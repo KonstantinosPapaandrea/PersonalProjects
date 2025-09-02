@@ -16,7 +16,7 @@
 body{
   background:#111;
   font-family:'WelcomeFont',sans-serif;
-  font-size:20px;
+  font-size:0.9rem;
   line-height:1.8;
   color:#fff;
   overflow-x:hidden;
@@ -31,11 +31,11 @@ p{
 /* ===== FULL-SCREEN WRAPPERS ===== */
 .section-wrapper{
   position:relative;
-  min-height:100vh;
+  min-height:50vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:60px 20px;
+  padding:1vh 1vw;
 }
 
 
@@ -58,10 +58,10 @@ p{
 }
 .level-text {
   position: absolute;          /* Absolute positioning relative to .hero__wrap */
-  top: 25%;                 /* Align it to the bottom (adjust as needed) */
+  top: 50%;                 /* Align it to the bottom (adjust as needed) */
   right: 10%;                     /* Align it to the left side */
   margin: 20px;                /* Add some margin for spacing */
-  font-size: 5rem;             /* Adjust the font size */
+  font-size: 1rem;             /* Adjust the font size */
   color: #fff;                 /* Text color (white) */
   font-family: 'WelcomeFont', monospace;
   z-index: 2;                  /* Ensure it stays above other content */

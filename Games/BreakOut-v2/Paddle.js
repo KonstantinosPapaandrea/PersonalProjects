@@ -1,23 +1,25 @@
+// File: Paddle.js
 import { GameObject } from "../gameEngine/core/GameObject.js";
-import { Input } from "../gameEngine/core/Input.js";
+import { Input }      from "../gameEngine/core/Input.js";
 
 export class Paddle extends GameObject {
   constructor(x, y, width, height, color = "blue") {
     super(x, y, width, height, color);
 
+    // Grouping for Physics queries
     this.collisionGroup = "paddle";
-    this.collidesWith = ["ball","powerup"];
+    this.collidesWith   = ["ball", "powerup"];
+
+    // Let Physics clamp us inside the world bounds (no bounce for paddles)
+    this.stayInWorld = true;   // Physics will clamp x/y and zero bad velocity
   }
 
   update(dt) {
-    if (Input.isKeyDown("ArrowLeft")) this.vx = -20;
-    else if (Input.isKeyDown("ArrowRight")) this.vx = 20;
-    else this.vx = 0;
+    // Respond to input; Physics will integrate after this
+    if (Input.isKeyDown("ArrowLeft"))      this.vx = -20;
+    else if (Input.isKeyDown("ArrowRight")) this.vx =  20;
+    else                                    this.vx =   0;
 
-    super.update(dt);
-    const W = this.engine.world.width;   // ← world units
-    if (this.x < 0) this.x = 0;
-    if (this.x + this.width > W) this.x = W - this.width;
+    // Do NOT move or clamp here; Physics will handle both.
   }
-  
 }
