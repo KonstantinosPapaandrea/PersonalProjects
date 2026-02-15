@@ -51,6 +51,12 @@
   max-height: 30vh;
 }
 
+.wheel__card img.project-pic--icpc {
+  background: #000;
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
 /* (Optional) remove duplicate img rule blocks elsewhere to avoid conflicts */
 .wheel-btn {
   position: absolute;

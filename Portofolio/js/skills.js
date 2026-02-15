@@ -1,12 +1,25 @@
-/* ─── Skills data – edit here ────────────────────────────────── */
+/* Skills data - edit here */
 const skillLabels = [
-  'HTML','CSS','JavaScript', 'React',
-  , 'C# / Unity', 'SQL','Java','C','ASM','Parallelism','Algorithms','GitHub'
+  'HTML',
+  'CSS',
+  'JavaScript',
+  'C# / Unity',
+  'SQL',
+  'Java',
+  'C',
+  'ASM',
+  'Parallelism',
+  'Algorithms',
+  'GitHub',
+  'C++',
+  'Data-Science',
+  'AI',
+  'Graphics'
 ];
 
-const skillScores = [95, 90, 80, 70, 90, 90,95,80,75,80,90,95,95]; // 0–100 scale
+const skillScores = [95, 90, 80, 90, 90, 95, 80, 75, 80, 90, 95, 95, 100, 95, 85]; // 0-100 scale
 
-/* ─── Build the neon radar chart ─────────────────────────────── */
+/* Build the neon radar chart */
 const ctx = document.getElementById('skillRadar');
 
 if (ctx) {
@@ -19,16 +32,14 @@ if (ctx) {
         data: skillScores,
         fill: true,
         backgroundColor: 'hsla(198,100%,60%,0.08)',
-        borderColor:  'hsl(198 100% 60%)',
+        borderColor: 'hsl(198 100% 60%)',
         borderWidth: 2,
         pointBackgroundColor: 'hsl(198 100% 60%)',
         pointRadius: 4
-    
       }]
     },
     options: {
-            layout: { padding: 30 },
-
+      layout: { padding: 30 },
       responsive: true,
       maintainAspectRatio: false,
       scales: {
@@ -36,9 +47,9 @@ if (ctx) {
           suggestedMin: 0,
           suggestedMax: 100,
           angleLines: { color: '#233' },
-          grid:       { color: '#233' },
-          pointLabels:{ color: '#9cf', font:{size:14} },
-          ticks:      { display:false }
+          grid: { color: '#233' },
+          pointLabels: { color: '#9cf', font: { size: 14 } },
+          ticks: { display: false }
         }
       },
       plugins: {
@@ -54,22 +65,25 @@ if (ctx) {
     }
   });
 }
+
 /* ==================================================================
-   Inter-icon hover → update the info panel
+   Inter-icon hover -> update the info panel
    ================================================================== */
 const infoLabel = document.getElementById('skillLabel');
 const infoBlurb = document.getElementById('skillBlurb');
 const iconItems = document.querySelectorAll('#skillList li');
 
-iconItems.forEach(li=>{
-  li.addEventListener('mouseenter', ()=>updateInfo(li));
-  li.addEventListener('focus',     ()=>updateInfo(li)); // keyboard
+iconItems.forEach((li) => {
+  li.addEventListener('mouseenter', () => updateInfo(li));
+  li.addEventListener('focus', () => updateInfo(li)); // keyboard
 });
 
-function updateInfo(el){
+function updateInfo(el) {
   infoLabel.textContent = el.dataset.skill;
-  infoBlurb.innerHTML   = el.dataset.blurb;   // safe – our own strings
+  infoBlurb.innerHTML = el.dataset.blurb; // safe - our own strings
 }
 
 /* start with the first item selected */
-updateInfo(iconItems[0]);
+if (iconItems.length > 0) {
+  updateInfo(iconItems[0]);
+}

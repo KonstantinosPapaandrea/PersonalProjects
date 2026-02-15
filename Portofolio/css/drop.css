@@ -13,7 +13,7 @@
 /* ─── water-drop component  (everything is scoped) ─ */
 .water-drop{
   /* master size — override inline or in media-queries */
-  --size:clamp(240px, 40vw, 420px);   /* ← roughly 2× bigger */
+  --size:clamp(180px, 30vw, 320px);
 
   /* derived sizes */
   --inner:calc(var(--size)*.86);

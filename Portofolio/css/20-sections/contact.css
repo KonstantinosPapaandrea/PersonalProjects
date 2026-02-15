@@ -19,11 +19,12 @@
     hsl(213 54% 12%) 40%,
     hsl(213 54% 10%) 100%
   );
-  height:100vh;
+  min-height:100svh;
+  height:auto;
   display: flex;
   justify-content: center;      /* centre the card */
   align-items: center;
-  padding-top:15vh;
+  padding-top:12vh;
 }
 
 /* 2️⃣  glass card
@@ -32,7 +33,7 @@
   /* keeps your existing colour-4 text */
   color: inherit;
 
-  max-width: 660px;
+  max-width: 700px;
   width: 100%;
   padding: 2.2rem 2.6rem;
   border-radius: 16px;
@@ -42,7 +43,7 @@
   backdrop-filter: blur(12px);
 
   display: grid;
-  gap: 1.8rem 2.4rem;
+  gap: 1.8rem 2.8rem;
 
   /* two equal columns from 640 px up */
   grid-template-columns: 1fr;
@@ -68,6 +69,110 @@
   margin: .3em 0;
   font-size: 1.05rem;
   line-height: 1.55;
+}
+
+.contact-block {
+  border: 1px solid hsl(0 0% 100% / 0.16);
+  background: hsl(0 0% 100% / 0.045);
+  border-radius: 12px;
+  padding: 1rem 1rem 1.05rem;
+  backdrop-filter: blur(8px);
+}
+
+.contact-block--info {
+  align-self: stretch;
+}
+
+.contact-block--hire {
+  border-radius: 999px;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+  align-self: center;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 1.15rem 1.35rem;
+  text-align: center;
+}
+
+@media (max-width: 780px) {
+  #contact.section-wrapper {
+    padding-top: 9vh;
+  }
+
+  .contact-block--hire {
+    max-width: 320px;
+  }
+}
+
+.contact-block h4 {
+  margin: 0 0 0.6rem;
+  font-size: 1.08rem;
+  letter-spacing: 0.02em;
+  color: hsl(198 100% 86%);
+}
+
+.contact-hire-note {
+  margin: 0 0 0.7rem;
+  font-size: 0.86rem;
+  color: hsl(198 62% 84% / 0.92);
+}
+
+.contact-info {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.contact-form {
+  display: grid;
+  gap: 0.55rem;
+  align-content: start;
+}
+
+.contact-block--hire .contact-form {
+  align-content: center;
+  justify-items: center;
+  width: min(320px, 100%);
+}
+
+.contact-block--hire .contact-form label {
+  text-align: center;
+}
+
+.contact-form label {
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  color: hsl(198 100% 88%);
+}
+
+.contact-form input {
+  width: 100%;
+  border: 1px solid hsl(0 0% 100% / 0.22);
+  background: hsl(0 0% 100% / 0.08);
+  color: hsl(0 0% 98%);
+  border-radius: 10px;
+  padding: 0.62rem 0.75rem;
+  font: inherit;
+  outline: none;
+}
+
+.contact-form input:focus {
+  border-color: hsl(198 100% 66% / 0.9);
+  box-shadow: 0 0 0 2px hsl(198 100% 66% / 0.25);
+}
+
+.contact-submit-btn {
+  justify-self: start;
+  width: fit-content;
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.05rem;
+}
+
+.contact-block--hire .contact-submit-btn {
+  justify-self: center;
 }
 
 /* 4️⃣  nice bullet list for socials

@@ -14,7 +14,7 @@
     padding: 0 1rem;
   }
   .brand {
-    font-size: 0.5rem;
+    font-size: 1rem;
   }
 
   /* Hero */
@@ -22,7 +22,7 @@
     height: auto;              /* let content drive height */
     padding: 4rem 1rem 2rem;
   }
-  .hero__name h1 {
+  .hero__name-title {
     font-size: 1.8rem;
     line-height: 1.2;
   }
@@ -33,24 +33,6 @@
   .scroll-hint {
     font-size: 1rem;
   }
-  .level-text {
-    font-size: 1.5rem;
-    top: auto;
-    bottom: 1rem;
-    right: 1rem;
-  }
-
-  /* About section */
-  .about-section.left {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
-  }
-  .dark-highlight-box {
-    max-width: 90vw;
-    padding: 1rem;
-  }
-
   /* Projects / Wheel */
   .projects {
     height: auto;
@@ -59,15 +41,23 @@
   }
   .wheel {
     width: 100%;
-    height: auto;
+    height: clamp(380px, 56vh, 560px);
   }
-  .wheel__card {
-    position: relative;
-    transform: none !important;
-    opacity: 1 !important;
-    scale: 1 !important;
-    margin-bottom: 1rem;
+
+  /* Keep JS wheel behavior on phones; only lift buttons above cards */
+  .wheel-btn {
+    width: 3.1rem;
+    top: 55%;
+    z-index: 8;
+    pointer-events: auto;
   }
+
+  .wheel-btn--prev { left: 0.35rem; }
+  .wheel-btn--next { right: 0.35rem; }
+
+  /* Prevent side/hidden cards from stealing taps from nav buttons */
+  #projectWheel .wheel__card { pointer-events: none; }
+  #projectWheel .wheel__card.is-front { pointer-events: auto; }
 
   /* Skills */
   .skills {
@@ -75,7 +65,7 @@
     padding: 3rem 1rem;
   }
   .skill-list {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: .8rem;
   }
 
@@ -92,5 +82,40 @@
   footer {
     padding: 1.2rem;
     font-size: .85rem;
+  }
+}
+
+/* Mobile-only: hide decorative global drop + skills radar */
+@media (max-width: 780px) {
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero,
+  .projects,
+  .skills,
+  .about,
+  .section-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .wheel {
+    overflow: hidden;
+  }
+
+  .wheel-btn {
+    display: none !important;
+  }
+
+  #global-drop {
+    display: none !important;
+  }
+
+  .radar-box {
+    display: none !important;
   }
 }

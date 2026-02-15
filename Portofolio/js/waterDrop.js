@@ -26,7 +26,7 @@ drop.style.transition =
    transform ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1)`;
 
 /* ---------- scale presets ---------- */
-const SCALE = { center:1.5, left:1, right:1, bottom:2  ,top:1.5};
+const SCALE = { center:0.72, left:1.8, right:0.85, bottom:1.6, top:2.05 };
 
 /* ---------- sizing helpers ---------- */
 const NATURAL = { w: drop.offsetWidth, h: drop.offsetHeight };

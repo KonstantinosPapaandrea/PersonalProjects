@@ -8,6 +8,10 @@
 
 }
 .pic-wrap img{ width:100%; height:100%; object-fit:cover; }
+img.pic-wrap{
+  display:block;
+  object-fit:cover;
+}
 /* ① simplest: circle directly on the <img> */
 /* apply to the element that actually shows pixels */
 /* ⬇  wrapper OR the <img> itself                   */

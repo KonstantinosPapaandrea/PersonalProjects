@@ -1,8 +1,9 @@
 /* ─── HERO LAYOUT  ------------------------------------------------- */
 .hero {
   margin-top:-15vh;
-  padding-top: 30vh;          /* to avoid being hidden behind the fixed header */
-  height: 100vh;
+  padding-top: 15vh;          /* to avoid being hidden behind the fixed header */
+  min-height: 100svh;
+  height: auto;
   width: 100%;
   max-width: 100vw;
   display: flex;               /* keeps wave + mesh positioned */
@@ -24,6 +25,17 @@
   z-index: 2;
 }
 
+.hero-orbit-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
 /* ── FLEX WRAPPER (two columns) ───────────────────── */
 .hero__wrap {
 
@@ -31,20 +43,109 @@
   flex-direction: column;
   justify-content: center;     /* Centers vertically */
   align-items: center;         /* Centers horizontally */
-  gap: 5vh;                    /* Space between columns */
+  gap: 1.5rem;                 /* Space between modules */
+  z-index: 2;
+  position: relative;
+  width: min(95vw, 1200px);
+  min-height: 30vh;
+  margin-top:20vh;
+  padding: 1rem 1.2rem 1rem;
+  transform: translateY(-2.4rem);
+}
+
+.hero-hud {
+  position: absolute;
+  inset: 0;
+  border: none;
+  box-shadow: none;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hud-status {
+  position: absolute;
+  top: 8px;
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: hsl(198 100% 76%);
+  text-shadow: 0 0 12px hsl(198 100% 60% / 0.65);
   z-index: 2;
 }
 
-/* LEFT COLUMN – name */
-.hero__name h1 {
-  font-size: clamp(2rem, 2vw, 4rem);
-  padding-top:5vh;
+.hud-status--left {
+  left: 40px;
+}
+
+.hud-status--right {
+  right: 40px;
+}
+
+/* LEFT COLUMN - name */
+.hero__name-title {
+  font-size: clamp(2rem, 1.6vw, 3rem);
+  padding-top: 0;
   line-height: 1.1;
   color: #fff;
   text-align: center;
+  display: block;
+  z-index: 2;
+  margin: 0 0 0.25rem;
+  position: relative;
+}
+
+.hero__subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(0 0% 100% / 0.85);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 84%;
+}
+
+.hero__identity {
   display: flex;
-  justify-content: center;      /* Centers content horizontally */
-  align-items: center;         /* Centers content vertically */
+  align-items: center;
+  justify-content: center;
+  gap: clamp(5rem, 10vw, 2.5rem);
+  margin-top: 0.7rem;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.hero__name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero__right {
+  position: absolute;
+  left: 50%;
+  bottom: 0.6rem;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+}
+
+.hero__name-title,
+.hero__subtitle {
+  text-align: center;
+}
+
+.hero-portrait {
+  width: clamp(118px, 9vw, 220px);
+  height: clamp(118px, 9vw, 220px);
+  margin: 0;
+  object-fit: cover;
+  border-radius: 50%;
+  position: relative;
   z-index: 2;
 }
 
@@ -55,17 +156,47 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family:'WelcomeFont';
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 0;
+  position: relative;
+  z-index: 2;
 }
 
 /* SCROLL HINT – centered at the bottom */
 .scroll-hint {
-  font-size: 2.2rem;
+  font-size: 0.95rem;
   color: #ffffff88;
   animation: bob 2.8s ease-in-out infinite;
   display: flex;
   justify-content: center;     /* Centers horizontally */
   align-items: center;         /* Centers vertically */
+  margin: 0;
+  line-height: 1;
+  padding-bottom:0.5rem;
+}
+
+.hero-start-btn {
+  margin-top: 0.1rem;
+  min-width: 180px;
+  text-align: center;
+  letter-spacing: 0.08em;
+  border-color: hsl(198 100% 52%);
+  background: linear-gradient(45deg, hsl(198 100% 48%), hsl(198 100% 34%));
+  box-shadow: 0 0 18px hsl(198 100% 50% / 0.55);
+}
+
+.hero-start-btn:hover,
+.hero-start-btn:focus {
+  background: linear-gradient(45deg, hsl(198 100% 58%), hsl(198 100% 40%));
+  box-shadow:
+    0 6px 12px rgb(0 0 0 / 0.3),
+    0 0 26px hsl(198 100% 62% / 0.9),
+    0 0 44px hsl(188 100% 66% / 0.55);
+}
+
+.hero-start-btn.is-pressed {
+  transform: translateY(2px) scale(0.98);
+  filter: brightness(1.15);
 }
 
 /* BOBBING ANIMATION for .scroll-hint */
@@ -81,6 +212,46 @@
     align-items: center;
     text-align: center;
     justify-content: center;
-    gap: 2.2rem;
+    gap: 1.1rem;
+    min-height: auto;
+    padding: 1.3rem 0.8rem 1.2rem;
+    transform: translateY(-0.8rem);
   }
+
+  .hero__identity {
+    flex-direction: column;
+    gap: 1.3rem;
+    margin-top: 0.45rem;
+  }
+
+  .hero__right {
+    position: static;
+    transform: none;
+    width: auto;
+  }
+
+  .hero__name {
+    align-items: center;
+  }
+
+  .hero__name-title,
+  .hero__subtitle {
+    text-align: center;
+  }
+
+  .hero-portrait {
+    width: min(44vw, 168px);
+    height: min(44vw, 168px);
+  }
+
+  .hud-status--right {
+    display: none;
+  }
+
+  .hud-status--left {
+    left: 34px;
+    top: 8px;
+    font-size: 0.62rem;
+  }
+
 }
