@@ -1,16 +1,459 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=Portfolio/index.html">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Redirecting...</title>
-  <link rel="canonical" href="Portfolio/index.html">
-  <script>
-    window.location.replace("Portfolio/index.html");
+  <meta name="robots" content="index,follow" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Konstantinos Papaandrea — Portfolio</title>
+  <meta name="description" content="Portfolio of Konstantinos Papaandrea, showcasing software engineering projects, web development work, game development, and technical skills.">
+
+  
+  <link rel="canonical" href="https://www.konstantinospapaandrea.com/" />
+
+  <meta property="og:title" content="Konstantinos Papaandrea — Portfolio" />
+  <meta property="og:description" content="Portfolio of Konstantinos Papaandrea, showcasing software engineering projects, web development work, game development, and technical skills." />
+  <meta property="og:url" content="https://www.konstantinospapaandrea.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://www.konstantinospapaandrea.com/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Konstantinos Papaandrea",
+    "url": "https://www.konstantinospapaandrea.com/",
+    "sameAs": [
+      "https://www.linkedin.com/in/konstantinospapaandrea-ba3122361/",
+      "https://github.com/KonstantinosPapaandrea"
+    ],
+    "jobTitle": "Junior Software Developer"
+  }
   </script>
+<link rel="stylesheet" href="css/00-reset.css">
+  <link rel="stylesheet" href="css/01-base.css">
+  <link rel="stylesheet" href="css/02-utilities.css">
+  <link rel="stylesheet" href="css/responsivness/baseResponsive.css">
+  <!-- components -->
+  <link rel="stylesheet" href="css/10-components/hero-mesh.css">
+  <link rel="stylesheet" href="css/10-components/wave-separator.css">
+  <link rel="stylesheet" href="css/10-components/water-drop.css">
+  <link rel="stylesheet" href="css/10-components/buttons.css">
+  <link rel="stylesheet" href="css/10-components/pictures.css">
+  <link rel="stylesheet" href="css/10-components/wheel.css">
+  <link rel="stylesheet" href="css/10-components/box.css">
+  <link rel="stylesheet" href="css/10-components/data-reveal.css">
+  <link rel="stylesheet" href="css/10-components/welcome.css">
+
+
+
+  <!-- page sections -->
+  <link rel="stylesheet" href="css/20-sections/projects.css">
+  <link rel="stylesheet" href="css/20-sections/hero.css">
+  <link rel="stylesheet" href="css/20-sections/skills.css">
+  <link rel="stylesheet" href="css/20-sections/about.css">
+  <link rel="stylesheet" href="css/20-sections/contact.css">
+  <link rel="stylesheet" href="css/20-sections/footer.css">
+  <link rel="stylesheet" href="css/20-sections/header.css">
+
+
+  <!--  Devicon 2.2  – 100+ tech logos  -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+
+  <!-- ─── animated water-drop styles ────────────────────── -->
+  <link rel="stylesheet" href="css/drop.css">
 </head>
+
 <body>
-  <p>Redirecting to <a href="Portfolio/index.html">Portfolio</a>...</p>
+  <!-- ─── HEADER / NAV ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <!-- logo / brand mark -->
+      <a href="#hero" class="brand">
+        <span class="brand__dot"></span>Konstantinos<span class="brand__alt">Dev</span>
+      </a>
+
+      <!-- hamburger toggle (visible < 768 px) -->
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="nav-toggle__bar"></span>
+      </button>
+
+      <nav class="main-nav">
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+    </div><!-- /.site-header__inner -->
+  </header>
+
+  <!-- ─── Global, moving water-drop ─────────────────────── -->
+  <div id="global-drop" class="water-drop pos-center">
+    <div class="frame">
+      <div class="ring-static"></div>
+      <div class="wavy-line"></div>
+      <div class="wavy-line second"></div>
+      <div class="drop"></div>
+    </div>
+  </div>
+  <!-- ▸ Animated triple-curve banner 500 × 500  -->
+
+
+  <!-- ─── HERO ──────────────────────────────────────────── -->
+  <section id="hero" class="hero" data-title="Hero" data-drop="center">
+    <canvas class="hero-orbit-canvas" aria-hidden="true"></canvas>
+
+    <div class="hero-inner">
+
+
+      <!-- ── FLEX WRAPPER (two columns) ───────────────────── -->
+      <div class="hero__wrap">
+        <div class="hero-hud" aria-hidden="true">
+          <p class="hud-status hud-status--left">JUNIOR DEVELOPER</p>
+          <p class="hud-status hud-status--right">READY TO HIRE</p>
+        </div>
+        <div class="hero__identity">
+          <img src="assets/images/hero/photo.jpg" alt="Portrait of Konstantinos Papaandrea" class="hero-portrait target-pic pic-wrap">
+
+          <!-- ◂ LEFT column – name + drop target -->
+          <div class="hero__name">
+            <p class="hero__name-title" data-drop="center">Konstantinos<br>Papaandrea</p>
+          </div>
+        </div>
+        <p class="hero__subtitle" data-reveal>I’m a CS student graduating in Summer 2026 and founder of BMP (Build My
+          PC) a full-stack product where I own everything end-to-end. Alongside that, I created Motion2Music AI, that
+          generates music from motion data, showing I can build real pipelines, not just run tutorials. I’ve also
+          delivered a full-stack website for an actual client and built my own game engine, which sharpened my
+          architecture, debugging, and performance mindset. I’m looking for a junior role where ownership, shipping, and
+          problem-solving matter.</p>
+        <!-- ▸ RIGHT column – tagline, roles, buttons, cue -->
+
+        <div data-reveal data-reveal-from="bottom" class="hero-buttons">
+
+          <div class="scroll-hint" aria-hidden="true">Press Enter or Click Below</div>
+          <a href="#about" id="hero-start-btn" class="next-btn hero-start-btn">About Me</a>
+
+        </div>
+      </div><!-- /.hero__wrap -->
+    </div>
+
+  </section>
+
+
+
+  <!-- ─── ABOUT (Bio + Education merged) ───────────────────── -->
+  <section class="about section" id="about" data-title="About">
+    <div class="about-shell">
+      <a href="#projects" class="next-btn about-next-btn">Projects</a>
+      <div class="about-cards">
+        <article class="about-card target-pic" data-reveal data-reveal-from="left">
+
+          <h3>Mindset</h3>
+          <span class="mindset-rocket-idle-wrap" aria-hidden="true">
+            <img src="assets/images/about/Rocket.png" alt="" class="mindset-rocket-idle">
+          </span>
+          <p>
+            I take responsibility for the outcome, not just the task. I’m proactive, communicate clearly, and I like
+            turning vague requirements into concrete, finished work.
+          </p>
+          <span class="mindset-rocket-wrap">
+            <img src="assets/images/about/Rocket.png" alt="3D rocket illustration" class="mindset-rocket">
+          </span>
+
+        </article>
+
+        <article class="about-card" data-reveal data-reveal-from="bottom">
+          <h3>Approach</h3>
+          <span class="approach-icon-idle-wrap" aria-hidden="true">
+            <img src="assets/images/about/LightBulb.png" alt="" class="approach-icon-idle">
+          </span>
+          <p>
+            I care about clean structure and correctness first. I’m strong at debugging, thinking through edge cases,
+            and writing code that stays understandable as the project grows.
+          </p>
+          <span class="approach-icon-wrap">
+            <img src="assets/images/about/LightBulb.png" alt="Light bulb illustration" class="approach-icon">
+          </span>
+        </article>
+
+        <article class="about-card" data-reveal data-reveal-from="right">
+          <h3>Collaboration</h3>
+          <span class="collab-icon-idle-wrap" aria-hidden="true">
+            <img src="assets/images/about/Maskgroup.png" alt="" class="collab-icon-idle">
+          </span>
+          <p>
+            I work well with feedback and short iterations. I keep progress visible, ask good questions early, and aim
+            to be the kind of teammate that makes the whole team faster.
+          </p>
+          <span class="collab-icon-wrap">
+            <img src="assets/images/about/Maskgroup.png" alt="Collaboration illustration" class="collab-icon">
+          </span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="projects" class="projects section" data-drop="top">
+    <svg class="projects__bg target-pic" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387
+             .6.113.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416
+             -.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.729.083-.729
+             1.205.084 1.838 1.237 1.838 1.237 1.07 1.834 2.809 1.304 3.494.997
+             .107-.776.42-1.305.763-1.605-2.665-.303-5.466-1.332-5.466-5.931
+             0-1.31.468-2.382 1.236-3.222-.124-.303-.536-1.527.117-3.176
+             0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404
+             1.02.005 2.047.138 3.006.404 2.292-1.553 3.298-1.23 3.298-1.23
+             .654 1.649.242 2.873.118 3.176.77.84 1.235 1.913 1.235 3.222
+             0 4.609-2.804 5.625-5.476 5.921.432.372.824 1.102.824 2.222v3.293
+             c0 .319.192.694.801.576C20.565 21.797 24 17.298 24 12
+             24 5.373 18.627 0 12 0z" />
+    </svg>
+    <h2 class="section-heading">Projects</h2>
+
+    <button class="wheel-btn wheel-btn--prev" aria-label="Previous">‹</button>
+    <button class="wheel-btn wheel-btn--next" aria-label="Next">›</button>
+    <div class="wheel" id="projectWheel">
+
+  <article class="wheel__card">
+    <h3>BMP</h3>
+    <img src="assets/images/projects/BMP_Logo.png" alt="BMP project screenshot" class="project-pic">
+    <p>
+      BMP (Build My PC) is my end-to-end product that helps people choose the most compatible PC build for their needs.
+      I built the compatibility checker from scratch, collected and cleaned hardware data, designed the database, and
+      developed both the front-end and back-end. I also created a recommendation system using machine learning and data
+      science to suggest builds to users.
+    </p>
+  </article>
+
+  <article class="wheel__card">
+    <h3>Motion2Music</h3>
+    <img src="assets/images/projects/Motion2Music_Logo.png" alt="Motion2Music project screenshot" class="project-pic">
+    <p>
+      My thesis project: an AI prototype that extracts emotion, rhythm, and motion features from movement data and
+      generates original music tailored to a specific dance or action. The goal is to make game music interactive and
+      adaptive to a character’s movements in real time.
+    </p>
+  </article>
+
+  <article class="wheel__card">
+    <h3>Library Website</h3>
+    <img src="assets/images/projects/LibraryBooking.png" alt="Library booking website screenshot" class="project-pic">
+    <p>
+      My first finished product for a real client: a school library booking system with a database-backed website.
+      I worked as part of a team and contributed to building and delivering the full solution.
+    </p>
+  </article>
+
+  <article class="wheel__card">
+    <h3>Game Engine (HTML5)</h3>
+    <img src="assets/images/projects/GameEnginePhoto.png" alt="HTML5 game engine screenshot" class="project-pic">
+    <p>
+      A small 2D game engine built with pure JavaScript, HTML, and CSS. I made it while learning web development and
+      exploring game architecture. To validate it, I built playable demos like Pong and Breakout on top of the engine.
+    </p>
+  </article>
+
+  <article class="wheel__card">
+    <h3>Backgammon 2.0</h3>
+    <img src="assets/images/projects/BackGammon2.0.png" alt="Backgammon 2.0 screenshot" class="project-pic">
+    <p>
+      A modern 3D take on Backgammon with added strategy and mini-games (e.g., tic-tac-toe, maze, and more). The goal
+      was to reduce pure luck and make the experience more skill-based and engaging.
+    </p>
+  </article>
+
+  <article class="wheel__card">
+    <h3>Portfolio Website</h3>
+    <img src="assets/images/projects/PortfolioImage.png" alt="Portfolio website screenshot" class="project-pic">
+    <p>
+      This portfolio site you’re viewing right now. I designed and built everything myself to showcase my web skills
+      and present my work in a way that stands out beyond a typical “no experience” junior profile.
+    </p>
+  </article>
+
+  <article class="wheel__card">
+    <h3>ICPC — Qualified for European Regionals</h3>
+    <img src="assets/images/projects/icpc-logo.png" alt="ICPC logo" class="project-pic project-pic--icpc">
+    <p>
+      ICPC is a global competitive programming contest focused on algorithmic problem-solving. In 2025, my team
+      qualified for the European Regionals and achieved an honorable placement (we did not advance to World Finals).
+    </p>
+  </article>
+
+</div>
+
+    <a href="#skills" class="next-btn">Skills</a>
+
+  </section>
+  <!-- ▸ SKILLS / TOOLS ─────────────────────────────────────────────── -->
+  <section id="skills" class="skills section" data-title="Skills" data-drop="left">
+
+    <h2 class="section-heading">Skills&nbsp;&amp;&nbsp;Tools</h2>
+    <div class="skills__grid">
+
+      <!-- ◂───────────── ① Info panel (updates on hover) -->
+      <aside class="skill-info" id="skillInfo" data-reveal data-reveal-from="right">
+        <h3 id="skillLabel"> </h3>
+        <p id="skillBlurb">Hover an icon to learn more.</p>
+      </aside>
+
+      <!-- ◂───────────── ② Icon column  -->
+      <ul class="skill-list" id="skillList" data-reveal data-reveal-from="bottom">
+
+        <!-- ①  HTML -->
+        <li data-skill="HTML" data-blurb="Standards-compliant, accessible markup.">
+          <i class="devicon-html5-plain colored"></i>
+        </li>
+
+        <!-- ②  CSS -->
+        <li data-skill="CSS" data-blurb="Modern CSS — Grid, Flexbox, custom-properties, fluid type.">
+          <i class="devicon-css3-plain colored"></i>
+        </li>
+
+        <!-- ③  JavaScript -->
+        <li data-skill="JavaScript" data-blurb="ES 2023+, bundlers, unit tests (Vitest / Jest).">
+          <i class="devicon-javascript-plain colored"></i>
+        </li>
+
+        <!-- ④  C# / Unity -->
+        <li data-skill="C# / Unity" data-blurb="Gameplay code, Scriptable Objects, ECS &amp; shaders.">
+          <!-- two icons side-by-side -->
+          <i class="devicon-unity-original colored"></i>
+        </li>
+
+        <!-- ⑤  SQL -->
+        <li data-skill="SQL" data-blurb="Schema design, stored procedures, query optimisation.">
+          <i class="devicon-mysql-plain colored"></i>
+        </li>
+
+        <!-- ⑥  Java -->
+        <li data-skill="Java" data-blurb="OOP, collections, Spring-boot basics.">
+          <i class="devicon-java-plain colored"></i>
+        </li>
+
+        <!-- ⑦  C -->
+        <li data-skill="C" data-blurb="Pointers, memory management, low-level debugging.">
+          <i class="devicon-c-plain colored"></i>
+        </li>
+
+        <!-- ⑧  ASM -->
+        <li data-skill="ASM" data-blurb="x86-64 Linux, bit-twiddling, SIMD intrinsics.">
+          <!-- devicon has no generic ASM glyph – fallback to text -->
+          <span class="asm-icon">ASM</span>
+        </li>
+
+        <!-- ⑨  Parallelism -->
+        <li data-skill="Parallelism" data-blurb="OpenMP, thread pools, lock-free data structures.">
+          <span class="parallel-icon">⇅</span>
+        </li>
+
+        <!-- ⑩  Algorithms -->
+        <li data-skill="Algorithms" data-blurb="Graphs, DP, complexity analysis, contest practice.">
+          <span class="algo-icon">ƒ(n)</span>
+        </li>
+
+        <!-- ⑪  GitHub -->
+        <li data-skill="GitHub" data-blurb="Git flow, PR reviews, Actions CI/CD pipelines.">
+          <i class="devicon-github-original icon--white"></i>
+        </li>
+
+        <!-- ⑫  C++ -->
+        <li data-skill="C++" data-blurb="Performance-focused C++, STL, and low-level optimization patterns.">
+          <i class="devicon-cplusplus-plain colored"></i>
+        </li>
+
+        <!-- ⑬  Data-Science -->
+        <li data-skill="Data-Science" data-blurb="Data cleaning, feature engineering, analysis, and model evaluation.">
+          <span class="ds-icon">DS</span>
+        </li>
+
+        <!-- ⑭  AI -->
+        <li data-skill="AI" data-blurb="Applied AI workflows, model prototyping, and practical inference pipelines.">
+          <span class="ai-icon">AI</span>
+        </li>
+
+        <!-- ⑮  Graphics -->
+        <li data-skill="Graphics" data-blurb="Rendering fundamentals, shaders, and real-time visual systems.">
+          <span class="gfx-icon">GFX</span>
+        </li>
+
+      </ul>
+
+
+      <!-- ◂───────────── ③ Radar chart  -->
+      <div class="radar-box target-pic">
+        <canvas id="skillRadar" aria-label="Radar chart of my skills" role="img"></canvas>
+      </div>
+
+    </div><!-- /.skills__grid -->
+
+    <!-- fallback if JS disabled -->
+    <noscript>
+      <img src="images/skills-fallback.svg" alt="Static radar chart of my skills" width="400" height="400">
+    </noscript>
+    <a href="#contact" class="next-btn">Contact</a>
+
+  </section>
+
+
+
+  <!-- ─── CONTACT ───────────────────────────────────────── -->
+  <section id="contact" class="section-wrapper section" data-drop="bottom" data-title="Contact">
+
+    <div class="io-sentinel"></div>
+    <!-- ✨ NEW wrapper that the CSS targets -->
+    <div class="contact-card" data-reveal data-reveal-from="bottom">
+      <h3>📢 Contact Me</h3>
+      <div class="contact-block contact-block--info">
+        <h4>Contact</h4>
+        <div class="contact-info">
+        <p><strong>Email:</strong>
+          <a href="mailto:papaandreakonstantinos@gmail.com">papaandreakonstantinos@gmail.com</a><br>
+          <strong>Location:</strong> Cyprus
+        </p>
+        <p><strong>Socials</strong></p>
+        <ul>
+          <li class="github">
+            <a href="https://github.com/KonstantinosPapaandrea/PersonalProjects" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </li>
+          <li class="linkedin">
+            <a href="https://www.linkedin.com/in/konstantinos-papaandrea-ba3122361/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          </li>
+        </ul>
+        </div>
+      </div>
+      <div class="contact-block contact-block--hire target-pic">
+        <h4>Hire Me Now!</h4>
+        <p class="contact-hire-note">For recruiters and hiring managers.</p>
+        <form class="contact-form" action="https://formspree.io/f/mzdargwd" method="POST">
+          <input type="hidden" name="_subject" value="New hiring inquiry from portfolio">
+          <label for="contact-email">How can I contact you?</label>
+          <input id="contact-email" name="contact_method" type="text" placeholder="Email / Phone / LinkedIn" required>
+          <button type="submit" class="next-btn contact-submit-btn">Notify Me</button>
+        </form>
+      </div>
+
+    </div>
+    <a href="#hero" class="next-btn">Back to Top ↑</a>
+
+  </section>
+
+
+  <footer>
+    <p>&copy; 2025 Konstantinos Papaandrea. All rights reserved.</p>
+  </footer>
+  <script type="module" src="js/main.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 </body>
+
 </html>
