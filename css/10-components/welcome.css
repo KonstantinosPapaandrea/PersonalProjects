@@ -1,0 +1,121 @@
+.welcome {
+  position: absolute;    /* Use absolute positioning to place it relative to its first positioned (not static) ancestor */
+  top: 15vh;             /* Align the bottom to 0 (from the bottom of the parent container) */
+  left: 50%;             /* Align to 50% from the left */
+  transform: translateX(-50%); /* Adjust by 50% of its own width to perfectly center */
+  width: 100%;           /* Ensure it takes full width */
+  text-align: center;    /* Align text inside */
+}
+
+.welcome h1 {
+  position: relative;
+  font-size: clamp(3rem, 3vw, 5rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  color: #e0e0e0;  /* Softer off-white */
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Softer glow with blue/green hues */
+  text-shadow:
+    0 0 4px rgba(0, 255, 255, 0.5),     /* light cyan glow */
+    0 0 8px rgba(0, 200, 255, 0.4),     /* brighter cyan */
+    0 0 16px rgba(0, 150, 200, 0.3),    /* soft blue */
+    0 0 32px rgba(0, 100, 150, 0.2);    /* deep blue glow */
+
+  /* Start them invisible and scaled down */
+  opacity: 0;
+  transform: scale(0.8);
+  animation: welcome-pop 0.1s ease-out 0.3s forwards;
+}
+
+
+/* subtle “pop + fade-in” */
+@keyframes welcome-pop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.welcome h1 > span {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+}
+  
+  /* ─── WELCOME WORDS: INITIAL OFFSCREEN POSITIONS ─── */
+  .welcome h1 > span[data-reveal]:not(.is-visible)[data-reveal-from="left"] {
+    display: inline-block; /* allow it to move independently */
+    transform: translateX(-30vw) !important;
+  }
+  .welcome h1 > span[data-reveal]:not(.is-visible)[data-reveal-from="right"] {
+    display: inline-block;
+    transform: translateX(30vw) !important;
+  }
+  /* bottom uses your default var(--reveal-distance), so no override needed */
+  
+  /* ─── WELCOME WORDS: SNAPPY TRANSITIONS ─── */
+  .welcome h1 > span[data-reveal] {
+    display: inline-block;
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1) !important;
+  }
+  
+  /* ─── WELCOME WORDS: FINAL VISIBLE STATE ─── */
+  .welcome h1 > span[data-reveal].is-visible {
+    opacity: 1        !important;
+    transform: none   !important;
+  }
+  /* first word appears instantly */
+  .welcome h1 > span[data-reveal]:nth-of-type(1) {
+    transition-delay: 0s !important;
+  }
+  
+  /* second word after 0.1s */
+  .welcome h1 > span[data-reveal]:nth-of-type(2) {
+    transition-delay: 1s !important;
+  }
+  
+  /* third word after 0.2s */
+  .welcome h1 > span[data-reveal]:nth-of-type(3) {
+    transition-delay: 2s !important;
+  }
+  /* ─── PARTICLE EXPLOSION ─── */
+  .particle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: var(--color, #0ff);
+    border-radius: 50%;
+    pointer-events: none;
+    /* two‐part animation: shoot + fade */
+    animation-name: shoot, fade;
+    animation-duration: var(--duration, 0.6s),
+                        var(--duration, 0.6s);
+    animation-delay:    var(--delay, 0s),
+                        var(--delay, 0s);
+    animation-timing-function: ease-out, linear;
+    animation-fill-mode: forwards, forwards;
+  }
+  
+  @keyframes shoot {
+    from {
+      transform: translate(0,0) scale(1);
+    }
+    to {
+      transform: translate(var(--dx), var(--dy)) scale(0);
+    }
+  }
+  
+  @keyframes fade {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  
+.welcome [data-reveal][data-reveal-from="bottom"] {
+  /* small nudge so IO still sees it in-viewport */
+  transform: translateY(8vh) !important;
+}

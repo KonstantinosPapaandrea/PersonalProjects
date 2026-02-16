@@ -1,0 +1,39 @@
+:root {
+  /* Change this to rem, %, vw/vh—whatever “scale” you need */
+  --reveal-distance: 10rem;
+}
+
+/* base hidden state */
+[data-reveal] {
+  opacity: 0;
+  transition:
+    opacity 1.5s ease-out,
+    transform 1.5s cubic-bezier(.3,.6,.2,1);
+}
+
+/* slide in from bottom (default) */
+[data-reveal]:not([data-reveal-from]),
+[data-reveal][data-reveal-from="bottom"] {
+  transform: translateY(var(--reveal-distance));
+}
+
+/* from top */
+[data-reveal][data-reveal-from="top"] {
+  transform: translateY(calc(var(--reveal-distance) * -1));
+}
+
+/* from left */
+[data-reveal][data-reveal-from="left"] {
+  transform: translateX(calc(var(--reveal-distance) * -1));
+}
+
+/* from right */
+[data-reveal][data-reveal-from="right"] {
+  transform: translateX(var(--reveal-distance));
+}
+
+/* when visible, clear the transform & fade in */
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}

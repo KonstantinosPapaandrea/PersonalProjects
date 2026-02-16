@@ -1,0 +1,485 @@
+/* ===== ABOUT REMAKE ===== */
+.about {
+  min-height: 100vh;
+  padding: 0;
+  background:
+    radial-gradient(circle at 8% 10%, rgb(53 214 255 / 0.16), transparent 30%),
+    radial-gradient(circle at 92% 85%, rgb(43 93 177 / 0.25), transparent 30%),
+    linear-gradient(180deg, #0b3d91 0%, #0a2f6d 45%, #091d3f 100%);
+}
+
+.about-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  gap: 0;
+  position: relative;
+}
+
+.about-cards {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  flex: 1;
+}
+
+.about-card {
+  flex: 1;
+  border: 1px solid rgb(186 239 255 / 0.36);
+  border-radius: 0;
+  padding: 3.2rem 1.4rem 1.25rem;
+  background:
+    linear-gradient(180deg, rgb(236 250 255 / 0.22) 0%, rgb(236 250 255 / 0.08) 36%, rgb(236 250 255 / 0) 76%),
+    linear-gradient(160deg, rgb(8 20 44 / 0.44), rgb(16 37 74 / 0.35) 55%, rgb(25 53 101 / 0.3) 100%);
+  background-size: 100% 100%, 138% 138%;
+  background-position: 0 0, 50% 50%;
+  box-shadow:
+    inset 0 1px 0 rgb(247 253 255 / 0.55),
+    inset 0 -16px 30px rgb(2 9 24 / 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  outline: 1px solid rgb(189 240 255 / 0.14);
+  backdrop-filter: blur(18px) saturate(155%);
+  -webkit-backdrop-filter: blur(18px) saturate(155%);
+  transition: background 0.5s ease, box-shadow 0.5s ease, outline-color 0.5s ease;
+}
+
+
+.about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap) {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity 0 ease,
+    transform 0.42s ease,
+    visibility 0s linear 0.42s;
+}
+
+.about-card:hover,
+.about-card:focus-within {
+  background:
+    linear-gradient(180deg, rgb(242 252 255 / 0.34) 0%, rgb(242 252 255 / 0.12) 38%, rgb(242 252 255 / 0) 78%),
+    linear-gradient(160deg, rgb(12 27 58 / 0.52), rgb(19 42 84 / 0.44) 55%, rgb(30 62 118 / 0.38) 100%);
+  box-shadow:
+    0 0 0 1px rgb(209 246 255 / 0.54),
+    0 14px 28px rgb(2 11 30 / 0.2),
+    0 0 38px rgb(132 237 255 / 0.3),
+    inset 0 1px 0 rgb(248 254 255 / 0.68);
+  outline-color: rgb(211 246 255 / 0.64);
+  z-index: 4;
+}
+
+
+.about-card:hover > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap),
+.about-card:focus-within > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap) {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition:
+    opacity 0.42s ease,
+    transform 0.42s ease,
+    visibility 0s;
+  transition-delay: 0.2s;
+}
+
+.about-card h2 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.about-card h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: hsl(198 100% 72%);
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.42s ease, left 0.42s ease, transform 0.42s ease;
+  text-align: center;
+  width: calc(100% - 2.8rem);
+}
+
+.about-card:hover h3,
+.about-card:focus-within h3 {
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.about-card p {
+  margin-top: 30%;
+  color: rgb(236 244 255 / 0.95);
+  font-size: clamp(1.2rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.about-card .mindset-rocket-idle-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-18%, -50%) scale(1.5);
+  transform-origin: 70% 140%;
+  opacity: 1;
+  transition:
+    transform 0.7s cubic-bezier(.22,.8,.22,1),
+    opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-card .mindset-rocket-idle {
+  width: min(190px, 72%);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.about-card:hover .mindset-rocket-idle-wrap,
+.about-card:focus-within .mindset-rocket-idle-wrap {
+  transform: translate(-150%, -250%) rotate(-18deg) scale(0.62);
+  opacity: 0;
+}
+
+.about-card .approach-icon-idle-wrap {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-25%, -50%) scale(1.5);
+  transform-origin: center;
+  opacity: 1;
+  transition:
+    transform 0.7s cubic-bezier(.22,.8,.22,1),
+    opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-card .approach-icon-idle {
+  width: min(170px, 64%);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.about-card:hover .approach-icon-idle-wrap,
+.about-card:focus-within .approach-icon-idle-wrap {
+  transform: translate(-50%, -220%) scale(0.6);
+  opacity: 0;
+}
+
+.about-card .approach-icon-wrap {
+  display: block;
+  align-self: center;
+  position: relative;
+  margin: 0.15rem auto 0.75rem;
+  transform: translate(0%, 50%) scale(0.65);
+  transform-origin: center;
+  transition: none;
+  will-change: transform;
+  z-index: 1;
+}
+
+.about-card .approach-icon {
+  width: min(205px, 78%);
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+}
+
+.about-card:hover .approach-icon-wrap,
+.about-card:focus-within .approach-icon-wrap {
+  animation: approach-enter 2s cubic-bezier(.22,.8,.22,1) 0.12s forwards;
+}
+
+.about-card .collab-icon-idle-wrap {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-30%, -50%) scale(1.5);
+  transform-origin: center;
+  opacity: 1;
+  transition:
+    transform 0.7s cubic-bezier(.22,.8,.22,1),
+    opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.about-card .collab-icon-idle {
+  width: min(180px, 66%);
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.about-card:hover .collab-icon-idle-wrap,
+.about-card:focus-within .collab-icon-idle-wrap {
+  transform: translate(-136%, -214%) scale(0.62);
+  opacity: 0;
+}
+
+.about-card .collab-icon-wrap {
+  display: block;
+  align-self: center;
+  position: relative;
+  margin: 0.15rem auto 0.75rem;
+  transform: translate(130%, 95%) scale(0.66);
+  transform-origin: center;
+  transition: none;
+  will-change: transform;
+  z-index: 1;
+}
+
+.about-card .collab-icon {
+  width: min(210px, 78%);
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+}
+
+.about-card:hover .collab-icon-wrap,
+.about-card:focus-within .collab-icon-wrap {
+  animation: collab-enter 2s cubic-bezier(.22,.8,.22,1) 0.12s forwards;
+}
+
+.about-card .mindset-rocket-wrap {
+  display: block;
+  align-self: flex-start;
+  position: relative;
+  margin: 0.2rem auto 0.8rem;
+  transform: translate(-100%, 100%) rotate(30deg) scale(1);
+  transform-origin: center;
+  transition: none;
+  will-change: transform;
+  z-index: 1;
+}
+
+.about-card .mindset-rocket {
+  width: min(220px, 80%);
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0;
+  transition: none;
+  will-change: opacity;
+}
+
+.about-card .mindset-rocket-wrap::after {
+  content: "";
+  position: absolute;
+  top: 52%;
+  right: 72%;
+  width: 150px;
+  height: 26px;
+  transform: translateY(-50%) rotate(-90deg) scaleX(0.6);
+  transform-origin: right center;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(64 224 255 / 0) 0%,
+      rgb(64 224 255 / 0.2) 35%,
+      rgb(124 239 255 / 0.62) 72%,
+      rgb(225 250 255 / 0.92) 100%
+    );
+  filter: blur(7px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.about-card:hover .mindset-rocket,
+.about-card:focus-within .mindset-rocket {
+  opacity: 1;
+}
+
+.about-card:hover .mindset-rocket-wrap,
+.about-card:focus-within .mindset-rocket-wrap {
+  animation: rocket-enter 2s cubic-bezier(.22,.8,.22,1) 0.12s forwards;
+}
+
+.about-card:hover .mindset-rocket-wrap::after,
+.about-card:focus-within .mindset-rocket-wrap::after {
+  animation: rocket-trail 2s cubic-bezier(.22,.8,.22,1) 0.12s forwards;
+}
+
+@keyframes rocket-enter {
+  0% {
+    transform: translate(-100%,100%) rotate(30deg) scale(0.6);
+  }
+  100% {
+    transform: translate(50%, 50%) rotate(50deg) scale(1.5);
+  }
+}
+
+@keyframes rocket-trail {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) rotate(-90deg) scaleX(0.55);
+  }
+  35% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.65;
+    transform: translateY(-50%) rotate(-90deg) scaleX(1.15);
+  }
+}
+
+@keyframes approach-enter {
+  0% {
+    transform: translate(0%,90%) scale(0.62);
+  }
+  100% {
+    transform: translate(25%, 0%) scale(1.35);
+  }
+}
+
+@keyframes collab-enter {
+  0% {
+    transform: translate(130%,95%) scale(0.62);
+  }
+  100% {
+    transform: translate(50%, 0%) scale(1.32);
+  }
+}
+
+
+.about-next-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 6;
+}
+
+.about-next-btn:hover,
+.about-next-btn:focus,
+.about-next-btn:active {
+  transform: translateX(-50%);
+  animation: none;
+}
+
+@media (max-width: 780px) {
+  .about {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .about-shell {
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .about-cards {
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+  }
+
+  .about-next-btn {
+    bottom: 0.9rem;
+  }
+
+  .about-card {
+    padding: 2.7rem 0.9rem 0.95rem;
+  }
+
+  .about-card h2 {
+    font-size: 1.25rem;
+  }
+
+  .about-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .about-card p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .about-card .mindset-rocket {
+    width: min(170px, 74%);
+  }
+
+  .about-card .mindset-rocket-wrap {
+    margin-bottom: 0.65rem;
+  }
+
+  .about-card .mindset-rocket-idle-wrap {
+    top: 40%;
+  }
+
+  .about-card .approach-icon {
+    width: min(170px, 68%);
+  }
+
+  .about-card .collab-icon {
+    width: min(170px, 68%);
+  }
+}
+
+@media (hover: none) {
+  .about-card {
+    padding: 0.95rem 0.9rem;
+  }
+
+  .about-card h3 {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    text-align: left;
+    width: auto;
+    margin: 0 0 0.45rem;
+    transition: none;
+  }
+
+  .about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap) {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
+
+  .about-card .mindset-rocket-idle-wrap {
+    display: none;
+  }
+
+  .about-card .approach-icon-idle-wrap {
+    display: none;
+  }
+
+  .about-card .collab-icon-idle-wrap {
+    display: none;
+  }
+
+  .about-card .mindset-rocket-wrap {
+    transform: none;
+    animation: none;
+    align-self: center;
+    margin: 0.2rem auto 0.8rem;
+  }
+
+  .about-card .mindset-rocket-wrap::after {
+    display: none;
+  }
+
+}
