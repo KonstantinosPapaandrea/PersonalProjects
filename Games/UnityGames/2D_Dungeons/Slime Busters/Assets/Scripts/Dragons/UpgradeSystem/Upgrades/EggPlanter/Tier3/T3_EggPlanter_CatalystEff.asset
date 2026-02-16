@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7baf23a9d53c5724bb9d51e59bacdd3c, type: 3}
+  m_Name: T3_EggPlanter_CatalystEff
+  m_EditorClassIdentifier: 
+  linkRadius: 0
+  damageMult: 1
+  shrapnelCount: 6
+  shrapnelDamageMult: 0.25
+  shrapnelRange: 1.8
+  enableRemote: 0
+  remoteCooldown: 8
+  vulnPct: 0
+  vulnDur: 0
+  blastRadiusMult: 1.1

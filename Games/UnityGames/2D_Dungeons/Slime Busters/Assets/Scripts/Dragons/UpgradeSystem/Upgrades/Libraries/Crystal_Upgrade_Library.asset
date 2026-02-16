@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3479efcb1b3703448a008135552c2470, type: 3}
+  m_Name: Crystal_Upgrade_Library
+  m_EditorClassIdentifier: 
+  dragonType: 2
+  upgrades:
+  - {fileID: 11400000, guid: 786124bdc7faee444991826fdc8b2d9c, type: 2}
+  - {fileID: 11400000, guid: 0752fba1cc68da445a8f58c3eb346352, type: 2}
+  - {fileID: 11400000, guid: e214167a326411546b8954fee6ea7161, type: 2}
+  - {fileID: 11400000, guid: 1e4279a0ae48c9d4a9c3f4f5cc2f1c9e, type: 2}
+  - {fileID: 11400000, guid: d50529c4c6f02b84cb81524143c58105, type: 2}
+  - {fileID: 11400000, guid: 4b2426ae2234bf243814112b44dafd7f, type: 2}
+  - {fileID: 11400000, guid: 2565023e65de7114d891cb3bc29bd60a, type: 2}
+  - {fileID: 11400000, guid: 4f58ba11984899b48a0bcd3ecaa7a76b, type: 2}
+  - {fileID: 11400000, guid: 46bc9a7c6314ab545a614ce326f6a8ad, type: 2}

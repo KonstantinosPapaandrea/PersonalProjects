@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b46d5023fdc47f4fb753d8c6503b323, type: 3}
+  m_Name: CRYTAL_T1_RAPID_UPGRADE
+  m_EditorClassIdentifier: 
+  upgradeId: 212
+  displayName: Shoots Faster
+  description: 
+  icon: {fileID: 0}
+  dragonType: 2
+  tier: 1
+  pathIndex: 1
+  pathName: Rapid
+  coinCost: 100
+  essenceCost: 50
+  slimeRequirements: []
+  prerequisites: []
+  effects:
+  - {fileID: 11400000, guid: cb346d235c441db44bba655d574438d3, type: 2}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76be70767421668438adc82d3e0ff830, type: 3}
+  m_Name: FireDragon
+  m_EditorClassIdentifier: 
+  displayName: Fire Dragon
+  prefab: {fileID: 536766545489040746, guid: e2f7d3c00ae56dc4ca2ff21ca57e5372, type: 3}
+  icon: {fileID: 21300000, guid: c021e5c32a6d9e14c9af5138c94c4775, type: 3}
+  cost: 120
+  description: Fire Dragon

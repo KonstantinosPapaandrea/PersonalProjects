@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b46d5023fdc47f4fb753d8c6503b323, type: 3}
+  m_Name: FIRE_T1_OVERHEAT
+  m_EditorClassIdentifier: 
+  upgradeId: 112
+  displayName: Damge+1
+  description: Damage from each fireball +1
+  icon: {fileID: 0}
+  dragonType: 0
+  tier: 1
+  pathIndex: 1
+  pathName: OVERHEAT
+  coinCost: 100
+  essenceCost: 1
+  slimeRequirements: []
+  prerequisites: []
+  effects:
+  - {fileID: 11400000, guid: d4c6f217ce06dcd4a9ad67a3b784093d, type: 2}

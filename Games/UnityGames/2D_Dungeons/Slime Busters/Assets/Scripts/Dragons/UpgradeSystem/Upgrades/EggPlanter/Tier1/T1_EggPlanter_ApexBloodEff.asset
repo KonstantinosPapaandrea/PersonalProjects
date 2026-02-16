@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 506d6f06c93f2374b9bdb8863d24b874, type: 3}
+  m_Name: T1_EggPlanter_ApexBloodEff
+  m_EditorClassIdentifier: 
+  eggsPerCycleDelta: -1
+  damageMult: 1.6
+  blastRadiusMult: 2
+  fuseSeconds: 0
+  vsBossMult: 0
+  empoweredEveryN: 0
+  empoweredDamageMult: 0
+  empoweredRadiusMult: 0
+  empoweredIgnoreShields: 1

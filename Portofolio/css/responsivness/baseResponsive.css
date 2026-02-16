@@ -1,0 +1,166 @@
+/* 📱 Global phone layout fixes (≤480px wide) */
+@media (max-width: 480px) {
+html{
+  width:100vw;
+  font-size:10px !important;
+  overflow-x:clip !important;
+  overscroll-behavior-x: none !important;
+   touch-action: pan-y !important;      
+}
+
+  /* General typography scaling */
+  body {
+    font-size: 10px !important;  /* reset */
+    line-height: 1.5;
+  }
+
+ 
+
+ /* Keep the drop inside its container on small screens */
+
+
+
+/* safety even on larger screens: don’t let transforms create layout overflow */
+#global-drop { contain: layout paint; }     /* transform effects don’t affect layout */
+
+  
+  .hero__name h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+  }
+
+  .scroll-hint {
+    font-size: 1rem;
+  }
+  .level-text {
+    font-size: 1.5rem;
+    top: auto;
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+/* Title */
+.aboutMe{
+  font-size: clamp(1.25rem, 1rem + 2.5vw, 2rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
+  text-align: center;
+}
+
+/* Section wrapper (remove fixed height & huge % paddings) */
+.about{
+  background-color:#0b3d91;
+  padding-block: clamp(1.5rem, 5vw, 4rem);  /* replaces padding-top:10% etc */
+  margin-top: 0;
+  height: auto;                  /* was 90vh */
+  overflow-x: clip;              /* guard against tiny transform spill */
+}
+
+/* Inner layout: grid is easier to stack/swap than flex here */
+.about-section{
+  --pad: clamp(1rem, 4vw, 2rem);
+  --gap: clamp(1rem, 4vw, 2rem);
+  width: min(1100px, 100% - 2*var(--pad));
+  margin-inline: auto;
+  padding-inline: var(--pad);
+
+  display: grid;
+  grid-template-columns: 1fr;    /* stack by default (phones) */
+  gap: var(--gap);
+  align-items: center;
+  text-align: center;
+}
+
+.about-section > *{ min-width: 0; } /* allow content to shrink */
+
+/* Media (imgs/videos) should never overflow */
+.about-section img,
+.about-section video,
+.about-section svg,
+.about-section canvas{
+  max-width: 30%;
+  height: auto;
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  padding-right:10px;
+}
+  .dark-highlight-box {
+    max-width: 90vw;
+  }
+
+  /* Projects / Wheel */
+  .projects {
+    height: auto;
+    padding: 3rem 1rem;
+    gap: 2rem;
+  }
+
+/* ---------- MOBILE-ONLY OVERRIDES (≤ 800px) ---------- */
+@media (max-width: 800px){
+  .skills__grid{
+  display:grid;
+  /* two columns (radar | icons) + info spanning full row beneath */
+  grid-template-columns: minmax(320px, clamp(38vmin, 45vmin, 560px)) 1fr;
+  grid-template-areas:
+    "radar icons"
+    "info  info";
+  align-items:start;
+  gap: clamp(1.2rem, 5vw, 5rem) !important;
+  padding:5%;
+}
+
+.radar-box{
+  grid-area: radar;
+  justify-self:end;
+  /* bigger radar */
+  width: clamp(500px, 50vmin, 600px);
+  max-width: none !important;        /* override the old 25vw cap */
+  aspect-ratio: 1 / 1;
+}
+.radar-box canvas{
+  width:100% !important;
+  height:100% !important;
+}
+
+.skill-list{
+  grid-area: icons;
+  justify-self:start;
+}
+
+.skill-info{
+  grid-area: info;
+  max-width: min(72ch, 100%);
+  text-align:left;
+  margin-top: clamp(.5rem, 2vw, 1.25rem);
+  justify-self:center;
+}
+
+}
+
+/* ---------- TINY PHONES (≤ 380px) ---------- */
+@media (max-width: 380px){
+  .skill-list{ gap: 0.6rem; }
+  .skills .section-heading{
+    font-size: clamp(1.4rem, 6vw, 1.8rem);
+  }
+}
+
+/* ---------- BUGFIX (DESKTOP value that leaks to mobile) ---------- */
+/* Your clamp had min > max, which forces a huge gap everywhere.      */
+/* If this line is in your base, correct it so desktop stays same.    */
+/* BEFORE: gap: clamp(10rem, 4vw, 4rem); → always 10rem               */
+/* AFTER:  */
+.skills__grid{
+  gap: clamp(1rem, 4vw, 4rem); /* put this near your original rule */
+}
+
+  .contact-card h3 {
+    font-size: 1.6rem;
+  }
+
+  /* Footer */
+  footer {
+    padding: 1.2rem;
+    font-size: .85rem;
+  }
+}

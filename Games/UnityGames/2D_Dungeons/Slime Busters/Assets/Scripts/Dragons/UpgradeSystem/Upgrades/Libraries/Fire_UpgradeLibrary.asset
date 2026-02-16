@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3479efcb1b3703448a008135552c2470, type: 3}
+  m_Name: Fire_UpgradeLibrary
+  m_EditorClassIdentifier: 
+  dragonType: 0
+  upgrades:
+  - {fileID: 11400000, guid: ba7e4c49263169d448ecc18255e36c21, type: 2}
+  - {fileID: 11400000, guid: 45150f12fa56d55479eda23ea47a6c51, type: 2}
+  - {fileID: 11400000, guid: 752c2232e62ce1b439676c35da34a630, type: 2}
+  - {fileID: 11400000, guid: 54b9728c480e4624092494ea776a8243, type: 2}
+  - {fileID: 11400000, guid: ee737fccd45d6934f8a1f25f2b4a5f12, type: 2}
+  - {fileID: 11400000, guid: 692df42e48f169e45a787f90f06a0b5b, type: 2}
+  - {fileID: 11400000, guid: 2afb3d6b710d510408078c76f22d1cef, type: 2}
+  - {fileID: 11400000, guid: 7f24634d73edab241bbbb621fdb6dc61, type: 2}
+  - {fileID: 11400000, guid: 0c236bfc684ec6845a6a7d93fa172fde, type: 2}

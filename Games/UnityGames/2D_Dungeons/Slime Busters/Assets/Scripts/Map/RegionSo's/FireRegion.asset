@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eeda9d4c7daed547bf5ccc5971740e1, type: 3}
+  m_Name: FireRegion
+  m_EditorClassIdentifier: 
+  regionId: 0
+  common:
+  - {fileID: 11400000, guid: 6fa55cf8c6cb33d4db175c6c78132e8c, type: 2}
+  - {fileID: 11400000, guid: 2d3d67253a0feed449dec7090b2d9896, type: 2}
+  - {fileID: 11400000, guid: 669a1ca949a0a7142ae02b9084918692, type: 2}
+  - {fileID: 11400000, guid: f94b63b221d1c634f9198e0f58449104, type: 2}
+  - {fileID: 11400000, guid: 4d771f6a75741c5449201d8b1de9b766, type: 2}
+  - {fileID: 11400000, guid: 7cb3d85fbd8e703459f6fb3764cc14d1, type: 2}
+  - {fileID: 11400000, guid: 28557f5060a841b49a03f74455962aaf, type: 2}
+  - {fileID: 11400000, guid: d0f5c07edf08db34b96bb92d91f7b649, type: 2}
+  fast: {fileID: 11400000, guid: 16de8f32380bca44eb3305c20e7b2e3c, type: 2}
+  tank: {fileID: 11400000, guid: 9b5f0b0e032441146a0e618942f173ba, type: 2}
+  boss: {fileID: 11400000, guid: 9b4fa57c8a030e845889ac9359d2d42d, type: 2}
+  hpMult:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0.07070707
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 100
+      value: 8
+      inSlope: 0.07070707
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  speedMult:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0.0035353538
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 100
+      value: 1.35
+      inSlope: 0.0035353538
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  bountyMult:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0.02020202
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 100
+      value: 3
+      inSlope: 0.02020202
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  resistBonusAll:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

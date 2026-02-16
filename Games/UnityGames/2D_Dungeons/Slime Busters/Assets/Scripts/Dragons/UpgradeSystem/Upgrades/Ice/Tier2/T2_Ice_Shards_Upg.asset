@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b46d5023fdc47f4fb753d8c6503b323, type: 3}
+  m_Name: T2_Ice_Shards_Upg
+  m_EditorClassIdentifier: 
+  upgradeId: 423
+  displayName: 3 Shards
+  description: Throws 3 shards
+  icon: {fileID: 0}
+  dragonType: 1
+  tier: 2
+  pathIndex: 2
+  pathName: Shards
+  coinCost: 100
+  essenceCost: 50
+  slimeRequirements: []
+  prerequisites:
+  - {fileID: 11400000, guid: 73eda23e252607246b5d7dfb3078ec29, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 4e5b40b0ddcd1534383466f523f3bba9, type: 2}

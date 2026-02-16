@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b46d5023fdc47f4fb753d8c6503b323, type: 3}
+  m_Name: T3_Lightning_Upgrade_Overload
+  m_EditorClassIdentifier: 
+  upgradeId: 532
+  displayName: Bigg aura+aura damage
+  description: 
+  icon: {fileID: 0}
+  dragonType: 3
+  tier: 3
+  pathIndex: 1
+  pathName: Overload
+  coinCost: 100
+  essenceCost: 50
+  slimeRequirements: []
+  prerequisites:
+  - {fileID: 11400000, guid: 6488d6549fcdfa943838b5810e2eea28, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 3113a6ba554c5264e93f9ea7d46e6949, type: 2}

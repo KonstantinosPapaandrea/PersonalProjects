@@ -1,0 +1,147 @@
+/* ─── overall section look stays as-is ───────────────────────────── */
+.skills{
+  --accent:hsl(198 100% 60%);
+  background:#0e1725;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0.5rem;
+  text-align:center;
+  height:100vh;
+  width:100%;
+  max-width:100vw;
+  padding-top:15vh;
+}
+
+/* ─── heading ───────────────────────────────────────────────────── */
+.skills .section-heading{
+  font-size:2.4rem;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:#fff;
+}
+
+/* ─── 3-column grid (auto stacks on narrow screens) ─────────────── */
+.skills__grid{
+  display:grid;
+  /* ➊ new order →   radar | icons | info  */
+  grid-template-columns: minmax(260px,420px)      /* radar box  */
+                        120px                     /* icon strip */
+                        1fr;                      /* info pane  */
+                          align-items:center;
+  gap: clamp(10rem, 4vw, 4rem);
+      z-index:2;
+
+}
+.radar-box{
+  order: 1;                /* first column */
+  justify-self:start;      /* hug left edge */
+}
+
+.skill-list{
+  order: 2;                /* middle column */
+  justify-self:center;
+}
+
+.skill-info{
+  order: 3;                /* right column */
+  justify-self:start;      /* flush left inside its cell */
+}
+
+/* stack ↓ on phones */
+@media (max-width:640px){
+  .skills__grid{
+    grid-template-columns:1fr;
+    grid-template-rows:auto auto auto;
+  }
+
+  /* stack order: radar → icons → info
+     (same as desktop visual order)                */
+  .radar-box  { order:1; }
+  .skill-list { order:2; margin-inline:auto; }   /* center strip */
+  .skill-info { order:3; text-align:center; }
+}
+
+/* ① info panel ---------------------------------------------------- */
+.skill-info{
+  text-align:left;
+  max-width:32ch;
+  justify-self:end;        /* bumps tight to the right of its grid cell */
+  color:#e6e6e6;
+}
+.skill-info h3{
+  font-size:1.4rem;
+  margin:0 0 .4rem;
+  color:var(--accent);
+}
+.skill-info p{line-height:1.5;margin:0;}
+
+/* ② vertical icon list ------------------------------------------- */
+.skill-list{
+  list-style:none;
+  margin:0; padding:0;
+display:grid; grid-template-columns:repeat(3,3rem);
+
+  gap:1.2rem;
+}
+.skill-list li{
+  /* turn every <li> into a 1-column, 2-row grid:
+     ┌── icon ──┐
+     └─ label ─┘                                       */
+  display:inline-grid;
+  grid-template-rows: 3rem auto;   /* 4.5 rem = icon square */
+  place-items:center;                /* center icon & text    */
+  width:3rem;                      /* enforce square tile   */
+  margin-inline:auto;                /* keep tiles aligned    */
+  gap:.4rem;
+  cursor:pointer;
+
+  /* card look */
+  background:#0f1824;
+  border:1px solid #fff1;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgb(0 0 0 /.35);
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.skill-list li:hover{
+  transform:translateY(-4px);
+  box-shadow:0 6px 18px rgb(0 0 0 /.45);
+}
+
+/* icon itself (devicon glyph) */
+.skill-list i{
+  font-size:2.6rem;      /* stays centred inside 4.5 rem square */
+  line-height:1;
+}
+
+/* tiny label */
+.skill-list span{
+  font-size:.7rem;
+  color:#ddd;
+  text-align:center;
+  white-space:nowrap;    /* keep one line                       */
+}
+
+/* ─── optional: hide label below 768 px so tiles stay neat ─── */
+@media (max-width:768px){
+  .skill-list span{ display:none; }
+}
+/* ③ radar container ---------------------------------------------- */
+.radar-box{
+  position:relative;
+  width:100%;
+  max-width:25vw;         /* same size you used before */
+  aspect-ratio:1/1;
+}
+.radar-box canvas{
+  width:100%!important;
+  height:100%!important;
+  border-radius:50%;
+  background:#111d;
+  box-shadow:0 0 20px var(--accent);
+  padding:.8rem;
+}
+.icon--white{
+  color:#fff;
+}
+.icon--white svg{ fill:#fff; }

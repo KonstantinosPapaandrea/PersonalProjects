@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b46d5023fdc47f4fb753d8c6503b323, type: 3}
+  m_Name: FIRE_T3_OVERHEAT
+  m_EditorClassIdentifier: 
+  upgradeId: 132
+  displayName: Damage+Pierce
+  description: +1 Damage Pierce through 3 enemies
+  icon: {fileID: 0}
+  dragonType: 0
+  tier: 3
+  pathIndex: 1
+  pathName: OVERHEAT
+  coinCost: 100
+  essenceCost: 50
+  slimeRequirements: []
+  prerequisites:
+  - {fileID: 11400000, guid: ee737fccd45d6934f8a1f25f2b4a5f12, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 547f16ba9961482449950d83511a7021, type: 2}

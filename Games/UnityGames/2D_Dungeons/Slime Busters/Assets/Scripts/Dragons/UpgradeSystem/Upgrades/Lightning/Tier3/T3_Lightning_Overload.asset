@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9846e6600a82e4449892b3d3c938e391, type: 3}
+  m_Name: T3_Lightning_Overload
+  m_EditorClassIdentifier: 
+  enableRodDeploy: 0
+  rodCooldown: 6
+  rodLifetime: 6
+  rodZapDps: 4
+  enableDragonAura: 1
+  dragonAuraRadius: 6
+  dragonAuraDps: 5
+  rodsPermanent: 0
+  enableRodAura: 0
+  rodAuraRadius: 1.2
+  rodAuraDps: 2

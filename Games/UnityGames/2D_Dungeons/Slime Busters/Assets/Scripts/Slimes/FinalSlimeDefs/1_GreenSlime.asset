@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cad0b91c57ae92243847492a9a479349, type: 3}
+  m_Name: 1_GreenSlime
+  m_EditorClassIdentifier: 
+  healingAuraPerSecond: 0
+  maxHpAuraPercent: 0
+  resistanceAuraBonus:
+    fire: 0
+    ice: 0
+    lightning: 0
+    egg: 0
+    crystal: 0
+    physical: 0
+  auraRadius: 0
+  displayName: Slime
+  tint: {r: 1, g: 1, b: 1, a: 1}
+  bounty: 1
+  scale: 1
+  maxHP: 1
+  moveSpeed: 1
+  splitsOnDeath: 0
+  splitChilds: []
+  splitCount: 2
+  regenerates: 0
+  regenPerSecond: 1
+  camo: 0
+  slowImmune: 0
+  lightningResist: 0
+  shielded: 0
+  shieldHP: 3
+  resistances:
+    fire: 0
+    ice: 0
+    lightning: 0
+    egg: 0
+    crystal: 0
+    physical: 0
+  overrideSprite: {fileID: 21300000, guid: 97b372cc47ce6b94f83b0c8a9e08f9f5, type: 3}

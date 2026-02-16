@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b46d5023fdc47f4fb753d8c6503b323, type: 3}
+  m_Name: FIRE_T3_EXPLOSIVE
+  m_EditorClassIdentifier: 
+  upgradeId: 131
+  displayName: Bigger explosion+ Burn Damge
+  description: Bigger explosion radius + Burn Damage
+  icon: {fileID: 0}
+  dragonType: 0
+  tier: 3
+  pathIndex: 0
+  pathName: EXPLOSIVE
+  coinCost: 100
+  essenceCost: 50
+  slimeRequirements: []
+  prerequisites:
+  - {fileID: 11400000, guid: 54b9728c480e4624092494ea776a8243, type: 2}
+  effects:
+  - {fileID: 11400000, guid: 2073efbd0a4a05446b2e071b3289c962, type: 2}
