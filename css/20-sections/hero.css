@@ -46,7 +46,7 @@
   gap: 1.5rem;                 /* Space between modules */
   z-index: 2;
   position: relative;
-  width: min(95vw, 1200px);
+  width: min(96vw, 1560px);
   min-height: 30vh;
   margin-top: clamp(1rem, 3vh, 2.5rem);
   padding: 1rem 1.2rem 1rem;
@@ -95,7 +95,7 @@
 }
 
 .hero__subtitle {
-  margin: 0.25rem 0 0;
+  margin: -0.25rem 0 0;
   font-size: 0.82rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -103,7 +103,7 @@
   text-align: center;
   position: relative;
   z-index: 2;
-  max-width: 84%;
+  max-width: min(98%, 2300px);
 }
 
 .hero__identity {
@@ -254,4 +254,50 @@
     font-size: 0.62rem;
   }
 
+}
+
+@media (min-width: 2000px) {
+  .hero {
+    padding-top: clamp(84px, 8vh, 132px);
+    min-height: 100svh;
+  }
+
+  .hero__wrap {
+    width: min(2300px, 96vw);
+    min-height: 62vh;
+    gap: 2.6rem;
+    margin-top: clamp(0rem, 1vh, 0.8rem);
+    transform: translateY(-0.6rem);
+  }
+
+  .hero__identity {
+    gap: clamp(5rem, 8vw, 10rem);
+  }
+
+  .hero-portrait {
+    width: clamp(220px, 13vw, 360px);
+    height: clamp(220px, 13vw, 360px);
+  }
+
+  .hero__name-title {
+    font-size: clamp(3.2rem, 2.3vw, 4.8rem);
+  }
+
+  .hero__subtitle {
+    font-size: clamp(1.35rem, 1.05vw, 2.1rem);
+    margin-top: -0.55rem;
+    max-width: min(98%, 3000px);
+    line-height: 1.7;
+  }
+
+  .scroll-hint {
+    font-size: 1.25rem;
+    padding-bottom: 0.9rem;
+  }
+
+  .hero-start-btn {
+    min-width: 280px;
+    font-size: 1.3rem;
+    padding: 1rem 1.6rem;
+  }
 }

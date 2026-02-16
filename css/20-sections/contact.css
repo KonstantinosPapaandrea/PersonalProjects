@@ -86,7 +86,7 @@
 .contact-block--hire {
   border-radius: 999px;
   width: 100%;
-  max-width: 280px;
+  max-width: clamp(260px, 58vw, 340px);
   aspect-ratio: 1 / 1;
   justify-self: center;
   align-self: center;
@@ -103,7 +103,7 @@
   }
 
   .contact-block--hire {
-    max-width: 320px;
+    max-width: clamp(240px, 74vw, 320px);
   }
 }
 
@@ -249,3 +249,54 @@ li.linkedin::before{
    If mask-clip isn’t supported, browsers will just get      *
    the bullet dot from the original rule above.             *
    ------------------------------------------------------ */
+
+@media (min-width: 781px) {
+  #contact.section-wrapper {
+    padding-top: 14vh;
+  }
+
+  .contact-card {
+    max-width: clamp(980px, 78vw, 1600px);
+    padding: 2.8rem 3.2rem;
+    gap: 2.2rem 3.4rem;
+  }
+
+  .contact-card h3 {
+    font-size: 2.8rem;
+  }
+
+  .contact-card p {
+    font-size: 1.18rem;
+    line-height: 1.65;
+  }
+
+  .contact-block {
+    padding: 1.35rem 1.35rem 1.45rem;
+  }
+
+  .contact-block h4 {
+    font-size: 1.22rem;
+  }
+
+  .contact-block--hire {
+    max-width: clamp(320px, 28vw, 520px);
+    padding: 1.35rem 1.5rem;
+  }
+
+  .contact-hire-note {
+    font-size: 0.95rem;
+  }
+
+  .contact-form label {
+    font-size: 1rem;
+  }
+
+  .contact-form input {
+    padding: 0.78rem 0.9rem;
+  }
+
+  .contact-submit-btn {
+    font-size: 1.05rem;
+    padding: 0.82rem 1.2rem;
+  }
+}

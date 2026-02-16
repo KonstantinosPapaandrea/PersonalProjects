@@ -26,7 +26,21 @@ drop.style.transition =
    transform ${SLIDE_MS}ms cubic-bezier(.6,.2,.3,1)`;
 
 /* ---------- scale presets ---------- */
-const SCALE = { center:0.72, left:1.8, right:0.85, bottom:1.6, top:2.05 };
+const BASE_SCALE = { center:1, left:1.8, right:1.4, bottom:2, top:2.05 };
+
+function responsiveScale(key){
+  const vw = window.innerWidth || 1440;
+  let factor = 1;
+
+  if (vw < 1000) factor = 0.82;
+  else if (vw < 1280) factor = 0.92;
+  else if (vw < 1800) factor = 1;
+  else if (vw < 2400) factor = 1.24;
+  else if (vw < 3200) factor = 1.45;
+  else factor = 1.62;
+
+  return (BASE_SCALE[key] ?? 1) * factor;
+}
 
 /* ---------- sizing helpers ---------- */
 const NATURAL = { w: drop.offsetWidth, h: drop.offsetHeight };
@@ -80,7 +94,7 @@ const io = new IntersectionObserver(entries=>{
 
     floatUnderBody();
 
-    const targetScale = SCALE[panel.dataset.drop] ?? 1;
+    const targetScale = responsiveScale(panel.dataset.drop);
     const { x,y }     = pageCentre(pic);
 
     moveAndScale(x, y, targetScale);
@@ -100,7 +114,7 @@ document.querySelectorAll('.io-sentinel').forEach(s => io.observe(s));
   if (!pic) return;
 
   const { x, y } = pageCentre(pic);
-  moveAndScale(x, y, SCALE[first.dataset.drop] ?? 1);
+  moveAndScale(x, y, responsiveScale(first.dataset.drop));
 })();
 
 /* ---------- keep centre correct on resize ---------- */

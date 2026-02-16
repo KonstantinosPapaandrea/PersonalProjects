@@ -82,6 +82,20 @@
   margin:0;
 }
 
+.skill-rating{
+  display:none;
+  margin:0 0 .35rem;
+  color:var(--accent);
+  font-weight:700;
+  letter-spacing:.02em;
+}
+
+@media (max-width:780px){
+  .skill-rating{
+    display:block;
+  }
+}
+
 /* ② vertical icon list ------------------------------------------- */
 .skill-list{
   list-style:none;
@@ -167,3 +181,77 @@ display:grid; grid-template-columns:repeat(4,3rem);
   color:#fff;
 }
 .icon--white svg{ fill:#fff; }
+
+@media (min-width: 2000px){
+  .skills{
+    padding-top: 18vh;
+    gap: 1.1rem;
+  }
+
+  .skills .section-heading{
+    font-size: 3.2rem;
+  }
+
+  .skills__grid{
+    grid-template-columns: minmax(420px, 620px) 320px 1fr;
+    gap: clamp(4rem, 5vw, 7rem);
+    width: min(1800px, 92vw);
+  }
+
+  .radar-box{
+    max-width: 520px;
+  }
+
+  .skill-info{
+    max-width: 40ch;
+  }
+
+  .skill-info h3{
+    font-size: 2.3rem;
+  }
+
+  .skill-info p{
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .skill-list{
+    grid-template-columns: repeat(4, 4.2rem);
+    gap: 1.15rem;
+  }
+
+  .skill-list li{
+    grid-template-rows: 4.2rem auto;
+    width: 4.2rem;
+  }
+
+  .skill-list i{
+    font-size: 3.3rem;
+  }
+
+  .skill-list span{
+    font-size: .86rem;
+  }
+
+  .skill-list .asm-icon,
+  .skill-list .parallel-icon,
+  .skill-list .algo-icon,
+  .skill-list .ds-icon,
+  .skill-list .ai-icon,
+  .skill-list .gfx-icon{
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 780px){
+  .skill-info{
+    justify-self: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .skill-info h3,
+  .skill-info p{
+    text-align: center;
+  }
+}

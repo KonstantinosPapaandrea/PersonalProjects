@@ -21,6 +21,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: clamp(340px, 72vw, 780px);
+  max-width: calc(100% - 1.25rem);
 
   padding: 1.1rem .9rem 2rem;
   background: #111d;
@@ -84,3 +86,32 @@
 .wheel-btn:active { scale: .92; } /* Positioning the navigation buttons */ 
 .wheel-btn--prev{ left: 1rem; }
  .wheel-btn--next{ right: 1rem; }
+
+@media (max-width: 780px){
+  .wheel__card{
+    width: clamp(260px, 80vw, 340px);
+    max-width: calc(100% - 1rem);
+    padding: 0.85rem 0.7rem 1.35rem;
+  }
+
+  .wheel__card img{
+    max-height: 22vh;
+  }
+}
+
+@media (min-width: 2000px){
+  .wheel{
+    width: min(92vw, 1240px);
+    height: clamp(620px, 66vh, 980px);
+  }
+
+  .wheel__card{
+    width: clamp(760px, 66vw, 1140px);
+    max-width: calc(100% - 2rem);
+    padding: 1.5rem 1.4rem 2.6rem;
+  }
+
+  .wheel__card img{
+    max-height: 42vh;
+  }
+}

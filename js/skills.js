@@ -70,16 +70,30 @@ if (ctx) {
    Inter-icon hover -> update the info panel
    ================================================================== */
 const infoLabel = document.getElementById('skillLabel');
+const infoRating = document.getElementById('skillRating');
 const infoBlurb = document.getElementById('skillBlurb');
 const iconItems = document.querySelectorAll('#skillList li');
+
+const skillScoreMap = Object.fromEntries(
+  skillLabels.map((label, i) => [label, skillScores[i]])
+);
 
 iconItems.forEach((li) => {
   li.addEventListener('mouseenter', () => updateInfo(li));
   li.addEventListener('focus', () => updateInfo(li)); // keyboard
+  li.addEventListener('click', () => updateInfo(li)); // touch + click
 });
 
 function updateInfo(el) {
   infoLabel.textContent = el.dataset.skill;
+  const score = skillScoreMap[el.dataset.skill];
+  if (infoRating) {
+    if (typeof score === 'number') {
+      infoRating.textContent = `${(score / 10).toFixed(1)}/10`;
+    } else {
+      infoRating.textContent = '';
+    }
+  }
   infoBlurb.innerHTML = el.dataset.blurb; // safe - our own strings
 }
 
