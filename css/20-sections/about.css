@@ -30,6 +30,26 @@
 }
 
 .about-card {
+  --anim-offset: 42px;
+  --anim-lift: 100px;
+  --corner-pad: 18px;
+  --idle-scale-mindset: 1.28;
+  --idle-scale-approach: 1.16;
+  --idle-scale-collab: 1.22;
+  --idle-shift-y-mindset: -50px;
+  --idle-shift-y: -6px;
+  --idle-size-mindset: clamp(150px, 18vw, 220px);
+  --idle-size-approach:  clamp(150px, 18vw, 220px);
+  --idle-size-collab:  clamp(150px, 18vw, 220px);
+  --rocket-size: clamp(150px, 15.5vw, 200px);
+  --approach-size: clamp(155px, 15.5vw, 200px);
+  --collab-size: clamp(155px, 15.5vw, 200px);
+  --about-h3-size: clamp(1.1rem, 0.75rem + 1.9vw, 2.6rem);
+  --about-p-size: clamp(0.95rem, 0.7rem + 1.15vw, 1.85rem);
+  --rocket-start-left: 16%;
+  --rocket-start-top: 84%;
+  --rocket-end-left: 70%;
+  --rocket-end-top: 60%;
   flex: 1;
   border: 1px solid rgb(186 239 255 / 0.36);
   border-radius: 0;
@@ -55,7 +75,7 @@
 }
 
 
-.about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap) {
+.about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap):not(.mindset-rocket-wrap):not(.approach-icon-wrap):not(.collab-icon-wrap) {
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
@@ -80,8 +100,8 @@
 }
 
 
-.about-card:hover > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap),
-.about-card:focus-within > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap) {
+.about-card:hover > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap):not(.mindset-rocket-wrap):not(.approach-icon-wrap):not(.collab-icon-wrap),
+.about-card:focus-within > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap):not(.mindset-rocket-wrap):not(.approach-icon-wrap):not(.collab-icon-wrap) {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -97,11 +117,13 @@
   font-size: clamp(1.5rem, 2.4vw, 2.25rem);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  position: relative;
+  z-index: 6;
 }
 
 .about-card h3 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--about-h3-size);
   color: hsl(198 100% 72%);
   position: absolute;
   top: 60%;
@@ -110,6 +132,7 @@
   transition: top 0.42s ease, left 0.42s ease, transform 0.42s ease;
   text-align: center;
   width: calc(100% - 2.8rem);
+  z-index: 6;
 }
 
 .about-card:hover h3,
@@ -123,61 +146,75 @@
 .about-card p {
   margin-top: 30%;
   color: rgb(236 244 255 / 0.95);
-  font-size: clamp(1.2rem, 1.2vw, 1.2rem);
+  font-size: var(--about-p-size);
   line-height: 1.65;
+  text-align: center;
+  position: relative;
+  z-index: 6;
 }
 
 .about-card .mindset-rocket-idle-wrap {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-18%, -50%) scale(1.5);
-  transform-origin: 70% 140%;
-  opacity: 1;
-  transition:
-    transform 0.7s cubic-bezier(.22,.8,.22,1),
-    opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.about-card .mindset-rocket-idle {
-  width: min(190px, 72%);
-  height: auto;
-  object-fit: contain;
-  display: block;
-}
-
-.about-card:hover .mindset-rocket-idle-wrap,
-.about-card:focus-within .mindset-rocket-idle-wrap {
-  transform: translate(-150%, -250%) rotate(-18deg) scale(0.62);
-  opacity: 0;
-}
-
-.about-card .approach-icon-idle-wrap {
-  position: absolute;
-  left: 50%;
-  top: 45%;
-  transform: translate(-25%, -50%) scale(1.5);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: none;
   transform-origin: center;
   opacity: 1;
   transition:
     transform 0.7s cubic-bezier(.22,.8,.22,1),
     opacity 0.5s ease;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
 }
 
-.about-card .approach-icon-idle {
-  width: min(170px, 64%);
+.about-card .mindset-rocket-idle {
+  width: var(--idle-size-mindset) !important;
+  max-width: none !important;
   height: auto;
   object-fit: contain;
   display: block;
+  transform: translateY(var(--idle-shift-y-mindset)) scale(var(--idle-scale-mindset));
+  transform-origin: center;
+}
+
+.about-card:hover .mindset-rocket-idle-wrap,
+.about-card:focus-within .mindset-rocket-idle-wrap {
+  transform: translate(
+      calc(-50% + var(--corner-pad)),
+      calc(-50% + var(--corner-pad))
+    ) rotate(-18deg) scale(0.62);
+  opacity: 0;
+}
+
+.about-card .approach-icon-idle-wrap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: none;
+  transform-origin: center;
+  opacity: 1;
+  transition:
+    transform 0.7s cubic-bezier(.22,.8,.22,1),
+    opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.about-card .approach-icon-idle {
+  width: var(--idle-size-approach) !important;
+  max-width: none !important;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transform: translateY(var(--idle-shift-y)) scale(var(--idle-scale-approach));
+  transform-origin: center;
 }
 
 .about-card:hover .approach-icon-idle-wrap,
 .about-card:focus-within .approach-icon-idle-wrap {
-  transform: translate(-50%, -220%) scale(0.6);
+  transform: translate(0, calc(-1 * var(--anim-lift))) scale(0.6);
   opacity: 0;
 }
 
@@ -186,7 +223,7 @@
   align-self: center;
   position: relative;
   margin: 0.15rem auto 0.75rem;
-  transform: translate(0%, 50%) scale(0.65);
+  transform: translate(0, calc(var(--anim-lift) * 0.45)) scale(0.65);
   transform-origin: center;
   transition: none;
   will-change: transform;
@@ -194,7 +231,7 @@
 }
 
 .about-card .approach-icon {
-  width: min(205px, 78%);
+  width: var(--approach-size);
   height: auto;
   object-fit: contain;
   display: block;
@@ -208,28 +245,62 @@
 
 .about-card .collab-icon-idle-wrap {
   position: absolute;
-  left: 50%;
-  top: 45%;
-  transform: translate(-30%, -50%) scale(1.5);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform: none;
   transform-origin: center;
   opacity: 1;
   transition:
     transform 0.7s cubic-bezier(.22,.8,.22,1),
     opacity 0.5s ease;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
 }
 
 .about-card .collab-icon-idle {
-  width: min(180px, 66%);
+  width: var(--idle-size-collab) !important;
+  max-width: none !important;
   height: auto;
   object-fit: contain;
   display: block;
+  transform: translateY(var(--idle-shift-y)) scale(var(--idle-scale-collab));
+  transform-origin: center;
+}
+
+
+/* Desktop-only: continuous scaling (does not affect mobile) */
+@media (min-width: 781px){
+  .about-card{
+    --idle-size-mindset: clamp(150px, 10.8vw, 320px);
+    --idle-size-approach: clamp(120px, 8.8vw, 260px);
+    --idle-size-collab: clamp(135px, 9.6vw, 290px);
+  }
+}
+
+@media (min-width: 781px) and (max-width: 1399px){
+  .about-card{
+    --about-h3-size: clamp(1.05rem, 0.68rem + 1.25vw, 1.85rem);
+    --about-p-size: clamp(0.9rem, 0.64rem + 0.72vw, 1.3rem);
+  }
+}
+
+@media (min-width: 2000px){
+  .about-card{
+    --idle-size-mindset: 340px;
+    --idle-size-approach: 280px;
+    --idle-size-collab: 310px;
+    --rocket-size: 500px;
+    --approach-size: 500px;
+    --collab-size: 500px;
+    --about-h3-size: clamp(2.9rem, 1.35rem + 1.6vw, 4.2rem);
+    --about-p-size: clamp(1.7rem, 1.05rem + 0.95vw, 2.8rem);
+  }
 }
 
 .about-card:hover .collab-icon-idle-wrap,
 .about-card:focus-within .collab-icon-idle-wrap {
-  transform: translate(-136%, -214%) scale(0.62);
+  transform: translate(calc(-1 * var(--anim-lift) * 0.8), calc(-1 * var(--anim-lift) * 0.92)) scale(0.62);
   opacity: 0;
 }
 
@@ -238,7 +309,7 @@
   align-self: center;
   position: relative;
   margin: 0.15rem auto 0.75rem;
-  transform: translate(130%, 95%) scale(0.66);
+  transform: translate(calc(var(--anim-lift) * 0.8), calc(var(--anim-lift) * 0.55)) scale(0.66);
   transform-origin: center;
   transition: none;
   will-change: transform;
@@ -246,7 +317,7 @@
 }
 
 .about-card .collab-icon {
-  width: min(210px, 78%);
+  width: var(--collab-size);
   height: auto;
   object-fit: contain;
   display: block;
@@ -260,18 +331,19 @@
 
 .about-card .mindset-rocket-wrap {
   display: block;
-  align-self: flex-start;
-  position: relative;
-  margin: 0.2rem auto 0.8rem;
-  transform: translate(-100%, 100%) rotate(30deg) scale(1);
+  position: absolute;
+  left: var(--rocket-start-left);
+  top: var(--rocket-start-top);
+  margin: 0;
+  transform: translate(-50%, -50%) rotate(30deg) scale(1);
   transform-origin: center;
   transition: none;
-  will-change: transform;
+  will-change: left, top, transform;
   z-index: 1;
 }
 
 .about-card .mindset-rocket {
-  width: min(220px, 80%);
+  width: var(--rocket-size);
   height: auto;
   object-fit: contain;
   display: block;
@@ -321,10 +393,14 @@
 
 @keyframes rocket-enter {
   0% {
-    transform: translate(-100%,100%) rotate(30deg) scale(0.6);
+    left: var(--rocket-start-left);
+    top: var(--rocket-start-top);
+    transform: translate(-50%, -50%) rotate(30deg) scale(0.6);
   }
   100% {
-    transform: translate(50%, 50%) rotate(50deg) scale(1.5);
+    left: var(--rocket-end-left);
+    top: var(--rocket-end-top);
+    transform: translate(-50%, -50%) rotate(50deg) scale(1.5);
   }
 }
 
@@ -344,19 +420,19 @@
 
 @keyframes approach-enter {
   0% {
-    transform: translate(0%,90%) scale(0.62);
+    transform: translate(0, calc(var(--anim-lift) * 0.9)) scale(0.62);
   }
   100% {
-    transform: translate(25%, 0%) scale(1.35);
+    transform: translate(var(--anim-offset), 0) scale(1.35);
   }
 }
 
 @keyframes collab-enter {
   0% {
-    transform: translate(130%,95%) scale(0.62);
+    transform: translate(calc(var(--anim-lift) * 0.9), calc(var(--anim-lift) * 0.8)) scale(0.62);
   }
   100% {
-    transform: translate(50%, 0%) scale(1.32);
+    transform: translate(var(--anim-offset), 0) scale(1.32);
   }
 }
 
@@ -380,7 +456,8 @@
 @media (max-width: 780px) {
   .about {
     padding: 0;
-    min-height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
   }
 
   .about-shell {
@@ -392,6 +469,7 @@
     flex-direction: column;
     gap: 0;
     flex: 1;
+    padding-bottom: 5.5rem; /* keep space for fixed bottom CTA */
   }
 
   .about-next-btn {
@@ -400,40 +478,78 @@
 
   .about-card {
     padding: 2.7rem 0.9rem 0.95rem;
+    --idle-size-mindset: clamp(74px, 18vw, 92px);
+    --idle-size-approach: clamp(78px, 20vw, 102px);
+    --idle-size-collab: clamp(80px, 20vw, 104px);
+    --idle-shift-y-mindset: -48px;
+    --idle-shift-y: -36px;
+  }
+
+  .about-card p {
+    margin-top: clamp(4.2rem, 20vw, 6.4rem);
+  }
+
+  /* Phone-safe layout: do not depend on hover capability */
+  .about-card h3 {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    margin: 0 0 0.45rem;
+    text-align: center;
+  }
+
+  .about-card:hover h3,
+  .about-card:focus-within h3 {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 0 0.45rem;
+    text-align: center;
+  }
+
+  .about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap):not(.mindset-rocket-wrap):not(.approach-icon-wrap):not(.collab-icon-wrap) {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+  }
+
+  .about-card .mindset-rocket-idle-wrap,
+  .about-card .approach-icon-idle-wrap,
+  .about-card .collab-icon-idle-wrap {
+    display: grid;
+    inset: 0;
+    place-items: center;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Mobile: show only idle layer */
+  .about-card .mindset-rocket-wrap,
+  .about-card .approach-icon-wrap,
+  .about-card .collab-icon-wrap,
+  .about-card .mindset-rocket-wrap::after {
+    display: none !important;
+    animation: none !important;
   }
 
   .about-card h2 {
     font-size: 1.25rem;
   }
 
-  .about-card h3 {
-    font-size: 1.1rem;
-  }
+  .about-card p { line-height: 1.6; }
 
-  .about-card p {
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-
-  .about-card .mindset-rocket {
-    width: min(170px, 74%);
-  }
+  .about-card .mindset-rocket { width: var(--rocket-size); }
 
   .about-card .mindset-rocket-wrap {
     margin-bottom: 0.65rem;
   }
 
-  .about-card .mindset-rocket-idle-wrap {
-    top: 40%;
-  }
-
-  .about-card .approach-icon {
-    width: min(170px, 68%);
-  }
-
-  .about-card .collab-icon {
-    width: min(170px, 68%);
-  }
+  .about-card .approach-icon { width: var(--approach-size); }
+  .about-card .collab-icon { width: var(--collab-size); }
 }
 
 @media (hover: none) {
@@ -446,13 +562,24 @@
     top: auto;
     left: auto;
     transform: none;
-    text-align: left;
+    text-align: center;
     width: auto;
     margin: 0 0 0.45rem;
     transition: none;
   }
 
-  .about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap) {
+  .about-card:hover h3,
+  .about-card:focus-within h3 {
+    position: static;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 0 0 0.45rem;
+    text-align: center;
+    transition: none;
+  }
+
+  .about-card > *:not(h3):not(.mindset-rocket-idle-wrap):not(.approach-icon-idle-wrap):not(.collab-icon-idle-wrap):not(.mindset-rocket-wrap):not(.approach-icon-wrap):not(.collab-icon-wrap) {
     opacity: 1;
     visibility: visible;
     transform: none;
@@ -460,18 +587,33 @@
   }
 
   .about-card .mindset-rocket-idle-wrap {
-    display: none;
+    display: grid;
+    inset: 0;
+    place-items: center;
+    opacity: 1;
+    transform: none;
   }
 
   .about-card .approach-icon-idle-wrap {
-    display: none;
+    display: grid;
+    inset: 0;
+    place-items: center;
+    opacity: 1;
+    transform: none;
   }
 
   .about-card .collab-icon-idle-wrap {
-    display: none;
+    display: grid;
+    inset: 0;
+    place-items: center;
+    opacity: 1;
+    transform: none;
   }
 
   .about-card .mindset-rocket-wrap {
+    position: static;
+    left: auto;
+    top: auto;
     transform: none;
     animation: none;
     align-self: center;
@@ -482,4 +624,161 @@
     display: none;
   }
 
+  .about-card .approach-icon-wrap,
+  .about-card .collab-icon-wrap {
+    display: none !important;
+    animation: none !important;
+  }
+
+}
+
+/* Desktop-only unified image hover animation */
+@media (min-width: 781px) {
+  .about-card {
+    --idle-exit-x: 0%;
+    --idle-exit-y: -48%;
+    --enter-start-top: 100%;
+    --enter-end-top: 80%;
+    --enter-scale-start: 0.84;
+    --enter-scale-end: 1.5;
+  }
+
+  /* Card 1 (Mindset): phase-1 exits to top-left */
+  .about-cards .about-card:first-child {
+    --idle-exit-x: -48%;
+    --idle-exit-y: -52%;
+  }
+
+  /* Card 3 (Collaboration): phase-1 exits to top-right */
+  .about-cards .about-card:last-child {
+    --idle-exit-x: 48%;
+    --idle-exit-y: -52%;
+  }
+
+  .about-card .mindset-rocket-wrap,
+  .about-card .approach-icon-wrap,
+  .about-card .collab-icon-wrap {
+    position: absolute;
+    left: 50%;
+    top: var(--enter-start-top);
+    margin: 0;
+    display: block;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%) scale(var(--enter-scale-start));
+    pointer-events: none;
+    z-index: 2;
+    animation: none;
+  }
+
+  .about-card .mindset-rocket-wrap::after {
+    display: none;
+  }
+
+  .about-card:hover .mindset-rocket-idle-wrap,
+  .about-card:focus-within .mindset-rocket-idle-wrap,
+  .about-card:hover .approach-icon-idle-wrap,
+  .about-card:focus-within .approach-icon-idle-wrap,
+  .about-card:hover .collab-icon-idle-wrap,
+  .about-card:focus-within .collab-icon-idle-wrap {
+    animation: idle-up-fade 0.44s ease forwards;
+  }
+
+  /* Card 1 (Mindset): arc motion + rotation to top-left */
+  .about-cards .about-card:first-child:hover .mindset-rocket-idle-wrap,
+  .about-cards .about-card:first-child:focus-within .mindset-rocket-idle-wrap {
+    animation: idle-arc-top-left 0.56s cubic-bezier(.22,.8,.22,1) forwards;
+  }
+
+  .about-cards .about-card:last-child:hover .collab-icon-idle-wrap,
+  .about-cards .about-card:last-child:focus-within .collab-icon-idle-wrap {
+    animation: idle-up-fade 0.56s cubic-bezier(.22,.8,.22,1) forwards;
+  }
+
+  .about-card:hover .mindset-rocket-wrap,
+  .about-card:focus-within .mindset-rocket-wrap,
+  .about-card:hover .approach-icon-wrap,
+  .about-card:focus-within .approach-icon-wrap,
+  .about-card:hover .collab-icon-wrap,
+  .about-card:focus-within .collab-icon-wrap {
+    visibility: visible;
+    animation: rise-and-settle 0.56s cubic-bezier(.22,.8,.22,1) 0.42s both;
+  }
+
+  /* Card 1 (Mindset): phase-2 enters from bottom-left */
+  .about-cards .about-card:first-child:hover .mindset-rocket-wrap,
+  .about-cards .about-card:first-child:focus-within .mindset-rocket-wrap {
+    animation: rise-and-settle-left 0.56s cubic-bezier(.22,.8,.22,1) 0.42s both;
+  }
+
+  /* Card 3 (Collaboration): phase-2 enters from bottom-right, no rotation */
+  .about-cards .about-card:last-child:hover .collab-icon-wrap,
+  .about-cards .about-card:last-child:focus-within .collab-icon-wrap {
+    animation: rise-and-settle-right 0.56s cubic-bezier(.22,.8,.22,1) 0.42s both;
+  }
+}
+
+@keyframes idle-up-fade {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--idle-exit-x), var(--idle-exit-y)) scale(0.72);
+  }
+}
+
+@keyframes idle-arc-top-left {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-48%, -52%) rotate(-34deg) scale(0.72);
+  }
+}
+
+@keyframes rise-and-settle {
+  from {
+    opacity: 0;
+    top: var(--enter-start-top);
+    transform: translate(-50%, -50%) scale(var(--enter-scale-start));
+  }
+  to {
+    opacity: 1;
+    top: var(--enter-end-top);
+    transform: translate(-50%, -50%) scale(var(--enter-scale-end));
+  }
+}
+
+@keyframes rise-and-settle-left {
+  from {
+    opacity: 0;
+    left: 18%;
+    top: var(--enter-start-top);
+    transform: translate(-50%, -50%) rotate(18deg) scale(var(--enter-scale-start));
+  }
+  to {
+    opacity: 1;
+    left: 80%;
+    top: var(--enter-end-top);
+    transform: translate(-50%, -50%) rotate(55deg) scale(var(--enter-scale-end));
+  }
+}
+
+@keyframes rise-and-settle-right {
+  from {
+    opacity: 0;
+    left: 82%;
+    top: var(--enter-start-top);
+    transform: translate(-50%, -50%) scale(var(--enter-scale-start));
+  }
+  to {
+    opacity: 1;
+    left: 50%;
+    top: var(--enter-end-top);
+    transform: translate(-50%, -50%) scale(var(--enter-scale-end));
+  }
 }

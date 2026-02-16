@@ -5,21 +5,32 @@
   /* accent colours you re-use everywhere */
   --c-accent: #35d6ff;
   --c-orange: hsl(28 92% 54%);
+  --font-primary: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-@font-face {
-  font-family: 'WelcomeFont'; /* Name the font family */
-  src: url('/fonts/04B_30__.TTF') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+html{
+  font-size: 16px;
 }
+
 body{
   background:#111;
-  font-family:'WelcomeFont',sans-serif;
+  font-family: var(--font-primary);
   font-size:0.9rem;
   line-height:1.8;
   color:#fff;
   overflow-x:hidden;
+}
+
+@media (min-width: 1440px){
+  html{
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1920px){
+  html{
+    font-size: 25px;
+  }
 }
 
 
@@ -29,9 +40,20 @@ p{
 
 }
 /* ===== FULL-SCREEN WRAPPERS ===== */
+.section{
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+section{
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
 .section-wrapper{
   position:relative;
-  min-height:50vh;
+  min-height:100vh;
+  min-height:100svh;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -55,7 +77,4 @@ p{
   justify-content: space-evenly;
   align-items: center;
   gap:5vh;
-}
-.level-text {
- margin-bottom:2rem;           
 }

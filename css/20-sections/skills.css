@@ -10,7 +10,7 @@
   min-height:100svh;
   height:auto;
   width:100%;
-  max-width:100vw;
+  max-width:100%;
   padding-top:15vh;
 }
 
@@ -167,4 +167,3 @@ display:grid; grid-template-columns:repeat(4,3rem);
   color:#fff;
 }
 .icon--white svg{ fill:#fff; }
-

@@ -1,7 +1,7 @@
 
 /* ② wrapper version (if you need extra padding or a frame) */
 .pic-wrap{
-  width:235px; aspect-ratio:1/1;
+  width:240px; aspect-ratio:1/1;
   border-radius:50%;
   overflow:hidden;           /* clips inner img               */
   position:relative; z-index:2;

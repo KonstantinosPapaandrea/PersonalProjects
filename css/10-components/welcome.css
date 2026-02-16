@@ -9,7 +9,7 @@
 
 .welcome h1 {
   position: relative;
-  font-size: clamp(3rem, 3vw, 5rem);
+  font-size: clamp(4rem, 4vw, 30rem);   /* Responsive font size */
   line-height: 1.1;
   text-transform: uppercase;
   letter-spacing: 0.5rem;
