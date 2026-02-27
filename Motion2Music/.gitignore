@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+outputs/
+*.npy
+*.npz
+*.wav
+*.mp3
+*.joblib
+.DS_Store

@@ -1,0 +1,7 @@
+numpy
+scipy
+matplotlib
+joblib
+scikit-learn
+librosa
+h5py
