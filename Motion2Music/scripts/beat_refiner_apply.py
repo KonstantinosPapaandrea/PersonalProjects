@@ -236,7 +236,7 @@ def main():
         help=(
             "If set (>0), automatically choose a subdivision factor so that the "
             "final ML beat count is roughly this number. "
-            "Example: 4 anchors, --target-beats 16 -> subdiv ≈ 4."
+            "Example: 4 anchors, --target-beats 16 -> subdiv ~= 4."
         ),
     )
 
@@ -356,7 +356,7 @@ def main():
 
     # --- Optional subdivision of refined ML grid ---
     # Decide effective subdivision:
-    # - If --target-beats is set, compute subdiv ≈ target / anchors.
+    # - If --target-beats is set, compute subdiv ~= target / anchors.
     # - Otherwise, use --subdivide as given.
     effective_subdiv = args.subdivide
 
@@ -381,18 +381,6 @@ def main():
             f"[ml-subdivide] factor={effective_subdiv}, "
             f"in={in_n} -> out={events_ml.size}"
         )
-
-
-    print(f"[ml-tempo] events_ml_refined={events_ml.size}")
-
-    # --- Optional subdivision of refined ML grid ---
-    if args.subdivide > 1 and events_ml.size >= 2:
-        events_ml_sub = subdivide_events_uniform(events_ml, args.subdivide, T)
-        print(
-            f"[ml-subdivide] factor={args.subdivide}, "
-            f"in={events_ml.size} -> out={events_ml_sub.size}"
-        )
-        events_ml = events_ml_sub
 
     print(f"[hybrid] events_hybrid={events_hybrid.size}  (snap_radius={args.snap_radius_sec:.3f}s, min_sep={args.hybrid_min_sep:.3f}s)")
 
@@ -420,3 +408,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

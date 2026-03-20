@@ -95,7 +95,8 @@ def event_level_metrics(prob: np.ndarray, y_true: np.ndarray, thr: float):
     Steps:
       1) prob >= thr -> y_pred (0/1)
       2) convert y_true, y_pred to segments of consecutive 1s
-      3) a predicted segment is TP if it overlaps at least one true segment
+      3) one-to-one match predicted/true segments by maximum overlap
+         (a single broad predicted segment cannot match many true events)
     """
     prob = np.asarray(prob, dtype=float)
     y_true = np.asarray(y_true, dtype=int)
@@ -117,19 +118,35 @@ def event_level_metrics(prob: np.ndarray, y_true: np.ndarray, thr: float):
     if n_true == 0:
         return 0.0, 1.0, 0.0, n_true, n_pred  # all preds are FP
 
-    matched_true = np.zeros(n_true, dtype=bool)
+    # Build overlap-length matrix: O[p, t] = number of overlapping frames.
+    overlap = np.zeros((n_pred, n_true), dtype=int)
+    for i, (ps, pe) in enumerate(pred_segments):
+        for j, (ts, te) in enumerate(true_segments):
+            s = max(ps, ts)
+            e = min(pe, te)
+            if e > s:
+                overlap[i, j] = int(e - s)
+
+    # Greedy one-to-one matching by largest overlap first.
     matched_pred = np.zeros(n_pred, dtype=bool)
-
-    for i, pseg in enumerate(pred_segments):
-        for j, tseg in enumerate(true_segments):
-            if segments_overlap(pseg, tseg):
-                matched_pred[i] = True
-                matched_true[j] = True
-
-    tp = matched_pred.sum()
+    matched_true = np.zeros(n_true, dtype=bool)
+    tp = 0
+    while True:
+        best = np.unravel_index(np.argmax(overlap), overlap.shape)
+        best_val = overlap[best]
+        if best_val <= 0:
+            break
+        i, j = int(best[0]), int(best[1])
+        if (not matched_pred[i]) and (not matched_true[j]):
+            matched_pred[i] = True
+            matched_true[j] = True
+            tp += 1
+        # Consume row/col so each pred and true is used at most once.
+        overlap[i, :] = 0
+        overlap[:, j] = 0
 
     precision = tp / n_pred if n_pred > 0 else 0.0
-    recall    = matched_true.sum() / n_true if n_true > 0 else 0.0
+    recall    = tp / n_true if n_true > 0 else 0.0
     if precision + recall > 0:
         f1 = 2.0 * precision * recall / (precision + recall)
     else:

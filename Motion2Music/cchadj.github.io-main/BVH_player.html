@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>BVH player</title>
+	<meta charset="utf-8">
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<meta http-equiv="X-UA-Compatible" content="IE=11,chrome=1">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta property="og:image" content="http://lo-th.github.io/olympe/res/img/logo.png"/>
+	<meta property="og:title" content="Advanced Morphing"/>
+	<meta property="og:url" content="http://lo-th.github.io/olympe/"/>
+	<meta property="og:site_name" content="LOTH"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:description" content="Experiment full morphing in webGl"/>
+	<meta name="language" content="en-us" />
+	<link rel="shortcut icon" href="res/img/favicon.ico" type="image/x-icon" />
+	<link href="css/dianna.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="history/history.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+	<script src="js/three.min.66.js"></script>
+	<script src="js/BufferGeometryUtils.66.js"></script>
+	<script src='js/libs/dat.gui.min.js'></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous" defer></script>
+
+	<script src="js/Animatable.js" defer></script>
+	<script src="js/Annotatable.js" defer></script>
+	<script src="js/AnnotationGraphLine.js" defer></script>
+	<script src="js/AnnotationGraph.js" defer></script>
+	<script src="js/ValueDisplay.js" defer></script>
+	<script src="js/FeatureBar.js" defer></script>
+	<script src="js/AnnotationBar.js" defer></script>
+	<script src="js/ProgressBar.js" defer></script>
+	<script src="js/Bvh.js" defer></script>
+	<script src="js/BvhPlayer.js" defer></script>
+
+	<body>
+	<div id="viewport"></div>
+
+	<div id="hubs">
+		<div id="debug"></div>
+		<div id="guiContener">
+<!--			<div id="gui"></div>-->
+		</div>
+		<div id="copy">
+			BVH player <a href="http://3dflashlo.wordpress.com/" target="_blank">&nbsp;&nbsp;&nbsp;loth 2014&nbsp;&nbsp;&nbsp;</a>
+		</div>
+	</div>
+
+	<div id="BVHhubs">
+		<div id="annotationButtonsContainer">
+			<div class="annotationButtons">
+				<button class="btn" disabled>BODY</button>
+				<button class="btn" disabled>EFFORT_WEIGHT_STRONG</button>
+				<button class="btn" disabled>EFFORT_TIME_SUDDEN</button>
+				<button class="btn" disabled>EFFORT_FLOW_BOUND</button>
+				<button class="btn" disabled>SHAPE</button>
+				<button class="btn" disabled>SPACE</button>
+			</div>
+		</div>
+
+		<div id="progressContainer">
+			<label for="progressBar"></label><input type="range" id="progressBar" min="0" max="100" value="0" disabled>
+			<canvas id="graphCanvas" width="3200" height="500"></canvas>
+		</div>
+
+		<button id="playPauseButton" aria-label="Play" disabled>
+			<i class="fas fa-play" aria-hidden="true"></i>
+		</button>
+	</div>
+
+	<div id="annotationContainer"></div>
+
+</body>
+
+</html>

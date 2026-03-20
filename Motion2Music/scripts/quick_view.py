@@ -46,6 +46,20 @@ def main():
     ap.add_argument("--signals", default="score,C_foot,ml_prob")
     ap.add_argument("--ml-min-sep", type=float, default=0.25)
     ap.add_argument("--playback-speed", type=float, default=1.0)
+    ap.add_argument("--max-display-fps", type=float, default=30.0,
+                    help="Cap viewer display FPS by auto-increasing stride (when framerate override is not used).")
+    ap.add_argument("--audio", default=None, help="Optional audio file to play in sync with BVH.")
+    ap.add_argument("--audio-start", type=float, default=0.0, help="Audio start offset in seconds.")
+    ap.add_argument("--audio-volume", type=float, default=1.0, help="Audio volume in [0,1].")
+    ap.add_argument("--audio-loop", action="store_true", help="Loop audio and animation.")
+    ap.add_argument("--sync-offset", type=float, default=0.0,
+                    help="Shift motion time vs audio in seconds (+ moves motion forward).")
+    ap.add_argument("--auto-sync", action="store_true",
+                    help="Estimate per-clip audio-motion offset automatically.")
+    ap.add_argument("--auto-sync-max-offset", type=float, default=1.0,
+                    help="Maximum absolute offset searched by --auto-sync.")
+    ap.add_argument("--auto-sync-hop-length", type=int, default=512,
+                    help="Hop length for onset envelope in --auto-sync.")
 
     # Optional overrides if you want to point at a different .npy explicitly
     ap.add_argument("--ml-events", default=None, help="Override: path to events .npy")
@@ -88,11 +102,27 @@ def main():
         "--signals", args.signals,
         "--ml-min-sep", str(args.ml_min_sep),
         "--playback-speed", str(args.playback_speed),
+        "--max-display-fps", str(args.max_display_fps),
     ]
 
     # Only pass ML overlay files when needed
     if args.events_mode in ("ml", "both"):
         cmd_vis += ["--ml-events", ml_events_path, "--ml-prob", ml_prob_path]
+    if args.audio:
+        cmd_vis += [
+            "--audio", args.audio,
+            "--audio-start", str(args.audio_start),
+            "--audio-volume", str(args.audio_volume),
+            "--sync-offset", str(args.sync_offset),
+        ]
+        if args.audio_loop:
+            cmd_vis.append("--audio-loop")
+        if args.auto_sync:
+            cmd_vis += [
+                "--auto-sync",
+                "--auto-sync-max-offset", str(args.auto_sync_max_offset),
+                "--auto-sync-hop-length", str(args.auto_sync_hop_length),
+            ]
 
     run(cmd_vis)
 

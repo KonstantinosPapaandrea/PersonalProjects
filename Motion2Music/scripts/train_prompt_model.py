@@ -3,7 +3,7 @@
 Train Motion2Music prompt model from your existing outputs/*_lma.csv + *_beats.csv.
 
 Usage:
-  python train_prompt_model.py --project "C:\...\Motion2Music" --out models/prompt_model.joblib
+  python train_prompt_model.py --project "C:\\...\\Motion2Music" --out models/prompt_model.joblib
 """
 import argparse, os
 import pandas as pd

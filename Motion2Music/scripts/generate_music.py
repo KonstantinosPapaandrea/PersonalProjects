@@ -80,7 +80,7 @@ def main() -> int:
 
     # MusicGen uses ~50 tokens/sec => max_new_tokens ≈ duration * 50
     max_new_tokens = max(1, int(round(args.duration * 50)))
-    print(f"[musicgen] duration≈{args.duration}s -> max_new_tokens={max_new_tokens}")
+    print(f"[musicgen] duration~{args.duration}s -> max_new_tokens={max_new_tokens}")
 
     inputs = processor(text=[prompt], padding=True, return_tensors="pt")
     inputs = {k: v.to(device) for k, v in inputs.items()}

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BVH player + music sync</title>
+  <meta charset="utf-8">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta http-equiv="X-UA-Compatible" content="IE=11,chrome=1">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="language" content="en-us">
+  <link rel="shortcut icon" href="res/img/favicon.ico" type="image/x-icon">
+  <link href="css/dianna.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="history/history.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <script src="js/three.min.66.js"></script>
+  <script src="js/BufferGeometryUtils.66.js"></script>
+  <script src="js/libs/dat.gui.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+
+  <script src="js/Animatable.js" defer></script>
+  <script src="js/Annotatable.js" defer></script>
+  <script src="js/AnnotationGraphLine.js" defer></script>
+  <script src="js/AnnotationGraph.js" defer></script>
+  <script src="js/ValueDisplay.js" defer></script>
+  <script src="js/FeatureBar.js" defer></script>
+  <script src="js/AnnotationBar.js" defer></script>
+  <script src="js/ProgressBar.js" defer></script>
+  <script src="js/Bvh.js" defer></script>
+  <script src="js/BvhPlayer.js" defer></script>
+</head>
+<body>
+  <div id="viewport"></div>
+
+  <div id="hubs">
+    <div id="debug"></div>
+    <div id="guiContener"></div>
+    <div id="copy">BVH player - music sync</div>
+  </div>
+
+  <div id="BVHhubs">
+    <div id="annotationButtonsContainer">
+      <div class="annotationButtons">
+        <button class="btn" disabled>BODY</button>
+        <button class="btn" disabled>EFFORT_WEIGHT_STRONG</button>
+        <button class="btn" disabled>EFFORT_TIME_SUDDEN</button>
+        <button class="btn" disabled>EFFORT_FLOW_BOUND</button>
+        <button class="btn" disabled>SHAPE</button>
+        <button class="btn" disabled>SPACE</button>
+      </div>
+    </div>
+
+    <div id="progressContainer">
+      <label for="progressBar"></label>
+      <input type="range" id="progressBar" min="0" max="100" value="0" disabled>
+      <canvas id="graphCanvas" width="3200" height="500"></canvas>
+    </div>
+
+    <button id="playPauseButton" aria-label="Play" disabled>
+      <i class="fas fa-play" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <div id="annotationContainer"></div>
+
+  <div id="musicDock" style="position:fixed;top:12px;right:12px;z-index:999999;background:#0e1420;color:#e8f0ff;border:1px solid #1b2633;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,0.4);padding:10px;width:360px;font:13px system-ui,Segoe UI,Arial;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+      <strong>Music</strong>
+      <button id="musicToggle" title="Minimize" style="background:#142033;border:1px solid #243247;color:#cfe3ff;padding:4px 8px;border-radius:8px;cursor:pointer;">-</button>
+    </div>
+    <div id="musicBody">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px;">
+        <button id="mpPick" style="background:#123049;border:1px solid #1a3e5a;color:#e8f0ff;padding:6px 10px;border-radius:8px;cursor:pointer;">Choose audio</button>
+        <input id="mpFile" type="file" accept="audio/*" style="display:none;">
+        <input id="mpUrl" type="text" placeholder="https://.../track.mp3" style="flex:1;min-width:160px;padding:6px 8px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+        <button id="mpLoad" style="background:#151c24;border:1px solid #2a3a52;color:#cfe3ff;padding:6px 10px;border-radius:8px;cursor:pointer;">Load URL</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+        <label>Offset (ms):
+          <input id="mpOff" type="number" value="0" step="10" style="width:110px;margin-left:6px;padding:4px 6px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+        </label>
+        <label style="margin-left:auto;display:flex;align-items:center;gap:6px;">Rate
+          <input id="mpRate" type="range" min="0.5" max="1.5" step="0.01" value="1" style="width:120px;">
+          <span id="mpRateVal">1.00x</span>
+        </label>
+      </div>
+      <audio id="mpAudio" preload="auto" controls style="width:100%;border-radius:6px;"></audio>
+      <div id="mpLog" style="margin-top:6px;color:#9fb3c8;"></div>
+      <div style="margin-top:6px;color:#89a;font-size:12px;">Tip: <code>?audio=URL&amp;offset=120&amp;rate=1&amp;autoplay=1</code></div>
+    </div>
+  </div>
+
+  <div id="pipelineDock" style="position:fixed;top:248px;right:12px;z-index:999998;background:#101722;color:#e8f0ff;border:1px solid #1b2633;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,0.4);padding:10px;width:380px;max-height:calc(100vh - 270px);overflow:auto;font:13px system-ui,Segoe UI,Arial;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+      <strong>Motion2Music</strong>
+      <button id="pipelineToggle" title="Minimize" style="background:#142033;border:1px solid #243247;color:#cfe3ff;padding:4px 8px;border-radius:8px;cursor:pointer;">-</button>
+    </div>
+    <div id="pipelineBody">
+      <div id="pipelineStatus" style="padding:8px;border-radius:8px;background:#132031;color:#dcecff;margin-bottom:8px;">Waiting for BVH upload.</div>
+      <div id="pipelineMeta" style="margin-bottom:8px;color:#9fb3c8;">Upload a BVH in the viewer. The latest uploaded BVH will be analyzed automatically.</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;">
+        <button id="pipelineAnalyzeBtn" style="background:#184263;border:1px solid #24567d;color:#f2f8ff;padding:6px 10px;border-radius:8px;cursor:pointer;" disabled>Analyze latest BVH</button>
+        <label>Quality
+          <select id="pipelineQuality" style="width:94px;margin-left:6px;padding:4px 6px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+            <option value="preview">Preview</option>
+            <option value="better">Better</option>
+            <option value="best">Best</option>
+          </select>
+        </label>
+        <label>Duration
+          <input id="pipelineDuration" type="number" min="4" max="60" step="1" value="8" style="width:64px;margin-left:6px;padding:4px 6px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+        </label>
+        <label>Seed
+          <input id="pipelineSeed" type="number" min="0" step="1" value="1234" style="width:78px;margin-left:6px;padding:4px 6px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+        </label>
+      </div>
+      <div style="margin:-2px 0 8px 0;color:#89a;font-size:12px;">Preview with 8-12s first. Long clips can take several minutes on CPU.</div>
+      <div id="pipelinePromptChoices" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"></div>
+      <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px;">
+        <label style="display:flex;flex-direction:column;gap:4px;">
+          <span style="color:#9fb3c8;">Genre</span>
+          <select id="pipelineGenre" style="width:138px;padding:6px 8px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+            <option value="auto">Auto</option>
+            <option value="jazz">Jazz</option>
+            <option value="hiphop">Hip-Hop</option>
+            <option value="electronic">Electronic</option>
+            <option value="cinematic">Cinematic</option>
+            <option value="ambient">Ambient</option>
+            <option value="orchestral">Orchestral</option>
+            <option value="rock">Rock</option>
+            <option value="funk">Funk</option>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:4px;flex:1;min-width:180px;">
+          <span style="color:#9fb3c8;">Instrument anchor</span>
+          <input id="pipelineInstruments" type="text" placeholder="auto-filled from genre" style="padding:6px 8px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;">
+        </label>
+      </div>
+      <div style="margin:-2px 0 8px 0;color:#89a;font-size:12px;">Genre and instruments are inserted at the front of the prompt so MusicGen sees them as the main style anchor.</div>
+      <div style="margin-bottom:6px;color:#9fb3c8;">Prompt</div>
+      <textarea id="pipelinePrompt" rows="7" style="width:100%;resize:vertical;padding:8px;border-radius:8px;border:1px solid #263243;background:#0b1220;color:#e8f0ff;box-sizing:border-box;" placeholder="Generated prompt will appear here."></textarea>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px;margin-bottom:8px;">
+        <button id="pipelineGenerateBtn" style="background:#21512d;border:1px solid #2f7340;color:#f4fff7;padding:7px 12px;border-radius:8px;cursor:pointer;" disabled>Generate music</button>
+        <a id="pipelineAudioLink" href="#" target="_blank" rel="noopener" style="display:none;color:#b9d7ff;">Open generated audio</a>
+      </div>
+      <div id="pipelineGenerateStatus" style="margin-bottom:8px;color:#9fb3c8;"></div>
+      <div style="margin-bottom:6px;color:#9fb3c8;">Semantic scores</div>
+      <div id="pipelineSemantics" style="display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:8px;"></div>
+      <div style="margin-bottom:6px;color:#9fb3c8;">Top prototypes</div>
+      <div id="pipelinePrototypes" style="display:grid;grid-template-columns:1fr;gap:6px;"></div>
+      <div style="margin:10px 0 6px 0;color:#9fb3c8;">Pipeline trace</div>
+      <div id="pipelineTrace" style="padding:8px;border-radius:8px;background:#0b1220;border:1px solid #1b2633;color:#d4deec;font:12px Consolas, monospace;white-space:pre-wrap;max-height:180px;overflow:auto;"></div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const qs = new URLSearchParams(window.location.search);
+
+      const audioEl = document.getElementById("mpAudio");
+      const audioFileEl = document.getElementById("mpFile");
+      const audioPickBtn = document.getElementById("mpPick");
+      const audioUrlEl = document.getElementById("mpUrl");
+      const audioLoadBtn = document.getElementById("mpLoad");
+      const audioOffsetEl = document.getElementById("mpOff");
+      const audioRateEl = document.getElementById("mpRate");
+      const audioRateValEl = document.getElementById("mpRateVal");
+      const audioLogEl = document.getElementById("mpLog");
+      const musicToggleBtn = document.getElementById("musicToggle");
+      const musicBodyEl = document.getElementById("musicBody");
+
+      const speedBox = document.createElement("div");
+      speedBox.style.cssText = "position:fixed;left:12px;top:12px;z-index:999999;background:#0e1420;color:#e8f0ff;border:1px solid #1b2633;border-radius:10px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.4);font:13px system-ui";
+      speedBox.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <strong>BVH Speed</strong>
+          <label>FPS <input id="bvhFps" type="number" step="1" min="1" style="width:80px;margin-left:6px;"></label>
+          <label style="margin-left:8px">Speed
+            <input id="bvhSpeed" type="range" min="0.25" max="2.0" step="0.01" value="1" style="width:140px;margin-left:6px;">
+            <span id="bvhSpeedVal">1.00x</span>
+          </label>
+        </div>
+        <div id="bvhMeta" style="margin-top:6px;color:#9fb3c8"></div>
+      `;
+      document.body.appendChild(speedBox);
+
+      const fpsEl = speedBox.querySelector("#bvhFps");
+      const speedEl = speedBox.querySelector("#bvhSpeed");
+      const speedValEl = speedBox.querySelector("#bvhSpeedVal");
+      const metaEl = speedBox.querySelector("#bvhMeta");
+
+      const fpsOverride = parseFloat(qs.get("fps"));
+      const speedOverride = parseFloat(qs.get("speed"));
+      const audioOffsetOverride = parseFloat(qs.get("offset"));
+      const audioRateOverride = parseFloat(qs.get("rate"));
+      const autoPlayRequested = qs.get("autoplay") === "1";
+      const initialAudioUrl = qs.get("audio") || "";
+
+      if (Number.isFinite(fpsOverride) && fpsOverride > 0) {
+        fpsEl.value = fpsOverride;
+      }
+      if (Number.isFinite(speedOverride) && speedOverride > 0) {
+        speedEl.value = speedOverride;
+      }
+      if (Number.isFinite(audioOffsetOverride)) {
+        audioOffsetEl.value = String(audioOffsetOverride);
+      }
+      if (Number.isFinite(audioRateOverride) && audioRateOverride > 0) {
+        audioRateEl.value = String(audioRateOverride);
+      }
+      if (initialAudioUrl) {
+        audioUrlEl.value = initialAudioUrl;
+      }
+
+      let suppressAudioEvents = false;
+      let suppressFrameSeek = false;
+      let lastMetaSignature = "";
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function getPlayer() {
+        return window.bvhPlayer || null;
+      }
+
+      function getPrimaryReader(player) {
+        if (!player || !player.animatables) {
+          return null;
+        }
+        const entries = Object.entries(player.animatables);
+        for (const [key, animatable] of entries) {
+          if (key === "progressBar" || key === "annotationGraph") {
+            continue;
+          }
+          if (animatable && typeof animatable.secsPerFrame === "number" && typeof animatable.numFrames === "number") {
+            return animatable;
+          }
+        }
+        return null;
+      }
+
+      function getBaseFps(player) {
+        const reader = getPrimaryReader(player);
+        if (reader && Number.isFinite(reader.secsPerFrame) && reader.secsPerFrame > 0) {
+          return 1 / reader.secsPerFrame;
+        }
+        if (player && Number.isFinite(player.frames_per_second) && player.frames_per_second > 0) {
+          return player.frames_per_second;
+        }
+        return 0;
+      }
+
+      function readMeta() {
+        const player = getPlayer();
+        if (!player) {
+          return null;
+        }
+        const reader = getPrimaryReader(player);
+        const frames = reader && reader.numFrames ? reader.numFrames : player.getNumFrames();
+        const activeFps = player.frames_per_second || 0;
+        const baseFps = getBaseFps(player);
+        const duration = frames && activeFps ? frames / activeFps : 0;
+        return { player, reader, frames, activeFps, baseFps, duration };
+      }
+
+      function renderMeta(tag) {
+        const meta = readMeta();
+        if (!meta || !meta.frames) {
+          metaEl.textContent = "BVH: not loaded yet";
+          return;
+        }
+        const suffix = tag ? ` (${tag})` : "";
+        metaEl.textContent = `BVH: ${meta.frames} frames, active FPS ${meta.activeFps.toFixed(3)}, base FPS ${meta.baseFps.toFixed(3)}, duration ${meta.duration.toFixed(3)} s${suffix}`;
+      }
+
+      function setLog(message) {
+        audioLogEl.textContent = message || "";
+      }
+
+      function getOffsetSeconds() {
+        const ms = parseFloat(audioOffsetEl.value);
+        return Number.isFinite(ms) ? ms / 1000 : 0;
+      }
+
+      function getAudioRate() {
+        const rate = parseFloat(audioRateEl.value);
+        return Number.isFinite(rate) ? clamp(rate, 0.5, 1.5) : 1;
+      }
+
+      function hasAudioSource() {
+        return !!audioEl.currentSrc || !!audioEl.src;
+      }
+
+      function syncAudioRate() {
+        const rate = getAudioRate();
+        audioEl.playbackRate = rate;
+        audioRateValEl.textContent = `${rate.toFixed(2)}x`;
+      }
+
+      function playerTimeToAudioTime(playerSeconds) {
+        return Math.max(0, playerSeconds - getOffsetSeconds());
+      }
+
+      function audioTimeToPlayerTime(audioSeconds) {
+        return Math.max(0, audioSeconds + getOffsetSeconds());
+      }
+
+      function seekAudioToFrame(frame) {
+        const player = getPlayer();
+        if (!player || !hasAudioSource()) {
+          return;
+        }
+        const targetTime = playerTimeToAudioTime(frame / player.frames_per_second);
+        suppressAudioEvents = true;
+        if (Number.isFinite(audioEl.duration) && audioEl.duration > 0) {
+          audioEl.currentTime = clamp(targetTime, 0, audioEl.duration);
+        } else {
+          audioEl.currentTime = Math.max(0, targetTime);
+        }
+        window.setTimeout(() => {
+          suppressAudioEvents = false;
+        }, 0);
+      }
+
+      function syncPlayerToAudio() {
+        const player = getPlayer();
+        if (!player || !hasAudioSource()) {
+          return;
+        }
+        const targetFrame = Math.round(audioTimeToPlayerTime(audioEl.currentTime) * player.frames_per_second);
+        suppressFrameSeek = true;
+        player.gotoFrame(targetFrame, true);
+        suppressFrameSeek = false;
+      }
+
+      function applyPlayerFps(fps, tag) {
+        const player = getPlayer();
+        if (!player || !Number.isFinite(fps) || fps <= 0) {
+          return;
+        }
+        player.frames_per_second = fps;
+        fpsEl.value = String(Math.round(fps * 1000) / 1000);
+        renderMeta(tag);
+        if (hasAudioSource()) {
+          syncPlayerToAudio();
+        }
+      }
+
+      function applyFps(fps) {
+        applyPlayerFps(fps, "FPS override");
+      }
+
+      function applySpeed(mult) {
+        const player = getPlayer();
+        if (!player || !Number.isFinite(mult) || mult <= 0) {
+          return;
+        }
+        const baseFps = getBaseFps(player);
+        if (!(baseFps > 0)) {
+          return;
+        }
+        speedValEl.textContent = `${mult.toFixed(2)}x`;
+        applyPlayerFps(baseFps * mult, `speed x${mult.toFixed(2)}`);
+      }
+
+      function loadAudioSource(src, label) {
+        if (!src) {
+          return;
+        }
+        suppressAudioEvents = true;
+        audioEl.src = src;
+        audioEl.load();
+        window.setTimeout(() => {
+          suppressAudioEvents = false;
+        }, 0);
+        setLog(`Loaded audio: ${label}`);
+      }
+
+      function safePlayAudio() {
+        if (!hasAudioSource()) {
+          return;
+        }
+        syncAudioRate();
+        const promise = audioEl.play();
+        if (promise && typeof promise.catch === "function") {
+          promise.catch(() => {
+            setLog("Audio play was blocked by the browser. Click play again.");
+          });
+        }
+      }
+
+      function wirePlayer(player) {
+        if (!player || player.__musicSyncWired) {
+          return;
+        }
+
+        player.__musicSyncWired = true;
+        player.setTimeSource(() => {
+          if (!hasAudioSource() || audioEl.paused || audioEl.ended) {
+            return null;
+          }
+          return audioTimeToPlayerTime(audioEl.currentTime);
+        });
+
+        player.setPlayStateCallback((isPlaying) => {
+          if (!hasAudioSource()) {
+            return;
+          }
+          if (isPlaying) {
+            seekAudioToFrame(player.frame);
+            safePlayAudio();
+          } else if (!audioEl.paused) {
+            suppressAudioEvents = true;
+            audioEl.pause();
+            window.setTimeout(() => {
+              suppressAudioEvents = false;
+            }, 0);
+          }
+        });
+
+        player.setFrameChangeCallback((frame) => {
+          if (!hasAudioSource() || suppressFrameSeek) {
+            return;
+          }
+          seekAudioToFrame(frame);
+        });
+
+        renderMeta("player wired");
+        if (hasAudioSource()) {
+          syncPlayerToAudio();
+          if (!audioEl.paused && !player.progressBar.playing) {
+            player.setPlaying(true);
+          }
+        }
+      }
+
+      audioPickBtn.addEventListener("click", () => {
+        audioFileEl.click();
+      });
+
+      audioFileEl.addEventListener("change", (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) {
+          return;
+        }
+        const objectUrl = URL.createObjectURL(file);
+        loadAudioSource(objectUrl, file.name);
+      });
+
+      audioLoadBtn.addEventListener("click", () => {
+        const url = audioUrlEl.value.trim();
+        if (!url) {
+          setLog("Enter an audio URL first.");
+          return;
+        }
+        loadAudioSource(url, url);
+      });
+
+      musicToggleBtn.addEventListener("click", () => {
+        const hidden = musicBodyEl.style.display === "none";
+        musicBodyEl.style.display = hidden ? "" : "none";
+        musicToggleBtn.textContent = hidden ? "-" : "+";
+      });
+
+      fpsEl.addEventListener("change", () => {
+        const fps = parseFloat(fpsEl.value);
+        if (Number.isFinite(fps) && fps > 0) {
+          applyFps(fps);
+        }
+      });
+
+      speedEl.addEventListener("input", () => {
+        const speed = parseFloat(speedEl.value) || 1;
+        speedValEl.textContent = `${speed.toFixed(2)}x`;
+        applySpeed(speed);
+      });
+
+      audioRateEl.addEventListener("input", () => {
+        syncAudioRate();
+      });
+
+      audioOffsetEl.addEventListener("change", () => {
+        const player = getPlayer();
+        if (player && hasAudioSource()) {
+          seekAudioToFrame(player.frame);
+        }
+      });
+
+      audioEl.addEventListener("loadedmetadata", () => {
+        syncAudioRate();
+        setLog(`Audio duration: ${audioEl.duration.toFixed(3)} s`);
+        syncPlayerToAudio();
+        const player = getPlayer();
+        if (autoPlayRequested && player && !player.progressBar.playing) {
+          player.setPlaying(true);
+        }
+      });
+
+      audioEl.addEventListener("play", () => {
+        if (suppressAudioEvents) {
+          return;
+        }
+        const player = getPlayer();
+        if (player && !player.progressBar.playing) {
+          player.setPlaying(true);
+        }
+      });
+
+      audioEl.addEventListener("pause", () => {
+        if (suppressAudioEvents) {
+          return;
+        }
+        const player = getPlayer();
+        if (player && player.progressBar.playing && !audioEl.ended) {
+          player.setPlaying(false);
+        }
+      });
+
+      audioEl.addEventListener("ended", () => {
+        const player = getPlayer();
+        if (player) {
+          player.setPlaying(false);
+        }
+      });
+
+      audioEl.addEventListener("seeked", () => {
+        syncPlayerToAudio();
+      });
+
+      audioEl.addEventListener("timeupdate", () => {
+        if (audioEl.paused) {
+          syncPlayerToAudio();
+        }
+      });
+
+      syncAudioRate();
+
+      const initPoll = window.setInterval(() => {
+        const player = getPlayer();
+        if (player) {
+          wirePlayer(player);
+        }
+
+        const meta = readMeta();
+        const signature = meta ? `${meta.frames}:${meta.baseFps}:${meta.activeFps}` : "";
+        if (signature && signature !== lastMetaSignature) {
+          lastMetaSignature = signature;
+          renderMeta("BVH ready");
+          if (Number.isFinite(fpsOverride) && fpsOverride > 0) {
+            applyFps(fpsOverride);
+          } else {
+            applySpeed(parseFloat(speedEl.value) || 1);
+          }
+          if (autoPlayRequested && hasAudioSource() && audioEl.readyState >= 2 && player && !player.progressBar.playing) {
+            player.setPlaying(true);
+          }
+        } else if (!signature) {
+          renderMeta();
+        }
+      }, 100);
+
+      if (initialAudioUrl) {
+        loadAudioSource(initialAudioUrl, initialAudioUrl);
+      }
+
+      window.m2mMusicSync = {
+        loadAudioSource,
+        setLog,
+        safePlayAudio,
+        getPlayer,
+        syncPlayerToAudio,
+        hasAudioSource: () => hasAudioSource(),
+        getAudioUrl: () => audioEl.currentSrc || audioEl.src || "",
+        setAudioOffsetMs: (ms) => {
+          audioOffsetEl.value = String(ms);
+          const player = getPlayer();
+          if (player && hasAudioSource()) {
+            seekAudioToFrame(player.frame);
+          }
+        },
+      };
+
+      window.addEventListener("beforeunload", () => {
+        window.clearInterval(initPoll);
+      });
+    })();
+  </script>
+  <script src="js/motion2music-web.js"></script>
+</body>
+</html>

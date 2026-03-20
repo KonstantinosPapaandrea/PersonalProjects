@@ -50,6 +50,8 @@ def _audio_features_librosa(audio_path: Path, sr: int = 32000) -> dict[str, floa
         beat_count = int(len(beats))
     except Exception:
         tempo, beat_count = np.nan, 0
+    if isinstance(tempo, np.ndarray):
+        tempo = float(np.ravel(tempo)[0]) if tempo.size else np.nan
 
     # Basic energy
     rms = librosa.feature.rms(y=y)[0]

@@ -6,6 +6,7 @@ sys.path.insert(0, str(ROOT / "src"))
 # visualize_beats_on_bvh.py
 import argparse
 import re
+import time
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -18,6 +19,15 @@ from motion2music.io.loadbvh import loadbvh
 from motion2music.config import JOINT_INDICES, N_TOTAL_JOINTS  # N_TOTAL_JOINTS unused but kept
 from motion2music.beats.BeatExtraction import extract_beats_v1, extract_beats_v2, BeatParamsV1, BeatParamsV2
 
+try:
+    import pygame  # optional: only needed when --audio is used
+except Exception:
+    pygame = None
+
+try:
+    import librosa  # optional: only needed for --auto-sync
+except Exception:
+    librosa = None
 
 # -----------------------------
 # Skeleton helpers
@@ -175,6 +185,164 @@ def _dedup_events_by_time(events, fps, min_sep_s: float):
 
     return np.asarray(kept, dtype=int)
 
+
+def _compute_motion_envelope(positions: np.ndarray, frame_times: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Simple motion envelope used for audio-motion offset estimation."""
+    positions = np.asarray(positions, dtype=float)
+    T = positions.shape[0]
+    if T < 2:
+        return np.zeros((T,), dtype=float), np.asarray(frame_times, dtype=float)
+
+    if frame_times is not None and len(frame_times) == T:
+        dt = float(np.median(np.diff(frame_times)))
+        times = np.asarray(frame_times, dtype=float)
+    else:
+        dt = 1.0
+        times = np.arange(T, dtype=float) * dt
+
+    vel = np.gradient(positions, dt, axis=0)      # (T, J, 3)
+    speed = np.linalg.norm(vel, axis=2)           # (T, J)
+    env = np.median(speed, axis=1)                # (T,)
+    return env, times
+
+
+def _compute_audio_onset_envelope(audio_path: str, hop_length: int) -> tuple[np.ndarray, np.ndarray]:
+    if librosa is None:
+        raise RuntimeError(
+            "Auto-sync requires librosa. Install in your venv:\n"
+            "  .\\.venv\\Scripts\\python.exe -m pip install librosa"
+        )
+    y, sr = librosa.load(audio_path, sr=None, mono=True)
+    oenv = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop_length)
+    times = librosa.frames_to_time(np.arange(len(oenv)), sr=sr, hop_length=hop_length)
+    return oenv, times
+
+
+def _estimate_audio_motion_offset(
+    audio_env: np.ndarray,
+    audio_times: np.ndarray,
+    motion_env: np.ndarray,
+    motion_times: np.ndarray,
+    max_offset_sec: float = 1.0,
+    dt_grid: float = 0.01,
+) -> float:
+    """Estimate offset_sec so motion(t) ~= audio(t + offset_sec)."""
+    audio_env = np.asarray(audio_env, dtype=float)
+    audio_times = np.asarray(audio_times, dtype=float)
+    motion_env = np.asarray(motion_env, dtype=float)
+    motion_times = np.asarray(motion_times, dtype=float)
+    if audio_env.size < 5 or motion_env.size < 5:
+        return 0.0
+
+    t_min = max(float(audio_times[0]), float(motion_times[0]))
+    t_max = min(float(audio_times[-1]), float(motion_times[-1]))
+    if t_max <= t_min + 5 * dt_grid:
+        return 0.0
+
+    grid = np.arange(t_min, t_max, dt_grid)
+    if grid.size < 10:
+        return 0.0
+
+    ag = np.interp(grid, audio_times, audio_env)
+    mg = np.interp(grid, motion_times, motion_env)
+    ag = (ag - ag.mean()) / (ag.std() + 1e-9)
+    mg = (mg - mg.mean()) / (mg.std() + 1e-9)
+
+    corr = np.correlate(ag, mg, mode="full")
+    lags = np.arange(-len(grid) + 1, len(grid))
+    max_lag_steps = int(max_offset_sec / dt_grid)
+    mask = np.abs(lags) <= max_lag_steps
+    if not np.any(mask):
+        return 0.0
+
+    best_lag = int(lags[mask][int(np.argmax(corr[mask]))])
+    return float(-best_lag * dt_grid)
+
+
+class _AudioSyncPlayer:
+    """Minimal optional audio player used to keep WAV playback in sync with BVH animation."""
+
+    def __init__(self, audio_path: str, start_sec: float = 0.0, volume: float = 1.0, loop: bool = False):
+        if pygame is None:
+            raise RuntimeError(
+                "Audio sync requires pygame. Install in your venv:\n"
+                "  .\\.venv\\Scripts\\python.exe -m pip install pygame"
+            )
+        self.audio_path = str(audio_path)
+        self.start_sec = max(0.0, float(start_sec))
+        self.volume = float(np.clip(volume, 0.0, 1.0))
+        self.loop = bool(loop)
+        self._inited = False
+        self._started = False
+        self._paused = False
+        self._clock_t0 = 0.0
+        self._pause_t0 = 0.0
+        self._paused_accum = 0.0
+
+    @property
+    def started(self) -> bool:
+        return self._started
+
+    @property
+    def paused(self) -> bool:
+        return self._paused
+
+    def _ensure_loaded(self) -> None:
+        if self._inited:
+            return
+        pygame.mixer.init()
+        pygame.mixer.music.load(self.audio_path)
+        pygame.mixer.music.set_volume(self.volume)
+        self._inited = True
+
+    def start(self) -> None:
+        self._ensure_loaded()
+        loops = -1 if self.loop else 0
+        pygame.mixer.music.play(loops=loops, start=self.start_sec)
+        self._clock_t0 = time.perf_counter()
+        self._pause_t0 = 0.0
+        self._paused_accum = 0.0
+        self._started = True
+        self._paused = False
+
+    def pause(self) -> None:
+        if self._started and not self._paused:
+            pygame.mixer.music.pause()
+            self._pause_t0 = time.perf_counter()
+            self._paused = True
+
+    def resume(self) -> None:
+        if self._started and self._paused:
+            pygame.mixer.music.unpause()
+            self._paused_accum += max(0.0, time.perf_counter() - self._pause_t0)
+            self._pause_t0 = 0.0
+            self._paused = False
+
+    def is_busy(self) -> bool:
+        return bool(self._started and pygame.mixer.music.get_busy())
+
+    def current_time(self) -> float:
+        """Playback time in seconds on the audio timeline (includes start_sec)."""
+        if not self._started:
+            return self.start_sec
+        now = self._pause_t0 if self._paused else time.perf_counter()
+        elapsed = max(0.0, now - self._clock_t0 - self._paused_accum)
+        return self.start_sec + elapsed
+
+    def stop(self) -> None:
+        if not self._inited:
+            return
+        try:
+            pygame.mixer.music.stop()
+        finally:
+            pygame.mixer.quit()
+            self._inited = False
+            self._started = False
+            self._paused = False
+            self._clock_t0 = 0.0
+            self._pause_t0 = 0.0
+            self._paused_accum = 0.0
+
 # -----------------------------
 # Main
 # -----------------------------
@@ -184,6 +352,12 @@ def main():
     ap.add_argument("--bvh", required=True, help="Path to .bvh file")
     ap.add_argument("--stride", type=int, default=1, help="Frame stride for display")
     ap.add_argument("--framerate", type=float, default=None, help="Override display FPS")
+    ap.add_argument(
+        "--max-display-fps",
+        type=float,
+        default=30.0,
+        help="When --framerate is not set, auto-increase stride so displayed FPS does not exceed this value.",
+    )
     ap.add_argument("--view", choices=["xy", "xz", "yz"], default="xy")
     ap.add_argument("--up", choices=["auto", "x", "y", "z"], default="auto", help="Up-axis of source BVH")
     ap.add_argument(
@@ -230,6 +404,52 @@ def main():
         type=float,
         default=1.0,
         help="Playback speed factor: 1.0 = real-time, 0.5 = half-speed, 0.25 = quarter-speed, 2.0 = double speed."
+    )
+    ap.add_argument(
+        "--audio",
+        type=str,
+        default=None,
+        help="Optional audio file (.wav/.mp3/...) to play in sync with the BVH animation."
+    )
+    ap.add_argument(
+        "--audio-start",
+        type=float,
+        default=0.0,
+        help="Start audio playback from this offset (seconds)."
+    )
+    ap.add_argument(
+        "--audio-volume",
+        type=float,
+        default=1.0,
+        help="Audio volume in [0,1]."
+    )
+    ap.add_argument(
+        "--audio-loop",
+        action="store_true",
+        help="Loop audio (and animation) continuously."
+    )
+    ap.add_argument(
+        "--sync-offset",
+        type=float,
+        default=0.0,
+        help="Shift motion time relative to audio in seconds (+ moves motion forward, - delays motion)."
+    )
+    ap.add_argument(
+        "--auto-sync",
+        action="store_true",
+        help="Estimate per-clip audio-motion offset automatically from onset/motion envelopes."
+    )
+    ap.add_argument(
+        "--auto-sync-max-offset",
+        type=float,
+        default=1.0,
+        help="Maximum absolute offset (seconds) searched by --auto-sync."
+    )
+    ap.add_argument(
+        "--auto-sync-hop-length",
+        type=int,
+        default=512,
+        help="Hop length for onset envelope when --auto-sync is enabled."
     )
 
     # Optional ML overlays
@@ -402,13 +622,57 @@ def main():
     ylim = (mins_xy[1] - margin, maxs_xy[1] + margin)
 
     stride = max(1, int(args.stride))
-    disp_fps = (fps / stride) if args.framerate is None else args.framerate
+    if args.framerate is None:
+        max_disp = max(1.0, float(args.max_display_fps))
+        auto_stride = max(1, int(np.ceil(float(fps) / max_disp)))
+        if auto_stride > stride:
+            print(f"[display] auto stride {stride} -> {auto_stride} to cap display at <= {max_disp:.1f} FPS")
+            stride = auto_stride
+        disp_fps = float(fps) / float(stride)
+    else:
+        disp_fps = float(args.framerate)
+    print(f"[display] source_fps={fps:.3f} stride={stride} display_fps={disp_fps:.3f}")
     win_sec = max(0.0, float(args.win_seconds))
 
     # playback speed: 1.0 = normal, 0.5 = half-speed, etc.
     playback_speed = float(args.playback_speed)
     if playback_speed <= 0:
         playback_speed = 1.0  # safety fallback
+    if args.audio and abs(playback_speed - 1.0) > 1e-9:
+        print("[audio] forcing --playback-speed=1.0 for sync playback.")
+        playback_speed = 1.0
+
+    sync_offset_eff = float(args.sync_offset)
+    audio_player = None
+    if args.audio:
+        if args.auto_sync:
+            print("[audio] estimating auto-sync offset...")
+            motion_env, motion_times = _compute_motion_envelope(positions, frame_times)
+            audio_env, audio_times = _compute_audio_onset_envelope(
+                audio_path=args.audio,
+                hop_length=int(args.auto_sync_hop_length),
+            )
+            auto_off = _estimate_audio_motion_offset(
+                audio_env=audio_env,
+                audio_times=audio_times,
+                motion_env=motion_env,
+                motion_times=motion_times,
+                max_offset_sec=float(args.auto_sync_max_offset),
+                dt_grid=0.01,
+            )
+            sync_offset_eff += auto_off
+            print(f"[audio] auto-sync offset={auto_off:+.3f}s -> effective sync_offset={sync_offset_eff:+.3f}s")
+
+        audio_player = _AudioSyncPlayer(
+            audio_path=args.audio,
+            start_sec=args.audio_start,
+            volume=args.audio_volume,
+            loop=args.audio_loop,
+        )
+        print(
+            f"[audio] prepared: {args.audio} (start={args.audio_start:.3f}s, "
+            f"volume={args.audio_volume:.2f}, sync_offset={sync_offset_eff:+.3f}s)"
+        )
 
     # Figure and axes: skeleton only, or signals + skeleton
     if args.plot_cues:
@@ -444,7 +708,7 @@ def main():
     flash_ml,   = ax.plot([], [], "o", ms=10, mfc="none", mec="cyan", mew=2)
     frame_text = ax.text(0.02, 0.95, "", transform=ax.transAxes)
 
-    frames = range(0, T, stride)
+    frames = None if audio_player is not None else range(0, T, stride)
 
     # Decide which events we use for flashing on the skeleton
     if args.events_mode == "ml" and events_ml is not None:
@@ -511,7 +775,23 @@ def main():
         return []
 
     def update(fi):
-        nonlocal current_frame
+        nonlocal current_frame, anim_running
+
+        if audio_player is not None:
+            if not audio_player.started:
+                audio_player.start()
+                print("[audio] playback started")
+            t_audio = audio_player.current_time() + sync_offset_eff
+            fi = int(round(max(0.0, t_audio) * float(fps)))
+            fi = int(np.clip(fi, 0, T - 1))
+            if (not args.audio_loop) and audio_player.started and (not audio_player.is_busy()) and (not audio_player.paused):
+                # Audio reached the end; freeze animation at final synced frame.
+                anim.event_source.stop()
+                anim_running = False
+                print("[audio] playback ended")
+        else:
+            fi = int(fi)
+
         current_frame = fi
 
         XYf = XY[fi]
@@ -561,10 +841,14 @@ def main():
             artists.append(vline)
         return artists
 
-    interval_ms = 1000.0 / (disp_fps * playback_speed)
+    if audio_player is not None:
+        interval_ms = max(10.0, 1000.0 / max(30.0, disp_fps))
+    else:
+        interval_ms = 1000.0 / (disp_fps * playback_speed)
+    repeat_anim = True if (not args.audio or args.audio_loop) else False
     anim = FuncAnimation(
         fig, update, frames=frames, init_func=init,
-        interval=interval_ms, repeat=True, blit=False
+        interval=interval_ms, repeat=repeat_anim, blit=False
     )
 
     # ------- Key handler: pause + label beats + save -------
@@ -592,10 +876,14 @@ def main():
             if anim_running:
                 anim.event_source.stop()
                 anim_running = False
+                if audio_player is not None:
+                    audio_player.pause()
                 print_debug_for_frame(current_frame)
             else:
                 anim.event_source.start()
                 anim_running = True
+                if audio_player is not None:
+                    audio_player.resume()
                 print("[PLAY]")
         elif event.key == "b":
             # toggle beat at current_frame
@@ -617,7 +905,12 @@ def main():
             else:
                 print("[label] no beats to save")
 
+    def on_close(_event):
+        if audio_player is not None:
+            audio_player.stop()
+
     fig.canvas.mpl_connect("key_press_event", on_key)
+    fig.canvas.mpl_connect("close_event", on_close)
 
     plt.tight_layout()
     plt.show()

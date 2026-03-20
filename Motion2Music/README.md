@@ -4,18 +4,24 @@ This repo is a *cleaned* version of your current Motion2Music files, with a stab
 
 ## Folder layout
 
-- `src/motion2music/` – Python package (beats, BVH loading, ML helpers)
-- `scripts/` – CLI scripts (they auto-add `src/` to `PYTHONPATH`, so you can run them from anywhere)
-- `models/` – trained `.joblib` models
-- `outputs/` – outputs (npy files, etc.)
+- `src/motion2music/` - Python package (beats, BVH loading, ML helpers)
+- `scripts/` - CLI scripts (they auto-add `src/` to `PYTHONPATH`, so you can run them from anywhere)
+- `models/` - trained `.joblib` models
+- `outputs/` - outputs (npy files, etc.)
 
 ## Quick setup (Windows)
 
 ```bat
-cd Motion2Music_Clean
+cd Motion2Music
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+## Smoke check
+
+```bat
+python scripts\smoke_check.py
 ```
 
 ## Run the beat refiner on a BVH
@@ -34,3 +40,4 @@ Outputs are saved next to the BVH by default:
 
 - The original scripts expected modules like `ml_helpers.py` and `config.py` next to them. After re-organizing folders this breaks (especially on Linux). This version makes all imports go through the `motion2music` package.
 - `JOINT_INDICES` is defined in `src/motion2music/config.py`. If you want to use a specific joint subset for beat extraction, update it there.
+

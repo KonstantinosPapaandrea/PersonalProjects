@@ -106,48 +106,50 @@ class BVHLoader:
         joints_stack = [None]
 
         for i, line in enumerate(hierarchy_section):
+            line_lower = line.lower()
+
             if "{" in line:
                 brace_count += 1
             elif "}" in line:
                 brace_count -= 1
-                if joints_stack:
+                # Keep the sentinel root placeholder in the stack.
+                if len(joints_stack) > 1:
                     joints_stack.pop()
                 if joints_stack:
                     current_joint = joints_stack[-1]
-            elif "ROOT" in line or "JOINT" in line:
+            elif line_lower.startswith("root ") or line_lower.startswith("joint "):
                 # ROOT Hips
                 # JOINT LHipJoin
-                prev_joint = joints_stack[-1]
-                assert (
-                    "ROOT" in line
-                    and brace_count == 0
-                    and joint_index == 0
-                    and prev_joint is None
-                ) or (
-                    "JOINT" in line
-                    and brace_count >= 1
-                    and joint_index >= 1
-                    and prev_joint is not None
-                )
-                joint_name = line.split()[1]
+                parts = line.split(maxsplit=1)
+                if len(parts) < 2:
+                    raise ValueError(f"Malformed joint declaration at hierarchy line {i}: {line!r}")
+
+                is_root = line_lower.startswith("root ")
+                prev_joint = joints_stack[-1] if joints_stack else None
+                if is_root and joint_index != 0:
+                    raise ValueError("Malformed hierarchy: multiple ROOT declarations found.")
+                if (not is_root) and prev_joint is None:
+                    raise ValueError("Malformed hierarchy: JOINT declared before ROOT.")
+
+                joint_name = parts[1]
                 current_joint = Joint(
                     name=joint_name,
                     nest_depth=brace_count,
                     parent=prev_joint,
-                    is_root="ROOT" in line and brace_count == 0,
+                    is_root=is_root and brace_count == 0,
                     joint_index=joint_index,
                 )
                 self.skeleton.append(current_joint)
                 joints_stack.append(current_joint)
                 joint_index += 1
-            elif "OFFSET" in line:
+            elif line_lower.startswith("offset"):
                 # OFFSET -0.087 1.94 -0.2889
                 line_tokens = line.split()[1:]
                 offset_numbers = [float(s) for s in line_tokens]
                 current_joint.offset = np.asarray(offset_numbers)
                 self.skeleton[-1] = current_joint
                 joints_stack[-1] = current_joint
-            elif "CHANNELS" in line:
+            elif line_lower.startswith("channels"):
                 # CHANNELS 6 Xposition Yposition Zposition Zrotation Xrotation Yrotation
                 line_tokens = line.split()[1:]
                 n_channels = int(line_tokens[0])
@@ -172,7 +174,7 @@ class BVHLoader:
                 current_joint.n_channels = n_channels
                 self.skeleton[-1] = current_joint
                 joints_stack[-1] = current_joint
-            elif "End Site" in line:
+            elif line_lower.startswith("end site"):
                 prev_joint = joints_stack[-1]
                 current_joint = Joint(
                     name="",
@@ -199,12 +201,17 @@ class BVHLoader:
             tok = line.strip().split()
             if not tok:
                 continue
-            if (not found_frame_count) and tok[0].lower().startswith("frames"):
+            if (not found_frame_count) and len(tok) >= 2 and tok[0].lower().startswith("frames"):
                 # e.g. "Frames: 123"
                 # tokens like ["Frames:", "123"] or ["Frames:", "123", "..."]
                 self.frame_count = int(tok[1])
                 found_frame_count = True
-            elif (not found_frame_time) and tok[0].lower() == "frame" and tok[1].lower().startswith("time"):
+            elif (
+                (not found_frame_time)
+                and len(tok) >= 3
+                and tok[0].lower() == "frame"
+                and tok[1].lower().startswith("time")
+            ):
                 # e.g. "Frame Time: 0.0333333"
                 # tokens like ["Frame", "Time:", "0.0333333"]
                 self.frame_time = float(tok[2])
