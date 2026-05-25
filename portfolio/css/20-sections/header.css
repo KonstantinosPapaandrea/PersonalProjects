@@ -111,6 +111,30 @@
   transform: scaleX(1);
 }
 
+.main-nav a.resume-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.45rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid hsl(198 100% 60% / 0.8);
+  border-radius: 6px;
+  color: #fff;
+  background: hsl(198 100% 38% / 0.2);
+  box-shadow: 0 0 18px hsl(198 100% 50% / 0.28);
+}
+
+.main-nav a.resume-download::after {
+  display: none;
+}
+
+.main-nav a.resume-download:hover,
+.main-nav a.resume-download:focus {
+  background: hsl(198 100% 44% / 0.34);
+  border-color: hsl(198 100% 66%);
+  box-shadow: 0 0 24px hsl(198 100% 58% / 0.45);
+}
+
 /* ─── HAMBURGER TOGGLE (<768px) ─────────────────────────── */
 .nav-toggle {
   --bar-w: 26px;
